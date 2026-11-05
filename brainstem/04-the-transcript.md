@@ -40,44 +40,29 @@ also records what was asked. Removing the arguments would make exact replay impo
 
 ## 4.2 The conversation is a composition surface
 
-Suppose the first result contains an approved working preference, the second contains
-a draft, and the third contains a review. The next caller can use those outputs
-without opening each tool's storage or knowing which internal helpers it called.
-That is composition through a shared stream.
+A next step consumes outputs without opening the preceding tool's storage.
+The teaching caller stores results; chapter 5 explicitly passes one field.
+A model-facing host instead serializes results into the conversation.
 
-The teaching caller stores results but does not feed them to a model. Chapter 5
-passes one field explicitly to make the transfer observable. A real host would
-serialize results into the model's conversation format and let the model decide what
-is useful next. Do not attribute that selection behavior to this name-dispatch fixture.
+The inspected runtime does exactly that serialization: `run_tool_calls()`
+(`brainstem.py:2180–2230`) invokes `perform(**args)` and puts `str(result)` in a
+tool message with its call ID. The live adapter returns JSON text deliberately;
+a raw Python dictionary would become Python `repr`, not JSON. `/chat` returns
+response text and readable `agent_logs`, not the complete internal `messages` array.
+Keep caller-owned input/output records if later replay needs them.
 
 ## 4.3 Copies matter
 
-`MiniLoop.call()` deep-copies both arguments and results before recording them.
-Without that copy, downstream code could mutate a dictionary after the call and
-silently rewrite the apparent past. The original object returned to the caller
-remains convenient to use, while the record preserves what actually crossed the boundary.
-
-This is in-memory protection, not an append-only storage system or a signature.
-Someone with access to the transcript list can still edit it. If an audit needs
-tamper evidence, add an appropriate storage and integrity design; do not imply
-that a list of dictionaries already provides it.
+`MiniLoop.call()` deep-copies arguments and results so later mutation of a returned
+dictionary does not rewrite the record. The transcript list remains editable:
+copying is not tamper evidence. Chapter 9 describes the framing boundary.
 
 ## 4.4 Context is not the archive
 
-A model's active context is limited. Keep a complete, access-controlled archive
-outside it, and present only the material relevant to the next decision.
-Summarization, filtering, and retrieval are views over evidence, not permission
-to erase the evidence itself.
-
-For large tool results, put the bulk artifact in a controlled store, return a stable
-identifier and a useful digest, and include the small part needed immediately.
-If later reasoning requires omitted details, make a retrieval capability available.
-Never replace a failed retrieval with a confident summary from stale memory.
-
-The supplied ContextMemory agent demonstrates bounded presentation: individual
-memory content is limited, and `system_context()` limits the injected text.
-Those are context limits, not proof that all memories were recalled. Chapter 6
-examines that distinction.
+Keep the complete archive outside limited model context. Large artifacts can stay
+in a controlled store while results carry identifiers, digests, and useful extracts.
+Summaries and bounded memory recall are presentation views, not complete archives;
+chapter 6 examines those bounds.
 
 ## 4.5 Exercises
 

@@ -28,12 +28,8 @@ print(json.dumps(DraftFollowUp.metadata, indent=2))
 assert DraftFollowUp.metadata["parameters"]["required"] == ["transcript"]
 ```
 
-The printed object is the public surface. It says nothing about a particular mail
-provider or database. It can therefore remain stable when the implementation changes.
-
-Names should describe capabilities rather than implementation details:
-`DraftFollowUp`, not `ReadFileThenFormatV3`. The description should tell a caller
-when this capability is relevant and how to recognize its result.
+Name the capability, not its internals: `DraftFollowUp`, not `ReadFileThenFormatV3`.
+Describe when to call and what result to expect.
 
 ## 2.2 Description and schema
 
@@ -45,14 +41,11 @@ conditions directly:
 or for news headlines."
 ```
 
-Its `count` parameter is an integer with minimum 1 and maximum 30. A reader does not
-need to know how the stories are fetched to ask for five. The declaration is compact
-because it does not document the Firebase response inside the selection interface.
+Its `count` schema bounds an integer from 1 to 30. Asking for five does not require
+knowing the network implementation.
 
-Our draft tool takes free text because a conversation may contain qualifications,
-disagreements, corrections, or unfamiliar topics. Replacing that field with a short
-enum of approved phrases would destroy useful evidence. An enum belongs where a
-downstream operation really requires one, such as a known output format.
+The draft takes free text to preserve qualifications and corrections. Reserve enums
+for genuinely finite choices, such as an output format.
 
 The miniature caller supports required fields, unknown-field rejection, and strings.
 It is **not** a JSON Schema implementation. A production adapter must use its host's
@@ -61,10 +54,8 @@ until they impersonate a standard.
 
 ## 2.3 Liberty is not authorization
 
-The third rule grants the caller freedom to supply useful information. It does not
-grant freedom to read arbitrary files, send messages, change tenants, or bypass a
-permission check. `perform()` must enforce those limits even if a model supplies
-persuasive arguments.
+Freedom to supply information is not permission to read files or send messages.
+Enforce authority outside model-supplied arguments.
 
 In the memory writer's real metadata, `memory_type` is an enum, `importance` has a
 range, and `user_guid` is optional. A user identifier is a scope hint, not proof of
@@ -74,15 +65,10 @@ single-user working notes.
 
 ## 2.4 A file is not necessarily a tool
 
-Keep three different surfaces distinct. An agent.py declaration describes an
-executable entry point. A skill file supplies a procedure for a caller to follow.
-A subagent declaration describes delegated work in a separate execution context.
-They can cooperate without being interchangeable.
-
-There is no skill or subagent frontmatter parser in this teaching profile.
-There is ordinary Jekyll frontmatter in the book's own chapters; that controls
-publication, not agent permissions. Do not mistake every YAML header for a common
-runtime interface. The companion chapter shows the actual Claude file formats.
+An executable declaration, a skill procedure, and a delegated model's configuration
+are distinct surfaces. This profile parses neither skills nor subagent frontmatter.
+The chapters' Jekyll headers control publication only; the companion book shows
+Claude's runtime formats.
 
 ## 2.5 Exercises
 

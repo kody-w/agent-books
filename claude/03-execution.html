@@ -2,7 +2,7 @@
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>The Claude Agent Programming Language — Execution</title><link rel="stylesheet" href="../site.css"></head><body><div class="progress" style="width:24%"></div><main><nav><a href="../index.html">Companion shelf</a></nav><p class="edition">Docs as of 2026-11-05 · Tutorial and reference edition</p><p><a href="02-the-interface.html">← Chapter 2: The Interface</a> · <a href="README.html">Book contents</a> · <a href="04-the-transcript.html">Chapter 4: The Transcript →</a></p>
 <h1 id="chapter-3--execution">Chapter 3 — Execution</h1>
 <blockquote><p><strong>In this chapter:</strong> execute code on Anthropic&#x27;s server, identify the client&#x27;s responsibilities, and use hooks for lifecycle behavior rather than prompting alone.</p></blockquote>
-<h2 id="31-run-server-side-code">3.1 Run server-side code</h2>
+<h2 id="31-server-tools-code-execution">3.1 Server tools: code execution</h2>
 <p>Run <code>python3 claude/examples/03_execution.py</code>. The complete program handles <code>pause_turn</code>; this first-request form shows the execution boundary:</p>
 <pre><code class="language-python">import anthropic
 
@@ -15,16 +15,88 @@ with anthropic.Anthropic() as client:
     )
     print(response.model_dump_json(indent=2))</code></pre>
 <p>Code execution is a server tool: Anthropic runs code in a sandboxed container. The documented current version above adds explicit wall-clock-limit guidance to the runtime that supports persistent Python state and programmatic calls. No code-execution beta header is required for this tool version. <a href="https://platform.claude.com/docs/en/agents-and-tools/tool-use/code-execution-tool">Code execution</a>.</p>
+<p><strong>When:</strong> calculate, transform datasets, or generate downloadable artifacts without provisioning your own interpreter. <strong>Limits:</strong> the sandbox has no internet access; use installed libraries rather than assuming <code>pip install</code> will work. Reuse <code>response.container.id</code> explicitly to preserve files and REPL state between requests. Each programmatic Python cell has a 90-second wall-clock limit; container data is retained for up to 30 days. Files created in the Files API have a separate deletion/expiration lifecycle. <a href="https://platform.claude.com/docs/en/agents-and-tools/tool-use/code-execution-tool">Runtime, reuse, and retention</a>.</p>
 <h2 id="32-client-work-and-server-work">3.2 Client work and server work</h2>
 <p>In chapter 1, our application executes the handler and returns a result. For server tools such as web search and code execution, the API executes the work. Server responses may require continuation with <code>pause_turn</code>; that is not the same as a client <code>tool_use</code> request. Our numbered program bounds continuation and raises on incomplete stop reasons rather than reporting a partial answer as complete. <a href="https://platform.claude.com/docs/en/agents-and-tools/tool-use/overview">Tool execution and stop behavior</a>.</p>
 <p>This division is a useful strength: an application can keep domain-specific credentials and validation local while delegating supported search or computation to the server. It still needs to assess the feature&#x27;s retention and availability contract. The code-execution page documents container retention separately from tool syntax. <a href="https://platform.claude.com/docs/en/agents-and-tools/tool-use/code-execution-tool">Code execution contract</a>.</p>
 <h2 id="33-scripts-and-subagents">3.3 Scripts and subagents</h2>
 <p>A skill can invoke a script without placing the script&#x27;s source in context. A subagent can inspect many files in a separate context and return a small summary. Both are legitimate ways to keep implementation or working material out of the parent conversation. <a href="https://code.claude.com/docs/en/skills">Skills</a>, <a href="https://code.claude.com/docs/en/sub-agents">subagents</a>.</p>
 <p>Application guidance: use a script for stable transformations and a subagent for work that requires judgment or exploration. A wrapper around a model call does not make the operation deterministic. Measure both latency and result quality when choosing an execution location.</p>
-<h2 id="34-hooks-run-at-boundaries">3.4 Hooks run at boundaries</h2>
+<h2 id="34-hooks-run-deterministic-lifecycle-checks">3.4 Hooks: run deterministic lifecycle checks</h2>
 <p>Claude Code fires hooks at events including <code>PreToolUse</code>, <code>PostToolUse</code>, <code>UserPromptSubmit</code>, and <code>Stop</code>. Command hooks receive JSON on stdin and may return structured decisions. They can enforce a deterministic precondition before a tool runs instead of hoping the model remembers a paragraph. <a href="https://code.claude.com/docs/en/hooks">Hook lifecycle and output</a>.</p>
 <p>The <a href="config/hooks.json">hook template</a> demonstrates an event handler returning a deny decision for Bash calls. It is intentionally conservative and belongs in a disposable test project, not your working configuration. Read it before installing. A hook can run code with the host&#x27;s permissions; a &quot;hook&quot; label is not a sandbox. <a href="https://code.claude.com/docs/en/hooks">Hook configuration</a>.</p>
-<h2 id="35-exercises">3.5 Exercises</h2>
+<p>The checked-in configuration&#x27;s decision payload is exactly:</p>
+<pre><code class="language-json">{
+  &quot;hookSpecificOutput&quot;: {
+    &quot;hookEventName&quot;: &quot;PreToolUse&quot;,
+    &quot;permissionDecision&quot;: &quot;deny&quot;,
+    &quot;permissionDecisionReason&quot;: &quot;This demonstration disables Bash; use a disposable project.&quot;
+  }
+}</code></pre>
+<p><strong>When:</strong> enforce a precondition or record an audit event independently of the model&#x27;s willingness to follow prose. <strong>Example:</strong> copy <a href="config/hooks.json">hooks.json</a> into a disposable project&#x27;s <code>.claude/settings.json</code>, ask Claude to execute <code>printf hello</code>, and inspect the denial. Its <code>PreToolUse</code> matcher is <code>Bash</code>; it does not deny <code>Read</code>. <strong>Limits:</strong> hook event schemas differ. A permission decision object for <code>PreToolUse</code> is not a valid universal response for every event. Hook failure, timeout, and exit-code handling are part of the documented event contract, so test them before relying on a check as enforcement. <a href="https://code.claude.com/docs/en/hooks">Hook inputs and decisions</a>.</p>
+<h2 id="35-server-tools-web-search">3.5 Server tools: web search</h2>
+<p>Run <code>python3 claude/examples/03_execution.py --tool search</code>. Its exact declaration:</p>
+<pre><code class="language-python">search = {
+    &quot;type&quot;: &quot;web_search_20260318&quot;, &quot;name&quot;: &quot;web_search&quot;,
+    &quot;max_uses&quot;: 2, &quot;allowed_domains&quot;: [&quot;platform.claude.com&quot;],
+    &quot;allowed_callers&quot;: [&quot;direct&quot;],
+}</code></pre>
+<p><strong>What:</strong> Anthropic performs search and returns web results and citations in the response. <strong>When:</strong> an answer needs current evidence rather than the model&#x27;s training data. The example restricts searches to the official documentation and asks for a source-backed answer. <a href="https://platform.claude.com/docs/en/agents-and-tools/tool-use/web-search-tool">Web search</a>.</p>
+<p><strong>Limits:</strong> the domain filter is not a general browser policy. <code>max_uses</code> caps searches, not all model tokens; handle tool error blocks even when HTTP succeeds. Do not set both allowed and blocked domain lists. This example opts into direct search deliberately. Current search versions otherwise default to programmatic dynamic filtering, which provisions code execution and filters bulky results before they enter context. Preserve and display the returned citations when presenting searched claims. <a href="https://platform.claude.com/docs/en/agents-and-tools/tool-use/web-search-tool">Search configuration and dynamic filtering</a>.</p>
+<h2 id="36-server-tools-web-fetch">3.6 Server tools: web fetch</h2>
+<p>Run <code>python3 claude/examples/03_execution.py --tool fetch</code>. The request uses:</p>
+<pre><code class="language-python">fetch = {
+    &quot;type&quot;: &quot;web_fetch_20260318&quot;, &quot;name&quot;: &quot;web_fetch&quot;,
+    &quot;max_uses&quot;: 2, &quot;max_content_tokens&quot;: 12000,
+    &quot;allowed_domains&quot;: [&quot;platform.claude.com&quot;],
+    &quot;allowed_callers&quot;: [&quot;direct&quot;], &quot;citations&quot;: {&quot;enabled&quot;: True},
+}</code></pre>
+<p><strong>What:</strong> retrieve the content of a known URL, including supported PDF content, instead of searching for a URL. <strong>When:</strong> the task already supplies the official page to analyze; combine search then fetch when discovery and detailed reading are separate steps. <a href="https://platform.claude.com/docs/en/agents-and-tools/tool-use/web-fetch-tool">Web fetch</a>.</p>
+<p><strong>Limits:</strong> fetch is not an authenticated interactive browser and does not execute a page&#x27;s JavaScript. URLs must be available in the conversation or prior results; that restriction reduces exfiltration risk but does not make retrieved content trustworthy. Limit content tokens and handle inaccessible URLs. Direct mode here avoids silently introducing a code-execution dependency; use dynamic filtering intentionally for large pages. <a href="https://platform.claude.com/docs/en/agents-and-tools/tool-use/web-fetch-tool">Fetch controls and risks</a>.</p>
+<h2 id="37-tool-runner-let-the-sdk-maintain-the-loop">3.7 Tool runner: let the SDK maintain the loop</h2>
+<pre><code class="language-python">import json
+import anthropic
+from anthropic import beta_tool
+
+@beta_tool
+def review_draft(draft: str) -&gt; str:
+    &quot;&quot;&quot;Return a supplied draft for human review, without sending it.
+
+    Args:
+        draft: Exact draft text to preserve.
+    &quot;&quot;&quot;
+    if not draft.strip():
+        raise ValueError(&quot;draft must not be empty&quot;)
+    return json.dumps({&quot;draft&quot;: draft, &quot;sent&quot;: False})
+
+with anthropic.Anthropic() as client:
+    runner = client.beta.messages.tool_runner(
+        model=&quot;claude-opus-5-5&quot;, max_tokens=1024, max_iterations=8,
+        tools=[review_draft],
+        messages=[{&quot;role&quot;: &quot;user&quot;, &quot;content&quot;:
+                   &quot;Use review_draft on: Please review the library plan.&quot;}],
+    )
+    result = runner.until_done()
+    if result.stop_reason != &quot;end_turn&quot;:
+        raise RuntimeError(f&quot;Incomplete run: {result.stop_reason}&quot;)
+    print(result.content)</code></pre>
+<p><strong>What:</strong> the beta SDK helper derives schemas from typed functions, invokes handlers, appends results, and continues the model conversation. <strong>When:</strong> use ordinary functions without maintaining the protocol loop yourself. Iterating the runner exposes intermediate messages; chapter 1 keeps a manual loop because its explicit event archive is part of the lesson. <a href="https://platform.claude.com/docs/en/agents-and-tools/tool-use/tool-runner">Tool runner</a>.</p>
+<p><strong>Limits:</strong> type hints do not authorize an operation. Retain validation, iteration limits, cancellation, and observability in application policy. <code>until_done()</code> is convenient but does not establish that a specific handler ran; assert a recorded handler event when the workflow requires it. <a href="https://platform.claude.com/docs/en/agents-and-tools/tool-use/tool-runner">Runner control</a>.</p>
+<h2 id="38-bash-and-text-editor-tools-client-execution-standard-schemas">3.8 Bash and text editor tools: client execution, standard schemas</h2>
+<p><strong>What:</strong> Anthropic defines standard shell and file-editing tool interfaces; your application provides their executor. They are not the server code sandbox. <strong>Example:</strong> these are exact <code>tools</code> entries for the client request:</p>
+<pre><code class="language-python">client_tools = [
+    {&quot;type&quot;: &quot;bash_20250124&quot;, &quot;name&quot;: &quot;bash&quot;},
+    {&quot;type&quot;: &quot;text_editor_20250728&quot;, &quot;name&quot;: &quot;str_replace_based_edit_tool&quot;},
+]</code></pre>
+<p><strong>When:</strong> an application has a provisioned, controlled workspace and wants familiar shell and editing operations. Implement tool dispatch using the same ID-paired <code>tool_result</code> loop as chapter 1, but run commands only in an isolated workspace with explicit timeouts and path policy. <a href="https://platform.claude.com/docs/en/agents-and-tools/tool-use/bash-tool">Bash tool</a>, <a href="https://platform.claude.com/docs/en/agents-and-tools/tool-use/text-editor-tool">text editor</a>.</p>
+<p><strong>Limits:</strong> declaring these tools does not create a shell, sandbox, permission prompt, or filesystem snapshot. The current editor version does not implement <code>undo_edit</code>; keep application version history rather than promising rollback. Do not point a book demonstration at a real user&#x27;s home directory. <a href="https://platform.claude.com/docs/en/agents-and-tools/tool-use/text-editor-tool">Editor version differences</a>.</p>
+<h2 id="39-browser-and-computer-use-a-client-controlled-environment">3.9 Browser and computer use: a client-controlled environment</h2>
+<p><strong>What:</strong> browser toolsets describe navigation, reading, and interaction; computer toolsets describe screen and input operations. The application executes them and returns state/results. This differs from Claude in Chrome, a ready-made host covered in chapter 9. <strong>Example:</strong> these exact declarations select the current interfaces:</p>
+<pre><code class="language-python">browser = {&quot;type&quot;: &quot;browser_toolset_20260801&quot;}
+computer = {&quot;type&quot;: &quot;computer_toolset_20260801&quot;}</code></pre>
+<p><strong>When:</strong> a necessary task has a user interface but no suitable application API. Implement the selected toolset using the official action/state reference and return screenshots or browser accessibility state as requested. The SDK toolset adapter guide explains how executors integrate with the tool runner; it deliberately does not supply a universal browser provider. <a href="https://platform.claude.com/docs/en/agents-and-tools/tool-use/browser-use-tool">Browser use</a>, <a href="https://platform.claude.com/docs/en/agents-and-tools/tool-use/computer-use-tool">computer use</a>, <a href="https://platform.claude.com/docs/en/agents-and-tools/tool-use/browser-use-sdk">SDK adapters</a>.</p>
+<p><strong>Limits:</strong> neither declaration launches a browser or grants safe access to a desktop. Use a dedicated test identity, least-privilege site access, and human approval for consequential actions. Browser titles, URLs, downloaded content, and screenshots are untrusted evidence. Coordinate dimensions must match the actual display; an incorrect viewport can target the wrong control. <a href="https://platform.claude.com/docs/en/agents-and-tools/tool-use/browser-use-tool">Browser trust boundaries</a>, <a href="https://platform.claude.com/docs/en/agents-and-tools/tool-use/computer-use-tool">computer-use risks</a>.</p>
+<h2 id="310-exercises">3.10 Exercises</h2>
 <p><strong>Exercise 3-1.</strong> Inspect the server result blocks and distinguish execution output from the final natural-language answer.</p>
 <p><strong>Exercise 3-2.</strong> Install the deny hook in a disposable project and verify both a denied Bash call and an unaffected read operation.</p>
 <p><strong>Exercise 3-3.</strong> Move one deterministic transformation from a skill&#x27;s prose into a script. Compare what enters the conversation before and after.</p>

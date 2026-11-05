@@ -55,33 +55,27 @@ a new review should be recorded rather than silently updating the earlier one.
 
 ## 10.3 The draft is intentionally modest
 
-The output preserves evidence verbatim. It does not write an elegant message or
-decide which deadline is authoritative. This lets deterministic tests establish
-what actually crossed the boundary.
-
-For a semantic drafting tool, replace the template behind `perform()` and evaluate
-it separately: does it preserve commitments, identify conflicting dates, omit
-unsupported promises, and remain a draft? Keep the interface and handoff tests,
-but do not confuse them with a quality evaluation.
-
-Likewise, a deterministic caller selecting known names is not a test of description-
-driven model behavior. It isolates the mechanics so a later model-based evaluation
-can identify selection errors rather than rediscovering basic data loss.
+The template preserves evidence rather than deciding which deadline wins.
+A semantic replacement belongs behind `perform()`. Evaluate commitments,
+conflicting dates, unsupported promises, and draft-only behavior separately
+from the interface and handoff checks.
 
 ## 10.4 Make the archive durable
 
-The command prints the archive; redirect its JSON output to a chosen file if you
-want a durable run record. `MiniLoop.save()` is also available for recording events
-with their implementation digest. Store the matching repository revision beside it.
-
-Do not put real transcripts in a public static book repository. In a deployed
-system, retain archives under appropriate access control and deletion policy.
-The JSON endpoint that publishes this book is not a suitable store for private
-conversation data.
+Redirect the command's JSON or call `MiniLoop.save()` to retain events and their
+implementation digest; preserve the matching revision too. Real transcripts belong
+in access-controlled storage, not this public book's static endpoint.
 
 The local tests additionally run all ten programs, check replay immutability and
 source mismatch refusal, and exercise the complete flow with independent temporary
-files. These checks cover mechanics, not the unavailable production hosts.
+files. These checks cover deterministic mechanics.
+
+The [real chapter 10 turns](../fixtures/brainstem-live.json) additionally ran through
+the copied production `/chat`: a real model called the draft tool, then the reviewer
+with the identical draft, then only the draft tool with the later evidence.
+The runner asserts that `Monday` appears only in the revised draft, the handoff is
+exact, nothing is sent, and replay does not execute the reviewer. This is a caller-
+initiated selected-step re-execution, not a built-in runtime rewind command.
 
 ## 10.5 Exercises
 

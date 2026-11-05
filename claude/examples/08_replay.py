@@ -17,12 +17,13 @@ async def main():
     require_key()
     first = await checked_query(
         "Draft a follow-up asking for comments by Friday. Do not send.",
-        ClaudeAgentOptions(model=MODEL, tools=[], max_turns=3),
+        ClaudeAgentOptions(model=MODEL, tools=[], max_turns=3, setting_sources=[]),
     )
     fork = await checked_query(
         "Later evidence: the deadline moved to Monday. Revise the draft. Do not send.",
         ClaudeAgentOptions(model=MODEL, tools=[], max_turns=3,
-                           resume=first.session_id, fork_session=True),
+                           resume=first.session_id, fork_session=True,
+                           setting_sources=[]),
     )
     if first.session_id == fork.session_id:
         raise RuntimeError("fork did not create a distinct session")

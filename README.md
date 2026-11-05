@@ -28,8 +28,6 @@ No generated PDF or Jekyll installation is required.
 The frontmatter, navigation, chapter boxes, numbered sections, runnable-first
 sequence, exercises, and reference/glossary conventions follow the public
 [`rapp-1` reference book](https://github.com/kody-w/rapp-1/tree/main/book).
-The local reference directory was inaccessible, so the five named source files
-were fetched from its public repository.
 
 ## Run and verify
 
@@ -41,7 +39,18 @@ python3 brainstem/examples/10_system.py
 ```
 
 `mini_loop.py` is a deterministic caller selecting tools by explicit name, not a
-model and not an installed Brainstem runtime. Drafting is an evidence-preserving
+model and not an installed Brainstem runtime. A separate
+[live runner](scripts/run_brainstem_live.py) copies the inspected runtime and only
+book agents into a temporary directory, chooses a free loopback port, and reuses
+existing Copilot access without touching the work instance on port 7071.
+Install `flask flask-cors python-dotenv requests` in a chosen test environment,
+then run `python3 scripts/run_brainstem_live.py` for real model requests.
+The [synthetic fixture](fixtures/brainstem-live.json) records chapters 1, 5, 7,
+and 10. LearnNew created and next-turn loaded a tool, but used a fallback scaffold:
+its `copilot --message` generator invocation is incompatible with the installed CLI.
+Requested uppercase behavior did **not** pass; this is recorded, not hidden.
+
+Drafting is an evidence-preserving
 template in **both** books, not a claim of model-generated writing quality.
 
 Claude examples use the actual official SDKs. Use Python 3.13 for the reproducible
@@ -72,10 +81,17 @@ every Claude example. Live tests require both a key and explicit
 `BOOKS_LIVE_TESTS=1`; normal CI does not spend API credits.
 
 The suite checks all relative book links, numbering, frontmatter, source allowlists,
-example/fence parity, a maximum 15% manuscript-length difference, exact handoffs,
+ten numbered programs per book, per-concept Claude sections and official citations, exact handoffs,
 replay refusals, immutable snapshots, generated HTML links, and build idempotence.
-Word counts include manuscript bodies, tables, code, navigation, and the shared
-appendix; they exclude frontmatter, contents pages, source files, and generated HTML.
+Both prefaces receive the same generated plain-count table. Concepts and hosts
+come from each preface's JSON lists in front matter; host coverage does not mean
+deployment was tested. Examples count executable/configuration fences (`python`,
+`bash`, `sh`, `json`, `yaml`, `toml`, `javascript`, `markdown`), not plain output
+blocks; the ten numbered programs are also listed separately in the API.
+Word counts include manuscript bodies, code, navigation, and the shared appendix;
+they exclude frontmatter, the generated count table itself, contents pages, source
+files, and generated HTML. There is no length band or equal-fence requirement:
+length follows the material.
 
 ## Sources and limits
 
@@ -84,22 +100,25 @@ The supplied [news](ref-hacker_news_agent.py),
 [memory reader](ref-context_memory_agent.py) are quoted and analyzed, not imported
 as standalone examples. The [source essay](ref-blog-post.html) supplies the six rules
 and research starting points. Product claims in the Claude book cite only fetched
-official Anthropic sources, inline.
+official Anthropic sources, inline. The [fetch ledger](fixtures/claude-docs.json)
+records successful official URL responses and content hashes.
 
-**(unverified)** Installed Brainstem runtime/loader and concrete LearnNew behavior,
-authenticated scope binding and instance reuse, working Pyodide/browser deployment,
-and Copilot Studio adapters: local runtime access was denied and those hosts were
-not executed. The books distinguish these from the observed supplied source files.
+The installed Brainstem loader, LearnNew, memory agents, and conversation lifecycle
+are source-verified in [the evidence ledger](fixtures/brainstem-source.json).
+Conversation history is caller-owned; optional memory and other runtime files are
+not stateless. Fresh memory-agent instances start in shared scope; a model-supplied
+`user_guid` does not establish authorization.
 
-**(unverified)** Live authenticated API and Agent SDK execution unless explicitly
-enabled: compilation and imports do not establish account access, server-tool
-availability, or live behavior. The opt-in suite reports this honestly.
+**(unverified)** Working Pyodide/browser deployment and Copilot Studio integration:
+neither host was executed.
 
-**(unverified)** Full SDK import compatibility in the authoring environment:
-the dependency download failed its integrity check (empty artifact), and subsequent
-installation attempts were denied. No integrity check was bypassed. All examples
-compile; pure Claude handler/replay checks and the no-key refusal run without SDKs.
-CI still requires installation and the full import check rather than weakening them.
+**(unverified)** Authenticated Claude API, Agent SDK, Managed Agents, and product-UI
+execution: compilation and imports do not establish account access, server-tool
+availability, or live behavior. The API/SDK opt-in suite reports its skip honestly;
+other product hosts require separate acceptance runs.
+
+Official SDK dependencies were installed and every example was import-checked
+without network calls. Imports do not establish live API or Agent SDK behavior.
 
 `last_checked` is the editorial documentation-check timestamp, not the time of every
 build. Weekly/manual CI GET-checks every unique official citation and fails on

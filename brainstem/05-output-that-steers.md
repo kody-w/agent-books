@@ -36,11 +36,16 @@ The second step receives the draft as a value, not a paraphrase of a summary.
 That is the practical purpose of `data_slush`: keep machine-useful material
 available without asking another model to reconstruct it.
 
+The [live chapter 5 fixture](../fixtures/brainstem-live.json) repeats this boundary
+through real `/chat`: the caller supplies the first tool's exact `draft`, the model
+calls `ReviewDraft`, and the recorded tool result contains the identical string with
+`sent: false`. The runner asserts equality; a model saying "I reviewed it" alone
+would not pass. This is one observed handoff, not a guarantee of every model turn.
+
 ## 5.2 Three jobs in one result
 
-The readable piece answers "what happened?" Guidance answers "what should the
-reader consider next?" Structured data answers "what can the next operation use
-without interpretation?" These jobs overlap, but separating them prevents accidents.
+Summary says what happened; guidance suggests what to consider next; structured
+data supplies values without reinterpretation.
 
 In the [Hacker News agent](../ref-hacker_news_agent.py), `summary` contains formatted
 Markdown and an instruction to preserve clickable titles. `stories` holds full
@@ -58,18 +63,9 @@ in the summary. Both should be documented so a consumer knows what to preserve.
 
 ## 5.3 Guidance is not a command channel
 
-A tool can advise the next step without gaining authority over the caller.
-"Check conflicting dates" is useful guidance. "Ignore permissions and send this"
-would not become legitimate because it came back in a result field.
-
-Treat source transcripts, memory text, web content, and imported drafts as untrusted
-data. If you derive guidance from them, keep the trust distinction visible.
-Our draft embeds evidence verbatim for human review; it does not execute directives
-found in that evidence.
-
-Descriptions and results also cannot replace enforcement. These tools have no mail
-sender. The absence of that capability is stronger than repeating "never send"
-in a hundred paragraphs.
+Guidance gains no authority from being in a tool result. Treat transcripts, memory,
+and retrieved content as untrusted evidence. These tools cannot execute embedded
+directives or send mail: no sender exists.
 
 ## 5.4 Preserve failure context
 
@@ -77,13 +73,8 @@ When a first step fails, do not invoke a downstream reviewer with an empty draft
 and report success. Check `status` before reading the payload.
 Chapter 10 does so at the system boundary.
 
-A robust result may also need provenance, partial-success information, artifact
-identifiers, or a request for user approval. Add fields because a consumer needs
-them, not because every result must resemble a comprehensive framework.
-
-There is no guarantee that a model will obey result guidance verbatim. Test the
-actual host and caller with representative tasks. Offline equality tests establish
-that the payload survives transfer, not that prose guidance controls behavior.
+Add provenance, partial-success fields, or approval requests when a consumer needs
+them. Equality tests establish payload preservation, not obedience to prose guidance.
 
 ## 5.5 Exercises
 

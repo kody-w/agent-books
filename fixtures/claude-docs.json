@@ -1,0 +1,596 @@
+{
+  "schema": "agent-books-link-check/1.0",
+  "checked_at": "2026-11-05T20:22:17.355897Z",
+  "checked": 84,
+  "failed": 0,
+  "results": [
+    {
+      "url": "https://code.claude.com/docs/en/agent-sdk/custom-tools",
+      "ok": true,
+      "status": 200,
+      "final_url": "https://code.claude.com/docs/en/agent-sdk/custom-tools",
+      "sha256": "2c723d5de77ebc62965239c7342b9788293adb2f75c0c4d80538eb7489e7e956"
+    },
+    {
+      "url": "https://code.claude.com/docs/en/agent-sdk/permissions",
+      "ok": true,
+      "status": 200,
+      "final_url": "https://code.claude.com/docs/en/agent-sdk/permissions",
+      "sha256": "6bc0303cb1dc4a0ae3d11e8ffd3cf6d144971dd124a7eb36f8b9a4114eb82993"
+    },
+    {
+      "url": "https://code.claude.com/docs/en/agent-sdk/python",
+      "ok": true,
+      "status": 200,
+      "final_url": "https://code.claude.com/docs/en/agent-sdk/python",
+      "sha256": "c0af210cb936980387d3b6d9fe4cf981fda69eab78ec8f442219d46b6ed8fc67"
+    },
+    {
+      "url": "https://code.claude.com/docs/en/agent-sdk/sessions",
+      "ok": true,
+      "status": 200,
+      "final_url": "https://code.claude.com/docs/en/agent-sdk/sessions",
+      "sha256": "48719fc75a2eebed83afc08b54a5671ca51bd464954bbc63f0c17c6b1ab93ff3"
+    },
+    {
+      "url": "https://code.claude.com/docs/en/agent-teams",
+      "ok": true,
+      "status": 200,
+      "final_url": "https://code.claude.com/docs/en/agent-teams",
+      "sha256": "6a075871b2b6508445e94360a51d3ee565055a54d691bd539cdb09867491224f"
+    },
+    {
+      "url": "https://code.claude.com/docs/en/channels",
+      "ok": true,
+      "status": 200,
+      "final_url": "https://code.claude.com/docs/en/channels",
+      "sha256": "85564f31ce9b7ac25ee188f94feadf12afee84ce0723ac36d564b394493421c5"
+    },
+    {
+      "url": "https://code.claude.com/docs/en/checkpointing",
+      "ok": true,
+      "status": 200,
+      "final_url": "https://code.claude.com/docs/en/checkpointing",
+      "sha256": "7f65d43ec64ab8f7d283d4d2b187c192d9d61c84c2511866bb7e7994a330b581"
+    },
+    {
+      "url": "https://code.claude.com/docs/en/chrome",
+      "ok": true,
+      "status": 200,
+      "final_url": "https://code.claude.com/docs/en/chrome",
+      "sha256": "1c77b44fed57a97ff7b90156095200c9eeeb64f8658e2e05e7cf9e84a4969139"
+    },
+    {
+      "url": "https://code.claude.com/docs/en/commands",
+      "ok": true,
+      "status": 200,
+      "final_url": "https://code.claude.com/docs/en/commands",
+      "sha256": "6ce20c78a94eb6011c2671225280da9b521eb8c449987c46a6d445239160e790"
+    },
+    {
+      "url": "https://code.claude.com/docs/en/hooks",
+      "ok": true,
+      "status": 200,
+      "final_url": "https://code.claude.com/docs/en/hooks",
+      "sha256": "9f7adf5f8551207d7ef82bd3b2d4c921e0c95f56bd72303d69f2a899bbfe7452"
+    },
+    {
+      "url": "https://code.claude.com/docs/en/interactive-mode",
+      "ok": true,
+      "status": 200,
+      "final_url": "https://code.claude.com/docs/en/interactive-mode",
+      "sha256": "b41aea7f596e2feb4a3ee88e684360ac82eb18000af94dabc92c003f3503c629"
+    },
+    {
+      "url": "https://code.claude.com/docs/en/mcp",
+      "ok": true,
+      "status": 200,
+      "final_url": "https://code.claude.com/docs/en/mcp",
+      "sha256": "48438c47d0ae7cae96febf04a53af0e7b857a6798c11800a3b8dc6d6f1fba26e"
+    },
+    {
+      "url": "https://code.claude.com/docs/en/memory",
+      "ok": true,
+      "status": 200,
+      "final_url": "https://code.claude.com/docs/en/memory",
+      "sha256": "ffb07d4878507a70e921be17fe2d76149471c6dd1d3df696a919c4823169a954"
+    },
+    {
+      "url": "https://code.claude.com/docs/en/output-styles",
+      "ok": true,
+      "status": 200,
+      "final_url": "https://code.claude.com/docs/en/output-styles",
+      "sha256": "f5b37b47593115c459928c8c04babc0ac4a4f5af97eafa25e87a00c0d0813bac"
+    },
+    {
+      "url": "https://code.claude.com/docs/en/plugins/overview",
+      "ok": true,
+      "status": 200,
+      "final_url": "https://code.claude.com/docs/en/plugins/overview",
+      "sha256": "23bb67d27dcbade7c2a44f7b035940249c474bede848d4db6c6cbdb488159b32"
+    },
+    {
+      "url": "https://code.claude.com/docs/en/remote-control",
+      "ok": true,
+      "status": 200,
+      "final_url": "https://code.claude.com/docs/en/remote-control",
+      "sha256": "3d6c35f8628c1f181f7bdc7f0a05c727710aebf69cd30cc1bbe2835f12fc4de0"
+    },
+    {
+      "url": "https://code.claude.com/docs/en/skills",
+      "ok": true,
+      "status": 200,
+      "final_url": "https://code.claude.com/docs/en/skills",
+      "sha256": "0a07c526b4e1e1acd133ef1c71c8665cc6b2f26799da771ced0052d937e61a5a"
+    },
+    {
+      "url": "https://code.claude.com/docs/en/sub-agents",
+      "ok": true,
+      "status": 200,
+      "final_url": "https://code.claude.com/docs/en/sub-agents",
+      "sha256": "31ce3ae51d251a245d7c0655fc8bcfd840648dff1a5956ce9eef3d458b415645"
+    },
+    {
+      "url": "https://platform.claude.com/docs/en/agents-and-tools/agent-skills/overview",
+      "ok": true,
+      "status": 200,
+      "final_url": "https://platform.claude.com/docs/en/agents-and-tools/agent-skills/overview",
+      "sha256": "72e111d404c2f2304159c8340dea47537d05e0816d0b882f8e52fcbaf4f2b160"
+    },
+    {
+      "url": "https://platform.claude.com/docs/en/agents-and-tools/mcp-connector",
+      "ok": true,
+      "status": 200,
+      "final_url": "https://platform.claude.com/docs/en/agents-and-tools/mcp-connector",
+      "sha256": "9c4e39cd5e8fe4e33f3dff00d9a101803cf440b45a9e06b0c5dfd9c22554773e"
+    },
+    {
+      "url": "https://platform.claude.com/docs/en/agents-and-tools/mcp-tunnels/quickstart",
+      "ok": true,
+      "status": 200,
+      "final_url": "https://platform.claude.com/docs/en/agents-and-tools/mcp-tunnels/quickstart",
+      "sha256": "b91e248ad850b3b526aadcacf27caf5c9e16e3cb0de81e59ed951061a0c5702a"
+    },
+    {
+      "url": "https://platform.claude.com/docs/en/agents-and-tools/tool-use/advisor-tool",
+      "ok": true,
+      "status": 200,
+      "final_url": "https://platform.claude.com/docs/en/agents-and-tools/tool-use/advisor-tool",
+      "sha256": "6367ab61ea8a4b8597e6825e953473aef00598a560c0da4f406fb6af7d4c29c1"
+    },
+    {
+      "url": "https://platform.claude.com/docs/en/agents-and-tools/tool-use/bash-tool",
+      "ok": true,
+      "status": 200,
+      "final_url": "https://platform.claude.com/docs/en/agents-and-tools/tool-use/bash-tool",
+      "sha256": "78bda69f275bf05bebb2c3fda11823afc056b0453dc84cb1c8c7d7389cd890c2"
+    },
+    {
+      "url": "https://platform.claude.com/docs/en/agents-and-tools/tool-use/browser-use-sdk",
+      "ok": true,
+      "status": 200,
+      "final_url": "https://platform.claude.com/docs/en/agents-and-tools/tool-use/browser-use-sdk",
+      "sha256": "fe65ddd97d764eaba93436644c68c1926929aa073b4f8b52c533eceba94c0c84"
+    },
+    {
+      "url": "https://platform.claude.com/docs/en/agents-and-tools/tool-use/browser-use-tool",
+      "ok": true,
+      "status": 200,
+      "final_url": "https://platform.claude.com/docs/en/agents-and-tools/tool-use/browser-use-tool",
+      "sha256": "e05c50e9647d7958d9349fa0558fc96939f4a2be3463363101613d2534940104"
+    },
+    {
+      "url": "https://platform.claude.com/docs/en/agents-and-tools/tool-use/code-execution-tool",
+      "ok": true,
+      "status": 200,
+      "final_url": "https://platform.claude.com/docs/en/agents-and-tools/tool-use/code-execution-tool",
+      "sha256": "527f501e93fe17e46127fd6649fdf36d0af14776bca5df6f33228305ea9657c7"
+    },
+    {
+      "url": "https://platform.claude.com/docs/en/agents-and-tools/tool-use/computer-use-tool",
+      "ok": true,
+      "status": 200,
+      "final_url": "https://platform.claude.com/docs/en/agents-and-tools/tool-use/computer-use-tool",
+      "sha256": "367a4585a8bfd68b46e1ae2970d1e362f842c76a2ab7ab49d9928fc5c07bfe6c"
+    },
+    {
+      "url": "https://platform.claude.com/docs/en/agents-and-tools/tool-use/define-tools",
+      "ok": true,
+      "status": 200,
+      "final_url": "https://platform.claude.com/docs/en/agents-and-tools/tool-use/define-tools",
+      "sha256": "4f21fd1dc5f893e92fc54abe5c696b91fdf75b1d6c3629556da26b5ea5d2722e"
+    },
+    {
+      "url": "https://platform.claude.com/docs/en/agents-and-tools/tool-use/fine-grained-tool-streaming",
+      "ok": true,
+      "status": 200,
+      "final_url": "https://platform.claude.com/docs/en/agents-and-tools/tool-use/fine-grained-tool-streaming",
+      "sha256": "1b45172cd693fe281d364524053acf16ffa5ea807a6385f146f7765d24739a4f"
+    },
+    {
+      "url": "https://platform.claude.com/docs/en/agents-and-tools/tool-use/handle-tool-calls",
+      "ok": true,
+      "status": 200,
+      "final_url": "https://platform.claude.com/docs/en/agents-and-tools/tool-use/handle-tool-calls",
+      "sha256": "8ca85717b424fbac3c6b0ad97c47ce2c6a940712b84c2fd47a0efc5c45e67dea"
+    },
+    {
+      "url": "https://platform.claude.com/docs/en/agents-and-tools/tool-use/memory-tool",
+      "ok": true,
+      "status": 200,
+      "final_url": "https://platform.claude.com/docs/en/agents-and-tools/tool-use/memory-tool",
+      "sha256": "4f4e2e11f088536257967b8d75b188281bd8ce293fe496fea6bd21d57d17042d"
+    },
+    {
+      "url": "https://platform.claude.com/docs/en/agents-and-tools/tool-use/overview",
+      "ok": true,
+      "status": 200,
+      "final_url": "https://platform.claude.com/docs/en/agents-and-tools/tool-use/overview",
+      "sha256": "fb8cff46b1b0bbe835e3f3cdcceee8767b0880a47e169faf53eb85400a533f9d"
+    },
+    {
+      "url": "https://platform.claude.com/docs/en/agents-and-tools/tool-use/parallel-tool-use",
+      "ok": true,
+      "status": 200,
+      "final_url": "https://platform.claude.com/docs/en/agents-and-tools/tool-use/parallel-tool-use",
+      "sha256": "7bbf18724594a002da13622b090ae6f52440989ed3ae112ff13e7ca68d867f92"
+    },
+    {
+      "url": "https://platform.claude.com/docs/en/agents-and-tools/tool-use/programmatic-tool-calling",
+      "ok": true,
+      "status": 200,
+      "final_url": "https://platform.claude.com/docs/en/agents-and-tools/tool-use/programmatic-tool-calling",
+      "sha256": "1ad0202de01fe22270c66c31c0171965d9f183ce3cd1b3e0b3e37cce3bb774c7"
+    },
+    {
+      "url": "https://platform.claude.com/docs/en/agents-and-tools/tool-use/strict-tool-use",
+      "ok": true,
+      "status": 200,
+      "final_url": "https://platform.claude.com/docs/en/agents-and-tools/tool-use/strict-tool-use",
+      "sha256": "bca1170b05afb66cfe44e11664fb4b115e5667c99290458dcd275337f1945fe1"
+    },
+    {
+      "url": "https://platform.claude.com/docs/en/agents-and-tools/tool-use/text-editor-tool",
+      "ok": true,
+      "status": 200,
+      "final_url": "https://platform.claude.com/docs/en/agents-and-tools/tool-use/text-editor-tool",
+      "sha256": "763e94a74a2cae2b277a4810456c7493e7b8eebdff5c045283e8b619b0e8c301"
+    },
+    {
+      "url": "https://platform.claude.com/docs/en/agents-and-tools/tool-use/tool-runner",
+      "ok": true,
+      "status": 200,
+      "final_url": "https://platform.claude.com/docs/en/agents-and-tools/tool-use/tool-runner",
+      "sha256": "c6e3e628a1626ad7b8f4dd50e325716d1d34ca7b388179c5c16fbc0afdb05c33"
+    },
+    {
+      "url": "https://platform.claude.com/docs/en/agents-and-tools/tool-use/tool-search-tool",
+      "ok": true,
+      "status": 200,
+      "final_url": "https://platform.claude.com/docs/en/agents-and-tools/tool-use/tool-search-tool",
+      "sha256": "2b6d0c3361d47e47f9e184289a803af7d05f3f63ef5c39ecb8ab4c3bc36df4d4"
+    },
+    {
+      "url": "https://platform.claude.com/docs/en/agents-and-tools/tool-use/web-fetch-tool",
+      "ok": true,
+      "status": 200,
+      "final_url": "https://platform.claude.com/docs/en/agents-and-tools/tool-use/web-fetch-tool",
+      "sha256": "b4747add2f72acf0eca2732b7418d736c953eb0d2e3ddb3427f361dcfe872c88"
+    },
+    {
+      "url": "https://platform.claude.com/docs/en/agents-and-tools/tool-use/web-search-tool",
+      "ok": true,
+      "status": 200,
+      "final_url": "https://platform.claude.com/docs/en/agents-and-tools/tool-use/web-search-tool",
+      "sha256": "884536dfa73be128c715123cfc98ee41fc2845a5862214f8260515d5b72d0975"
+    },
+    {
+      "url": "https://platform.claude.com/docs/en/build-with-claude/batch-processing",
+      "ok": true,
+      "status": 200,
+      "final_url": "https://platform.claude.com/docs/en/build-with-claude/batch-processing",
+      "sha256": "5f6c0b848846775fab267d626bcad75dd1cde0be3e9b5cca130d5ddfdff29685"
+    },
+    {
+      "url": "https://platform.claude.com/docs/en/build-with-claude/citations",
+      "ok": true,
+      "status": 200,
+      "final_url": "https://platform.claude.com/docs/en/build-with-claude/citations",
+      "sha256": "4e3530f09d39ef350c70d57058c3f3455d6d85707f34eca49d39a6fd1b2fe55d"
+    },
+    {
+      "url": "https://platform.claude.com/docs/en/build-with-claude/compaction",
+      "ok": true,
+      "status": 200,
+      "final_url": "https://platform.claude.com/docs/en/build-with-claude/compaction",
+      "sha256": "c1fc0637912dc2890497dbc786e5279cba28d578c11e2a6a531e69e550fe0dd8"
+    },
+    {
+      "url": "https://platform.claude.com/docs/en/build-with-claude/compaction-background",
+      "ok": true,
+      "status": 200,
+      "final_url": "https://platform.claude.com/docs/en/build-with-claude/compaction-background",
+      "sha256": "03357ad4452b0f6aad5982019b7a6fc7eb1bf686676f1b621b88a4fab53b6687"
+    },
+    {
+      "url": "https://platform.claude.com/docs/en/build-with-claude/compaction-on-demand",
+      "ok": true,
+      "status": 200,
+      "final_url": "https://platform.claude.com/docs/en/build-with-claude/compaction-on-demand",
+      "sha256": "2109b26ac323fb643f98ffda0e9585ee998b00e32a79f91257b85396c58333a1"
+    },
+    {
+      "url": "https://platform.claude.com/docs/en/build-with-claude/context-editing",
+      "ok": true,
+      "status": 200,
+      "final_url": "https://platform.claude.com/docs/en/build-with-claude/context-editing",
+      "sha256": "668db72d76abcc6a26a3dcc1e111e1f2fd35b4a265834a336c9dbf5bdb1be0ca"
+    },
+    {
+      "url": "https://platform.claude.com/docs/en/build-with-claude/effort",
+      "ok": true,
+      "status": 200,
+      "final_url": "https://platform.claude.com/docs/en/build-with-claude/effort",
+      "sha256": "508e42f06daab51f4d0abaa36a9d07c53d6fb55bd8c87a383bfb1a5716667f0c"
+    },
+    {
+      "url": "https://platform.claude.com/docs/en/build-with-claude/files",
+      "ok": true,
+      "status": 200,
+      "final_url": "https://platform.claude.com/docs/en/build-with-claude/files",
+      "sha256": "5666179c4839251a936892b70e1c9c15b0d0281f660e08c3f5b009497090917b"
+    },
+    {
+      "url": "https://platform.claude.com/docs/en/build-with-claude/message-threads",
+      "ok": true,
+      "status": 200,
+      "final_url": "https://platform.claude.com/docs/en/build-with-claude/message-threads",
+      "sha256": "51db4c8d40f43cab965431f3b1adb75285c8ee7e1f0ef43e20c075c0c90e7ca5"
+    },
+    {
+      "url": "https://platform.claude.com/docs/en/build-with-claude/mid-conversation-system-messages",
+      "ok": true,
+      "status": 200,
+      "final_url": "https://platform.claude.com/docs/en/build-with-claude/mid-conversation-system-messages",
+      "sha256": "a47b780e5071e28a55ad008d270294a1b34af05579a96b45373f84211251836d"
+    },
+    {
+      "url": "https://platform.claude.com/docs/en/build-with-claude/prompt-caching",
+      "ok": true,
+      "status": 200,
+      "final_url": "https://platform.claude.com/docs/en/build-with-claude/prompt-caching",
+      "sha256": "aee2de4eb8dbb3102f9164831482d848afc9621ca0a19bbd4f4fd11f46b2d3d1"
+    },
+    {
+      "url": "https://platform.claude.com/docs/en/build-with-claude/search-results",
+      "ok": true,
+      "status": 200,
+      "final_url": "https://platform.claude.com/docs/en/build-with-claude/search-results",
+      "sha256": "53497db729115c49c030e7a80e03c082c7eb652008df97bc5cb0d613fcfa1ada"
+    },
+    {
+      "url": "https://platform.claude.com/docs/en/build-with-claude/skills-guide",
+      "ok": true,
+      "status": 200,
+      "final_url": "https://platform.claude.com/docs/en/build-with-claude/skills-guide",
+      "sha256": "a81a42e063e6b7c57c9b15d687d666be81b6c950425bcef7ce990cfa07c6f42d"
+    },
+    {
+      "url": "https://platform.claude.com/docs/en/build-with-claude/structured-outputs",
+      "ok": true,
+      "status": 200,
+      "final_url": "https://platform.claude.com/docs/en/build-with-claude/structured-outputs",
+      "sha256": "a97a39ec51ed00d9467f7e7a0047ce12f13b0dccb75aef0655ff03be57af6781"
+    },
+    {
+      "url": "https://platform.claude.com/docs/en/build-with-claude/task-budgets",
+      "ok": true,
+      "status": 200,
+      "final_url": "https://platform.claude.com/docs/en/build-with-claude/task-budgets",
+      "sha256": "7f329d700eaaab8f770607d12e9cc5ec3973970592591f3852fccc0cade8f0b6"
+    },
+    {
+      "url": "https://platform.claude.com/docs/en/build-with-claude/thinking",
+      "ok": true,
+      "status": 200,
+      "final_url": "https://platform.claude.com/docs/en/build-with-claude/thinking",
+      "sha256": "4a7cd52014d12df139393d16e47bc79fe349ece71415d33d6d67206cc0478530"
+    },
+    {
+      "url": "https://platform.claude.com/docs/en/build-with-claude/token-counting",
+      "ok": true,
+      "status": 200,
+      "final_url": "https://platform.claude.com/docs/en/build-with-claude/token-counting",
+      "sha256": "6fbe962ba8db657bce1e4a98fbf1107d1ce4f8f561db183887c46b71dca8f233"
+    },
+    {
+      "url": "https://platform.claude.com/docs/en/manage-claude/inference-hooks",
+      "ok": true,
+      "status": 200,
+      "final_url": "https://platform.claude.com/docs/en/manage-claude/inference-hooks",
+      "sha256": "6acb75c54a13fcd1cc2bcd9e830bd19e507415a277368183dcb65f1eaab6ad6f"
+    },
+    {
+      "url": "https://platform.claude.com/docs/en/manage-claude/inference-hooks-configuration",
+      "ok": true,
+      "status": 200,
+      "final_url": "https://platform.claude.com/docs/en/manage-claude/inference-hooks-configuration",
+      "sha256": "49119570fa5b901ad09d2464776bd4ba127037c4aed44c646bd8b481e016864e"
+    },
+    {
+      "url": "https://platform.claude.com/docs/en/manage-claude/inference-hooks-endpoint",
+      "ok": true,
+      "status": 200,
+      "final_url": "https://platform.claude.com/docs/en/manage-claude/inference-hooks-endpoint",
+      "sha256": "72082f371839c78d4fbd5c44910b27c26e49dd856cf65265a99e4afce5b7af6a"
+    },
+    {
+      "url": "https://platform.claude.com/docs/en/managed-agents/agent-setup",
+      "ok": true,
+      "status": 200,
+      "final_url": "https://platform.claude.com/docs/en/managed-agents/agent-setup",
+      "sha256": "c2e473daf734cd17b80db5e1820e96a7d96b329c1deae77c6a2b3049484d364f"
+    },
+    {
+      "url": "https://platform.claude.com/docs/en/managed-agents/define-outcomes",
+      "ok": true,
+      "status": 200,
+      "final_url": "https://platform.claude.com/docs/en/managed-agents/define-outcomes",
+      "sha256": "07b5e9e8fbd11ed25e3190c635ec8b6d991762cbd6449e246d65b4cf2dfea43c"
+    },
+    {
+      "url": "https://platform.claude.com/docs/en/managed-agents/dreams",
+      "ok": true,
+      "status": 200,
+      "final_url": "https://platform.claude.com/docs/en/managed-agents/dreams",
+      "sha256": "0c7b9988bca6b352a1bd5508b071a391e34da8301f126954366c1df67766e3da"
+    },
+    {
+      "url": "https://platform.claude.com/docs/en/managed-agents/memory",
+      "ok": true,
+      "status": 200,
+      "final_url": "https://platform.claude.com/docs/en/managed-agents/memory",
+      "sha256": "233cafa7cc9c6ece91170766121d4ef381330ce871d0a7210f281ad90c998986"
+    },
+    {
+      "url": "https://platform.claude.com/docs/en/managed-agents/multiagent-orchestration",
+      "ok": true,
+      "status": 200,
+      "final_url": "https://platform.claude.com/docs/en/managed-agents/multiagent-orchestration",
+      "sha256": "990c13186e19000f2b2d77291983cc29aa87fb8f4a7ffcf5b628d45b93df3947"
+    },
+    {
+      "url": "https://platform.claude.com/docs/en/managed-agents/overview",
+      "ok": true,
+      "status": 200,
+      "final_url": "https://platform.claude.com/docs/en/managed-agents/overview",
+      "sha256": "9a4dc419265cab0469914679ab5148c5aef0246aaafb6b846fc6847da50494d8"
+    },
+    {
+      "url": "https://platform.claude.com/docs/en/managed-agents/quickstart",
+      "ok": true,
+      "status": 200,
+      "final_url": "https://platform.claude.com/docs/en/managed-agents/quickstart",
+      "sha256": "61bb43df0f52c5c8ef5dd36a40e9c782f5d726c81e8540ed7fd427e55e2435b7"
+    },
+    {
+      "url": "https://platform.claude.com/docs/en/managed-agents/scheduled-deployments",
+      "ok": true,
+      "status": 200,
+      "final_url": "https://platform.claude.com/docs/en/managed-agents/scheduled-deployments",
+      "sha256": "f52d3d8f101752df15abfd4884d5224b9bf71566ea8d724437fca664717d3f90"
+    },
+    {
+      "url": "https://platform.claude.com/docs/en/managed-agents/self-hosted-sandboxes",
+      "ok": true,
+      "status": 200,
+      "final_url": "https://platform.claude.com/docs/en/managed-agents/self-hosted-sandboxes",
+      "sha256": "7bfc197ded4c2d37e268b1f6ad8a684c3d56837a5cba258076fa19aa75b494c3"
+    },
+    {
+      "url": "https://platform.claude.com/docs/en/managed-agents/self-hosted-sandboxes-custom-tools",
+      "ok": true,
+      "status": 200,
+      "final_url": "https://platform.claude.com/docs/en/managed-agents/self-hosted-sandboxes-custom-tools",
+      "sha256": "661f8fc3f2f5206bbb022bd66595333500fc88bbff65f53c1a9c107c8f13c7d3"
+    },
+    {
+      "url": "https://platform.claude.com/docs/en/managed-agents/self-hosted-sandboxes-custom-tools.md",
+      "ok": true,
+      "status": 200,
+      "final_url": "https://platform.claude.com/docs/en/managed-agents/self-hosted-sandboxes-custom-tools.md",
+      "sha256": "661f8fc3f2f5206bbb022bd66595333500fc88bbff65f53c1a9c107c8f13c7d3"
+    },
+    {
+      "url": "https://platform.claude.com/docs/en/managed-agents/self-hosted-sandboxes-workers",
+      "ok": true,
+      "status": 200,
+      "final_url": "https://platform.claude.com/docs/en/managed-agents/self-hosted-sandboxes-workers",
+      "sha256": "50e659f866f714674373e5cd646704508c578d1a50aafb71cbbd421e9e2cab0c"
+    },
+    {
+      "url": "https://platform.claude.com/docs/en/managed-agents/session-operations",
+      "ok": true,
+      "status": 200,
+      "final_url": "https://platform.claude.com/docs/en/managed-agents/session-operations",
+      "sha256": "4f986f4d38c7a8fb122d8765025c98794f78b9cfda939da407ee9057064e9a7d"
+    },
+    {
+      "url": "https://platform.claude.com/docs/en/managed-agents/sessions",
+      "ok": true,
+      "status": 200,
+      "final_url": "https://platform.claude.com/docs/en/managed-agents/sessions",
+      "sha256": "5e4224acbd40e586d61f078d9e7a8f241f051a7cb659826f0588d957ebd85b14"
+    },
+    {
+      "url": "https://platform.claude.com/docs/en/managed-agents/skills",
+      "ok": true,
+      "status": 200,
+      "final_url": "https://platform.claude.com/docs/en/managed-agents/skills",
+      "sha256": "b70484ed0ee9b9ac6e124885e11a6763eb648c3886cf7633c8fc82a3790b9a25"
+    },
+    {
+      "url": "https://platform.claude.com/docs/en/managed-agents/tools",
+      "ok": true,
+      "status": 200,
+      "final_url": "https://platform.claude.com/docs/en/managed-agents/tools",
+      "sha256": "4a107edb9b166b67136244f6ee888670bcc0ecdc42a53820a48b0be2d7ef0c9a"
+    },
+    {
+      "url": "https://platform.claude.com/docs/en/managed-agents/tools.md",
+      "ok": true,
+      "status": 200,
+      "final_url": "https://platform.claude.com/docs/en/managed-agents/tools.md",
+      "sha256": "4a107edb9b166b67136244f6ee888670bcc0ecdc42a53820a48b0be2d7ef0c9a"
+    },
+    {
+      "url": "https://platform.claude.com/docs/en/managed-agents/workflow-runs",
+      "ok": true,
+      "status": 200,
+      "final_url": "https://platform.claude.com/docs/en/managed-agents/workflow-runs",
+      "sha256": "f642c920dea840e3fe18d026061ec76515a299de4fbfdeec966b5e16293bd952"
+    },
+    {
+      "url": "https://platform.claude.com/docs/llms.txt",
+      "ok": true,
+      "status": 200,
+      "final_url": "https://platform.claude.com/llms.txt",
+      "sha256": "7be9893a9cdb9c131e9a353b72c03efcab56febf4a713acff1461a70b76f77ac"
+    },
+    {
+      "url": "https://platform.claude.com/docs/mcp",
+      "ok": true,
+      "status": 200,
+      "final_url": "https://platform.claude.com/docs/mcp",
+      "sha256": "d63514020c211013f99ecea96682427131000757a65508515354c1b4d6ee3879"
+    },
+    {
+      "url": "https://support.claude.com/en/articles/11175166-getting-started-with-custom-connectors-using-remote-mcp",
+      "ok": true,
+      "status": 200,
+      "final_url": "https://support.claude.com/en/articles/11175166-get-started-with-custom-connectors-using-remote-mcp",
+      "sha256": "3048ff65086686cc2fdcf37a0ed4da61cde2145e42e35e0f6558fe39dbef4b12"
+    },
+    {
+      "url": "https://support.claude.com/en/articles/12512180-using-skills-in-claude",
+      "ok": true,
+      "status": 200,
+      "final_url": "https://support.claude.com/en/articles/12512180-use-skills-in-claude",
+      "sha256": "a3cb297265ee17fe7cf772933bb305a585826f66a4fa8246f375922a2424c5f2"
+    },
+    {
+      "url": "https://support.claude.com/en/articles/13345190-getting-started-with-cowork",
+      "ok": true,
+      "status": 200,
+      "final_url": "https://support.claude.com/en/articles/13345190-get-started-with-claude-cowork",
+      "sha256": "fa80e558e6a0fa35175d699b42abff0ca41138b0bf52f405eb0e835320d2a262"
+    },
+    {
+      "url": "https://support.claude.com/en/articles/9517075-what-are-projects",
+      "ok": true,
+      "status": 200,
+      "final_url": "https://support.claude.com/en/articles/9517075-what-are-projects",
+      "sha256": "2092654103eaf305a7b799fc16637e4946a703626a0a5f911ee5dc75a77d4dea"
+    }
+  ]
+}

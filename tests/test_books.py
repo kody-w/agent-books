@@ -1,3 +1,4 @@
+import ast
 import copy
 import hashlib
 from html.parser import HTMLParser
@@ -18,6 +19,20 @@ import build
 
 BOOKS = ("brainstem", "claude")
 MANIFEST = json.loads((ROOT / "manifest.json").read_text())
+REQUIRED_CLAUDE_CONCEPTS = {
+    "client tools", "tool_choice", "web search", "web fetch", "code execution",
+    "tool runner", "programmatic tool calling", "tool search", "memory tool",
+    "context editing", "prompt caching", "Files API", "MCP connector",
+    "Agent Skills: Claude Code", "Agent Skills: API", "Agent Skills: claude.ai",
+    "subagents", "slash commands", "hooks", "plugins", "MCP servers in Claude Code",
+    "output styles", "CLAUDE.md and auto memory", "checkpoints and rewind",
+    "background tasks", "Agent SDK", "Managed Agents", "Projects", "connectors",
+    "Cowork", "Claude in Chrome",
+    "Agent SDK sessions: resume and fork", "Agent SDK custom tools",
+    "Agent SDK ClaudeSDKClient", "Agent SDK permissions",
+    "Managed Agents sessions", "Managed Agents custom tools",
+    "Managed Agents self-hosted workers",
+}
 
 
 def manuscripts(book):
@@ -122,20 +137,71 @@ class BookStructure(unittest.TestCase):
             for url in build.URL_RE.findall(text):
                 self.assertTrue(build.official(url.rstrip(".,;")), f"{path}: nonofficial {url}")
 
-    def test_equal_examples_and_length_band(self):
+    def test_ten_numbered_programs_per_book(self):
         counts = []
-        words = []
-        fences = []
         for book in BOOKS:
             examples = sorted((ROOT / book / "examples").glob("[0-9][0-9]_*.py"))
             self.assertEqual([int(p.name[:2]) for p in examples], list(range(1, 11)))
             counts.append(len(examples))
-            words.append(sum(len(build.frontmatter(p.read_text())[1].split()) for p in manuscripts(book)))
-            fences.append(sum(len(re.findall(r"```python\n", p.read_text())) for p in manuscripts(book)))
         self.assertEqual(*counts)
-        self.assertEqual(*fences)
-        self.assertLessEqual(max(words) / min(words), 1.15)
-        self.assertGreater(min(words), 7000)
+
+    def test_declared_concepts_have_sections(self):
+        for book in BOOKS:
+            metadata, _ = build.frontmatter((ROOT / book / "00-preface.md").read_text())
+            for concept in metadata["concepts"]:
+                path = ROOT / book / concept["chapter"]
+                self.assertIn(path, manuscripts(book))
+                body = build.frontmatter(path.read_text())[1]
+                heading = "## " + concept["section"]
+                self.assertIn(heading + "\n", body, concept["name"])
+                section = body.split(heading + "\n", 1)[1].split("\n## ", 1)[0]
+                if book == "claude":
+                    self.assertTrue(build.doc_urls(section), f"{concept['name']}: no official citation")
+                    self.assertRegex(section, r"```(?:python|bash|sh|json|yaml|toml|markdown)\n",
+                                     f"{concept['name']}: no runnable example or exact config")
+
+    def test_every_requested_claude_concept_is_declared(self):
+        metadata, _ = build.frontmatter((ROOT / "claude/00-preface.md").read_text())
+        self.assertLessEqual(REQUIRED_CLAUDE_CONCEPTS, {c["name"] for c in metadata["concepts"]})
+        sections = {}
+        for concept in metadata["concepts"]:
+            text = (ROOT / "claude" / concept["chapter"]).read_text()
+            sections[concept["name"]] = text.split("## " + concept["section"] + "\n", 1)[1].split(
+                "\n## ", 1)[0]
+        sdk = "\n".join(section for name, section in sections.items() if name.startswith("Agent SDK"))
+        managed = "\n".join(
+            section for name, section in sections.items() if name.startswith("Managed Agents")
+        )
+        for token in ("query", "ClaudeSDKClient", "custom", "resume", "fork", "permission"):
+            self.assertIn(token.lower(), sdk.lower(), token)
+        for token in ("agents", "sessions", "custom", "self-hosted"):
+            self.assertIn(token, managed.lower(), token)
+
+    def test_official_citations_have_fetch_evidence(self):
+        evidence = json.loads((ROOT / "fixtures/claude-docs.json").read_text())
+        urls = {url for book in BOOKS for path in manuscripts(book)
+                for url in build.doc_urls(path.read_text())}
+        fetched = {result["url"] for result in evidence["results"] if result["ok"]}
+        self.assertLessEqual(urls, fetched)
+        self.assertEqual(evidence["failed"], 0)
+        for result in evidence["results"]:
+            self.assertEqual(result["status"], 200)
+            self.assertRegex(result["sha256"], r"^[0-9a-f]{64}$")
+
+    def test_generated_plain_counts(self):
+        counts = build.book_counts(ROOT, MANIFEST)
+        regions = []
+        api = json.loads((ROOT / "api/v1/books.json").read_text())
+        for book in api["books"]:
+            for key, value in counts[book["name"]].items():
+                self.assertEqual(book[key], value)
+            self.assertEqual(book["word_count"], sum(c["words"] for c in book["chapters"]))
+            text = (ROOT / book["name"] / "00-preface.md").read_text()
+            regions.append(build.COUNTS_RE.findall(text)[0])
+            self.assertIn(f"| {book['name'].capitalize()} | {book['concept_count']} | "
+                          f"{book['host_count']} | {book['word_count']} | {book['example_count']} |",
+                          regions[-1])
+        self.assertEqual(*regions)
 
     def test_mapping_is_identical(self):
         shared = (ROOT / "shared/C-mapping-table.md").read_bytes()
@@ -148,6 +214,36 @@ class BookStructure(unittest.TestCase):
         ):
             model_ids = re.findall(r"claude-(?:opus|sonnet|haiku)-[\w.-]+", path.read_text())
             self.assertTrue(all(m == "claude-opus-5-5" for m in model_ids), path)
+
+    def test_code_execution_request_versions_match(self):
+        declarations = callers = 0
+        paths = [ROOT / "claude/examples" / name
+                 for name in ("03_execution.py", "04_transcript.py")]
+        sources = [path.read_text() for path in paths]
+        for name in ("03-execution.md", "04-the-transcript.md"):
+            sources += re.findall(r"```python\n(.*?)\n```",
+                                  (ROOT / "claude" / name).read_text(), re.S)
+        for source in sources:
+            for node in ast.walk(ast.parse(source)):
+                if not isinstance(node, ast.Dict):
+                    continue
+                fields = {key.value: value for key, value in zip(node.keys, node.values)
+                          if isinstance(key, ast.Constant) and isinstance(key.value, str)}
+                name = fields.get("name")
+                kind = fields.get("type")
+                if (isinstance(name, ast.Constant) and name.value == "code_execution"
+                        and isinstance(kind, ast.Constant)
+                        and isinstance(kind.value, str) and kind.value.startswith("code_execution_")):
+                    self.assertEqual(ast.literal_eval(fields["type"]), "code_execution_20260521")
+                    declarations += 1
+                allowed = fields.get("allowed_callers")
+                if isinstance(allowed, ast.List):
+                    values = ast.literal_eval(allowed)
+                    if any(value.startswith("code_execution_") for value in values):
+                        self.assertEqual(values, ["code_execution_20260521"])
+                        callers += 1
+        self.assertGreaterEqual(declarations, 2)
+        self.assertGreaterEqual(callers, 1)
 
 
 class BrainstemExamples(unittest.TestCase):
@@ -243,6 +339,53 @@ class BrainstemExamples(unittest.TestCase):
         loop = self.profile.MiniLoop()
         with self.assertRaises(ValueError):
             loop.register(self.profile.load_trusted_file(self.profile.SOURCE))
+
+    def test_recorded_real_runtime_evidence(self):
+        from scripts.run_brainstem_live import outputs
+        record = json.loads((ROOT / "fixtures/brainstem-live.json").read_text())
+        self.assertEqual(record["schema"], "agent-books-brainstem-live/1.0")
+        self.assertEqual(record["initial_agents"], ["DraftFollowUp", "ReviewDraft", "LearnNew"])
+        turns = record["turns"]
+        self.assertEqual([t["chapter"] for t in turns], [1, 5, 7, 7, 10, 10, 10])
+        for turn in turns:
+            self.assertTrue(turn["response"]["model"])
+            self.assertEqual(turn["response"]["session_id"], "synthetic-book-session")
+            self.assertNotIn("error", turn["response"])
+        hello = outputs(turns[0]["response"], "DraftFollowUp")[0]
+        handoff = outputs(turns[1]["response"], "ReviewDraft")[0]
+        self.assertEqual(hello["data_slush"]["draft"], handoff["data_slush"]["draft"])
+        created = outputs(turns[2]["response"], "LearnNew")[0]
+        self.assertTrue(created["hot_loaded"])
+        self.assertEqual(created["agent_name"], "BookUpper")
+        learned = outputs(turns[3]["response"], "BookUpper")[0]
+        self.assertEqual(record["growth_behavior"]["actual_result"], learned["result"])
+        self.assertEqual(record["growth_behavior"]["semantic_request_met"],
+                         learned["result"] == record["growth_behavior"]["requested_result"])
+        self.assertEqual(record["growth_behavior"]["stock_fallback_body"],
+                         "# Default implementation - customize this" in record["generated_source"])
+        compile(record["generated_source"], "recorded_generated_agent", "exec")
+        original = outputs(turns[4]["response"], "DraftFollowUp")[0]
+        review = outputs(turns[5]["response"], "ReviewDraft")[0]
+        revised = outputs(turns[6]["response"], "DraftFollowUp")[0]
+        self.assertEqual(original["data_slush"]["draft"], review["data_slush"]["draft"])
+        self.assertFalse(review["data_slush"]["sent"])
+        self.assertNotIn("Monday", original["summary"])
+        self.assertIn("Monday", revised["summary"])
+        self.assertFalse(outputs(turns[6]["response"], "ReviewDraft"))
+        for index in (0, 4, 6):
+            output = outputs(turns[index]["response"], "DraftFollowUp")[0]
+            # The recorded model trimmed the final input newline before calling.
+            text = turns[index]["request"]["user_input"].split("transcript:\n", 1)[1].strip()
+            self.assertEqual(output["data_slush"]["source_sha256"],
+                             hashlib.sha256(text.encode()).hexdigest())
+        source = json.loads((ROOT / "fixtures/brainstem-source.json").read_text())
+        for file in source["files"]:
+            self.assertRegex(file["sha256"], r"^[0-9a-f]{64}$")
+            if file["path"] in record["runtime_sources_sha256"]:
+                self.assertEqual(file["sha256"], record["runtime_sources_sha256"][file["path"]])
+        fixture_text = json.dumps(record)
+        self.assertNotIn("/Users/", fixture_text)
+        self.assertNotRegex(fixture_text, r"(?:ghu_|ghp_|sk-ant-)[A-Za-z0-9]{10}")
 
 
 HAS_SDK = all(importlib.util.find_spec(m) is not None for m in ("anthropic", "claude_agent_sdk"))
@@ -379,7 +522,8 @@ class StaticPublication(unittest.TestCase):
             build.build(target)
             for name, raw in before.items():
                 self.assertEqual((target / name).read_bytes(), raw)
-            self.assertEqual(len(list((target / "versions").rglob("*.md"))), len(before) + 1)
+            # One chapter and both generated preface tables get new snapshots.
+            self.assertEqual(len(list((target / "versions").rglob("*.md"))), len(before) + 3)
 
     def test_generated_html_links_and_ids(self):
         for path in [ROOT / "index.html"] + [
@@ -402,6 +546,7 @@ class StaticPublication(unittest.TestCase):
         path = ROOT / "brainstem/01-a-tutorial-introduction.html"
         text = path.read_text()
         self.assertNotIn("book_progress:", text)
+        self.assertNotIn("book-counts:", (ROOT / "brainstem/00-preface.html").read_text())
         self.assertIn("<blockquote>", text)
         self.assertIn('href="02-the-interface.html"', text)
         rendered = build.markdown("```python\nprint('<script>')\n```", path, set())

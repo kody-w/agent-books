@@ -2,7 +2,7 @@
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>The Claude Agent Programming Language — The Transcript</title><link rel="stylesheet" href="../site.css"></head><body><div class="progress" style="width:31%"></div><main><nav><a href="../index.html">Companion shelf</a></nav><p class="edition">Docs as of 2026-11-05 · Tutorial and reference edition</p><p><a href="03-execution.html">← Chapter 3: Execution</a> · <a href="README.html">Book contents</a> · <a href="05-output-that-steers.html">Chapter 5: Output That Steers the Next Step →</a></p>
 <h1 id="chapter-4--the-transcript">Chapter 4 — The Transcript</h1>
 <blockquote><p><strong>In this chapter:</strong> distinguish the durable record from active context and reduce irrelevant material with delegation, programmatic calls, and context editing.</p></blockquote>
-<h2 id="41-enable-a-context-policy">4.1 Enable a context policy</h2>
+<h2 id="41-context-editing-retain-the-archive-trim-active-context">4.1 Context editing: retain the archive, trim active context</h2>
 <p>Run <code>python3 claude/examples/04_transcript.py</code>. It makes a real beta request; its short conversation demonstrates configuration, not a measured clearing event:</p>
 <pre><code class="language-python">import anthropic
 
@@ -15,17 +15,102 @@ with anthropic.Anthropic() as client:
     )
     print(response.model_dump_json(indent=2))</code></pre>
 <p>Context editing can clear old tool results before the prompt reaches Claude. The client retains its full conversation history. The feature is beta and uses the explicit header above. A tiny request need not reach its clearing threshold. <a href="https://platform.claude.com/docs/en/build-with-claude/context-editing">Context editing</a>.</p>
+<p><strong>When:</strong> long tool traces displace the evidence needed for the next decision. <strong>Exact policy:</strong> replace the example&#x27;s <code>edits</code> array with the following to trigger at 30,000 input tokens, retain three tool uses, and require a worthwhile minimum clearing:</p>
+<pre><code class="language-python">context_management = {&quot;edits&quot;: [{
+    &quot;type&quot;: &quot;clear_tool_uses_20250919&quot;,
+    &quot;trigger&quot;: {&quot;type&quot;: &quot;input_tokens&quot;, &quot;value&quot;: 30000},
+    &quot;keep&quot;: {&quot;type&quot;: &quot;tool_uses&quot;, &quot;value&quot;: 3},
+    &quot;clear_at_least&quot;: {&quot;type&quot;: &quot;input_tokens&quot;, &quot;value&quot;: 5000},
+    &quot;exclude_tools&quot;: [&quot;review_draft&quot;],
+}]}</code></pre>
+<p><strong>Limits:</strong> clearing cannot act until eligible content and the threshold exist. Inspect <code>context_management.applied_edits</code> in the response before claiming a clearing event. Tool-result clearing differs from thinking-block clearing; the order of edits matters when combining strategies. This changes the model&#x27;s view, not the client&#x27;s archive or the underlying files. <a href="https://platform.claude.com/docs/en/build-with-claude/context-editing">Policy fields and reporting</a>.</p>
 <h2 id="42-keep-relevant-outputs">4.2 Keep relevant outputs</h2>
 <p>Ordinary client tools hide their implementation and return a <code>tool_result</code>. Subagents keep working context separate and return a summary. Skill scripts can execute without loading source. These are different routes to a concise parent conversation; none requires exposing every internal step. <a href="https://platform.claude.com/docs/en/agents-and-tools/tool-use/overview">Tool use</a>, <a href="https://code.claude.com/docs/en/sub-agents">subagents</a>, <a href="https://code.claude.com/docs/en/skills">skills</a>.</p>
 <p>Application guidance: preserve an audit record separately from the material you show the model. A summary is useful context, but it is not an adequate replacement for exact evidence when correctness depends on a particular date or identifier. The book&#x27;s client loop keeps assistant blocks and paired tool results intact.</p>
 <h2 id="43-programmatic-tool-calling">4.3 Programmatic tool calling</h2>
-<p>Claude can write code inside the code-execution container that calls application tools, aggregates responses, and prints only the useful portion. The request makes a tool callable from code with <code>allowed_callers: [&quot;code_execution_20260120&quot;]</code>, alongside the corresponding execution tool. This can reduce model round trips and keep bulk intermediate results out of model context. <a href="https://platform.claude.com/docs/en/agents-and-tools/tool-use/programmatic-tool-calling">Programmatic tool calling</a>.</p>
+<p>Claude can write code inside the code-execution container that calls application tools, aggregates responses, and prints only the useful portion. The request makes a tool callable from code with <code>allowed_callers: [&quot;code_execution_20260521&quot;]</code>, alongside <code>code_execution_20260521</code>. This can reduce model round trips and keep bulk intermediate results out of model context. <a href="https://platform.claude.com/docs/en/agents-and-tools/tool-use/programmatic-tool-calling">Programmatic tool calling</a>.</p>
 <p>The programmatic caller does not magically move your private database into the container. Your application still serves its client tools; generated code controls how their returned values are processed before presentation. Keep tool inputs narrowly scoped and validate them even when a generated program is the immediate caller. <a href="https://platform.claude.com/docs/en/agents-and-tools/tool-use/programmatic-tool-calling">Execution flow</a>.</p>
 <p>For the library system, this matters when hundreds of transcript excerpts must be filtered before drafting. It is unnecessary overhead for a three-line fixture. Choose it for an actual data-volume problem rather than for the feature count.</p>
+<p><strong>Example:</strong> run <code>python3 claude/examples/04_transcript.py --mode programmatic</code>. The program exposes a read-only synthetic catalog, verifies that a programmatic caller actually used it, and resumes the same container after returning results. Its exact catalog declaration is:</p>
+<pre><code class="language-python">catalog_tool = {
+    &quot;name&quot;: &quot;list_review_items&quot;,
+    &quot;description&quot;: &quot;Return synthetic review items with page counts.&quot;,
+    &quot;input_schema&quot;: {&quot;type&quot;: &quot;object&quot;, &quot;properties&quot;: {},
+                     &quot;additionalProperties&quot;: False},
+    &quot;allowed_callers&quot;: [&quot;code_execution_20260521&quot;],
+}</code></pre>
+<p><strong>Version rule:</strong> both <code>code_execution_20260120</code> and <code>code_execution_20260521</code> are accepted caller identifiers and are interchangeable. The response&#x27;s <code>caller.type</code> is always <code>code_execution_20260120</code>, even when the request uses <code>20260521</code>. Thus request and response identifiers need not look identical. This edition uses <code>20260521</code> consistently in declarations and checks the documented <code>20260120</code> response tag; it does not invent a newer caller response type. <a href="https://platform.claude.com/docs/en/agents-and-tools/tool-use/programmatic-tool-calling">Caller versions</a>.</p>
+<p><strong>Limits:</strong> the application still executes the custom operation. Return its results promptly: a paused generated program stops waiting after about four minutes, and idle containers are currently reclaimed after about five minutes. Programs have no network egress of their own; access controlled services through validated tools. Measure billed tokens and elapsed time on representative data, because container startup can cost more than it saves for a small first request. <a href="https://platform.claude.com/docs/en/agents-and-tools/tool-use/programmatic-tool-calling">Programmatic execution lifecycle</a>.</p>
 <h2 id="44-editing-and-caching-are-different">4.4 Editing and caching are different</h2>
 <p>Context editing changes what the model receives. Prompt caching reuses computation over an unchanged prefix. Tool-result clearing can invalidate cached prefixes; the documentation recommends making the amount cleared worthwhile. <a href="https://platform.claude.com/docs/en/build-with-claude/context-editing">Context editing and caching</a>.</p>
 <p>Neither mechanism is durable memory. Store needed artifacts before clearing them, and keep a retrieval path for omitted detail. Application guidance: test a long conversation that really crosses the configured threshold; merely receiving a successful short response does not verify the clearing behavior.</p>
-<h2 id="45-exercises">4.5 Exercises</h2>
+<h2 id="45-compaction-summarize-a-long-conversation">4.5 Compaction: summarize a long conversation</h2>
+<pre><code class="language-python">import anthropic
+
+history = [
+    {&quot;role&quot;: &quot;user&quot;, &quot;content&quot;: &quot;The original library review date was Friday.&quot;},
+    {&quot;role&quot;: &quot;assistant&quot;, &quot;content&quot;: &quot;I will preserve Friday as the original date.&quot;},
+    {&quot;role&quot;: &quot;user&quot;, &quot;content&quot;: &quot;Later evidence says Monday; preserve the conflict.&quot;},
+]
+with anthropic.Anthropic() as client:
+    response = client.beta.messages.create(
+        model=&quot;claude-opus-5-5&quot;, max_tokens=4096,
+        betas=[&quot;compact-2026-09-04&quot;],
+        messages=history, compaction={&quot;type&quot;: &quot;summarize&quot;},
+    )
+    if response.stop_reason != &quot;compaction&quot;:
+        raise RuntimeError(f&quot;No compaction: {response.stop_reason}&quot;)
+    compacted_history = [{&quot;role&quot;: &quot;assistant&quot;, &quot;content&quot;: response.content}]
+    print(response.content)</code></pre>
+<p><strong>What:</strong> compaction produces an explicit compacted representation of prior conversation; context editing selectively clears eligible blocks instead. <strong>When:</strong> important state is distributed across a long task rather than confined to old tool results. The index documents threshold-triggered, on-demand, keep-recent-turns, and background approaches. <a href="https://platform.claude.com/docs/en/build-with-claude/compaction">Compaction overview</a>, <a href="https://platform.claude.com/docs/en/build-with-claude/compaction-on-demand">on demand</a>.</p>
+<p><strong>Limits:</strong> a summary can omit detail. Preserve source files, exact artifact IDs, and the original archive outside the compacted context. Background compaction must replace only the prefix actually submitted to the summarizer; keep newer turns after it, and wait for a completed compaction result before swapping. The beta header here is the current on-demand interface, not the older context editing beta. <a href="https://platform.claude.com/docs/en/build-with-claude/compaction-background">Background compaction</a>.</p>
+<h2 id="46-message-threads-send-only-the-new-turns">4.6 Message threads: send only the new turns</h2>
+<pre><code class="language-python">import anthropic
+
+with anthropic.Anthropic() as client:
+    thread = client.beta.messages.thread(
+        model=&quot;claude-opus-5-5&quot;, max_tokens=1024,
+        cache_control={&quot;type&quot;: &quot;ephemeral&quot;},
+        system=&quot;Keep library follow-ups as drafts. Preserve conflicting dates.&quot;,
+    )
+    thread.send({&quot;role&quot;: &quot;user&quot;, &quot;content&quot;: &quot;The review was planned for Friday.&quot;})
+    reply = thread.send({&quot;role&quot;: &quot;user&quot;, &quot;content&quot;:
+                         &quot;Later evidence says Monday. Explain what needs review.&quot;})
+    print(reply.content)</code></pre>
+<p><strong>What:</strong> a beta Messages thread stores a conversation prefix server-side; the SDK helper keeps the local history and sends only new messages on continuation. <strong>When:</strong> application-owned tool loops have long transcripts and repeated transmission is unnecessary overhead. This is a Messages feature, not an Agent SDK session ID. <a href="https://platform.claude.com/docs/en/build-with-claude/message-threads">Message threads</a>.</p>
+<p><strong>Limits:</strong> keep your own history. Prefix storage is transient, not durable application persistence; the helper can replay full history after a missing thread. Changed fingerprints or unsupported requests need explicit handling. The helper manages <code>message-threads-2026-08-12</code>; raw calls must supply the documented header and create/continue fields. A thread does not execute tools or restore a filesystem. <a href="https://platform.claude.com/docs/en/build-with-claude/message-threads">Thread recovery and retention</a>.</p>
+<h2 id="47-mid-conversation-system-messages-and-tool-changes">4.7 Mid-conversation system messages and tool changes</h2>
+<p><strong>What:</strong> the beta inline-tools interface changes instructions or tool availability at a particular conversation point without rewriting the prefix. <strong>When:</strong> switch a task from research to review while preserving earlier context and its cacheability. <strong>Exact example:</strong> this configuration withdraws our tool after its initial user turn:</p>
+<pre><code class="language-python">import sys
+sys.path.insert(0, &quot;claude/examples&quot;)
+from common import DRAFT, MODEL
+import anthropic
+
+with anthropic.Anthropic() as client:
+    result = client.beta.messages.create(
+        model=MODEL, max_tokens=1024, betas=[&quot;inline-tools-2026-09-15&quot;],
+        tools=[DRAFT],
+        messages=[
+            {&quot;role&quot;: &quot;user&quot;, &quot;content&quot;: &quot;Acknowledge this review-only phase.&quot;},
+            {&quot;role&quot;: &quot;system&quot;, &quot;content&quot;: [{
+                &quot;type&quot;: &quot;tool_removal&quot;,
+                &quot;tool&quot;: {&quot;type&quot;: &quot;tool_reference&quot;, &quot;name&quot;: &quot;draft_follow_up&quot;},
+            }]},
+        ],
+    )
+    print(result.content)</code></pre>
+<p><strong>Limits:</strong> these are trusted application messages, never text copied from an untrusted transcript. Tool removal is selection/context control, not revocation of a credential already held by your executor. Keep the executor&#x27;s own current authorization check. <a href="https://platform.claude.com/docs/en/build-with-claude/mid-conversation-system-messages">Inline tool and system-message protocol</a>.</p>
+<h2 id="48-fine-grained-tool-streaming">4.8 Fine-grained tool streaming</h2>
+<p><strong>What:</strong> stream tool arguments as they are generated rather than waiting for buffered, validated argument JSON. <strong>Exact configuration:</strong></p>
+<pre><code class="language-python">import copy
+import sys
+sys.path.insert(0, &quot;claude/examples&quot;)
+from common import DRAFT
+
+streaming_draft = copy.deepcopy(DRAFT)
+streaming_draft[&quot;eager_input_streaming&quot;] = True</code></pre>
+<p>Use the declaration in <code>client.messages.stream(...)</code>, and consume the stream&#x27;s final message before executing the draft handler. <strong>When:</strong> a large generated file or argument should begin arriving early. <strong>Limits:</strong> chunks may not be valid JSON and a truncated response may never form a complete argument. Never execute a partial command or send a partial document just because bytes arrived; validate the assembled argument and final stop reason. <a href="https://platform.claude.com/docs/en/agents-and-tools/tool-use/fine-grained-tool-streaming">Fine-grained tool streaming</a>.</p>
+<h2 id="49-exercises">4.9 Exercises</h2>
 <p><strong>Exercise 4-1.</strong> Build a synthetic long history and observe an actual clearing event. Preserve the client archive and compare the reported usage.</p>
 <p><strong>Exercise 4-2.</strong> Delegate a context-heavy lookup and compare the parent transcript with the subagent&#x27;s working record.</p>
 <p><strong>Exercise 4-3.</strong> Design an aggregation tool for many excerpts. State which data must remain retrievable after only the aggregate enters context.</p>

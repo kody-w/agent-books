@@ -1,0 +1,325 @@
+{
+  "schema": "agent-books-brainstem-live/1.0",
+  "checked_at": "2026-11-05T20:09:17.329160Z",
+  "transport": "real HTTP /chat; real Copilot model; unmodified copied runtime",
+  "runtime_sources_sha256": {
+    "brainstem.py": "35618683ebc3d1c2bfaff47f60182fd756f3a8de53c53dd907ec1099d631930a",
+    "local_storage.py": "c38667c1f65a703174c1d4a8c42cbf36d499178ead41534d0086763e681b7ccb",
+    "VERSION": "910c4d9611201a96af6fa2be688c9ce937a67a0f571586e3d2a4df47b07a8121",
+    "agents/basic_agent.py": "701488bc00d536a7b23295e7da99c62f24e9b00f233daa325886430c736b78eb",
+    "agents/rar_rapp_learn_new_agent.py": "0edcecec861b4dce7ad6c06ef77a320d4c8affe51f8a9944b8c77aca0803c21c"
+  },
+  "isolation": "temporary runtime, credentials, soul, and book-only agents; no port 7071",
+  "turns": [
+    {
+      "chapter": 1,
+      "request": {
+        "user_input": "Call DraftFollowUp once with this exact transcript:\nFacilitator: We agreed to review the library's opening-hours proposal.\nVolunteer: Please draft a follow-up asking for comments by Friday.\nFacilitator: Keep the message a draft. Do not send it.\n",
+        "conversation_history": [],
+        "session_id": "synthetic-book-session"
+      },
+      "response": {
+        "agent_logs": "[DraftFollowUp] {\"status\": \"success\", \"summary\": \"Draft follow-up for review\\n\\nHello,\\n\\nFollowing up on the discussion below. Please share your comments and confirm the next steps and deadline before we proceed.\\n\\nThank you.\\n\\nEvidence:\\nFacilitator: We agreed to review the library's opening-hours proposal.\\nVolunteer: Please draft a follow-up asking for comments by Friday.\\nFacilitator: Keep the message a draft. Do not send it.\", \"instruction\": \"Review the evidence and draft; do not send automatically.\", \"data_slush\": {\"draft\": \"Draft follow-up for review\\n\\nHello,\\n\\nFollowing up on the discussion below. Please share your comments and confirm the next steps and deadline before we proceed.\\n\\nThank you.\\n\\nEvidence:\\nFacilitator: We agreed to review the library's opening-hours proposal.\\nVolunteer: Please draft a follow-up asking for comments by Friday.\\nFacilitator: Keep the message a draft. Do not send it.\", \"source_sha256\": \"2988ec78528ffedb2029c6f4d736ebb33dfdd44eb3aafc1f9152444758fd39a4\"}}",
+        "model": "claude-haiku-5.5",
+        "requested_model": "claude-haiku-5.5",
+        "response": "I drafted the follow-up once and did not send it. The tool returned this draft for review:\n\n---\nHello,\n\nFollowing up on the discussion below. Please share your comments and confirm the next steps and deadline before we proceed.\n\nThank you.\n\nEvidence:\nFacilitator: We agreed to review the library's opening-hours proposal.\nVolunteer: Please draft a follow-up asking for comments by Friday.\nFacilitator: Keep the message a draft. Do not send it.\n---\n\nThe draft does not mention Friday. The volunteer asked for comments by Friday, but the draft says only \"share your comments and confirm the next steps and deadline.\" You may want to add the Friday deadline before review. The draft also includes the raw transcript as \"Evidence,\" which you may want to remove before sending.",
+        "session_id": "synthetic-book-session",
+        "voice_mode": false
+      }
+    },
+    {
+      "chapter": 5,
+      "request": {
+        "user_input": "Call ReviewDraft once. Its draft argument must be exactly this text:\nDraft follow-up for review\n\nHello,\n\nFollowing up on the discussion below. Please share your comments and confirm the next steps and deadline before we proceed.\n\nThank you.\n\nEvidence:\nFacilitator: We agreed to review the library's opening-hours proposal.\nVolunteer: Please draft a follow-up asking for comments by Friday.\nFacilitator: Keep the message a draft. Do not send it.",
+        "conversation_history": [
+          {
+            "role": "user",
+            "content": "Call DraftFollowUp once with this exact transcript:\nFacilitator: We agreed to review the library's opening-hours proposal.\nVolunteer: Please draft a follow-up asking for comments by Friday.\nFacilitator: Keep the message a draft. Do not send it.\n"
+          },
+          {
+            "role": "assistant",
+            "content": "I drafted the follow-up once and did not send it. The tool returned this draft for review:\n\n---\nHello,\n\nFollowing up on the discussion below. Please share your comments and confirm the next steps and deadline before we proceed.\n\nThank you.\n\nEvidence:\nFacilitator: We agreed to review the library's opening-hours proposal.\nVolunteer: Please draft a follow-up asking for comments by Friday.\nFacilitator: Keep the message a draft. Do not send it.\n---\n\nThe draft does not mention Friday. The volunteer asked for comments by Friday, but the draft says only \"share your comments and confirm the next steps and deadline.\" You may want to add the Friday deadline before review. The draft also includes the raw transcript as \"Evidence,\" which you may want to remove before sending."
+          }
+        ],
+        "session_id": "synthetic-book-session"
+      },
+      "response": {
+        "agent_logs": "[ReviewDraft] {\"status\": \"success\", \"summary\": \"Ready for human review; nothing sent.\", \"instruction\": \"Check any conflicting dates before approving.\", \"data_slush\": {\"draft\": \"Draft follow-up for review\\n\\nHello,\\n\\nFollowing up on the discussion below. Please share your comments and confirm the next steps and deadline before we proceed.\\n\\nThank you.\\n\\nEvidence:\\nFacilitator: We agreed to review the library's opening-hours proposal.\\nVolunteer: Please draft a follow-up asking for comments by Friday.\\nFacilitator: Keep the message a draft. Do not send it.\", \"sent\": false}}",
+        "model": "claude-haiku-5.5",
+        "requested_model": "claude-haiku-5.5",
+        "response": "I sent the draft to ReviewDraft once, using the exact text you specified. The tool reports \"Ready for human review; nothing sent,\" and the draft's `sent` field is false.\n\nThe tool also says to \"check any conflicting dates before approving.\" The draft says \"deadline\" without a date, and the evidence mentions Friday, so someone should confirm the deadline before approval.",
+        "session_id": "synthetic-book-session",
+        "voice_mode": false
+      }
+    },
+    {
+      "chapter": 7,
+      "request": {
+        "user_input": "Call LearnNew action create, name BookUpper, description: Return a JSON string with status success and result equal to query.upper(). Use exactly one return statement, no branching.",
+        "conversation_history": [
+          {
+            "role": "user",
+            "content": "Call DraftFollowUp once with this exact transcript:\nFacilitator: We agreed to review the library's opening-hours proposal.\nVolunteer: Please draft a follow-up asking for comments by Friday.\nFacilitator: Keep the message a draft. Do not send it.\n"
+          },
+          {
+            "role": "assistant",
+            "content": "I drafted the follow-up once and did not send it. The tool returned this draft for review:\n\n---\nHello,\n\nFollowing up on the discussion below. Please share your comments and confirm the next steps and deadline before we proceed.\n\nThank you.\n\nEvidence:\nFacilitator: We agreed to review the library's opening-hours proposal.\nVolunteer: Please draft a follow-up asking for comments by Friday.\nFacilitator: Keep the message a draft. Do not send it.\n---\n\nThe draft does not mention Friday. The volunteer asked for comments by Friday, but the draft says only \"share your comments and confirm the next steps and deadline.\" You may want to add the Friday deadline before review. The draft also includes the raw transcript as \"Evidence,\" which you may want to remove before sending."
+          },
+          {
+            "role": "user",
+            "content": "Call ReviewDraft once. Its draft argument must be exactly this text:\nDraft follow-up for review\n\nHello,\n\nFollowing up on the discussion below. Please share your comments and confirm the next steps and deadline before we proceed.\n\nThank you.\n\nEvidence:\nFacilitator: We agreed to review the library's opening-hours proposal.\nVolunteer: Please draft a follow-up asking for comments by Friday.\nFacilitator: Keep the message a draft. Do not send it."
+          },
+          {
+            "role": "assistant",
+            "content": "I sent the draft to ReviewDraft once, using the exact text you specified. The tool reports \"Ready for human review; nothing sent,\" and the draft's `sent` field is false.\n\nThe tool also says to \"check any conflicting dates before approving.\" The draft says \"deadline\" without a date, and the evidence mentions Friday, so someone should confirm the deadline before approval."
+          }
+        ],
+        "session_id": "synthetic-book-session"
+      },
+      "response": {
+        "agent_logs": "[LearnNew] {\"status\": \"success\", \"action\": \"create\", \"message\": \"Created and loaded agent 'BookUpper'\", \"agent_name\": \"BookUpper\", \"filename\": \"book_upper_agent.py\", \"file_path\": \"<TEMP>/agents/book_upper_agent.py\", \"lines\": 73, \"hot_loaded\": true, \"description\": \"Return a JSON string with status success and result equal to query.upper(). Use exactly one return statement, no branching.\", \"hint\": \"Agent saved to agents/book_upper_agent.py \\u2014 it will auto-load on next request. Edit the perform() method to customize the logic. To submit to RAR, re-run with action='submit'.\"}",
+        "model": "claude-haiku-5.5",
+        "requested_model": "claude-haiku-5.5",
+        "response": "I created the BookUpper agent with the description you gave. The tool reports \"Created and loaded agent 'BookUpper'\" and saved it to `agents/book_upper_agent.py`. It is loaded now.\n\nI haven't invoked it. I'll wait for your next message before running it.",
+        "session_id": "synthetic-book-session",
+        "voice_mode": false
+      }
+    },
+    {
+      "chapter": 7,
+      "request": {
+        "user_input": "Call BookUpper once with query equal to library.",
+        "conversation_history": [
+          {
+            "role": "user",
+            "content": "Call DraftFollowUp once with this exact transcript:\nFacilitator: We agreed to review the library's opening-hours proposal.\nVolunteer: Please draft a follow-up asking for comments by Friday.\nFacilitator: Keep the message a draft. Do not send it.\n"
+          },
+          {
+            "role": "assistant",
+            "content": "I drafted the follow-up once and did not send it. The tool returned this draft for review:\n\n---\nHello,\n\nFollowing up on the discussion below. Please share your comments and confirm the next steps and deadline before we proceed.\n\nThank you.\n\nEvidence:\nFacilitator: We agreed to review the library's opening-hours proposal.\nVolunteer: Please draft a follow-up asking for comments by Friday.\nFacilitator: Keep the message a draft. Do not send it.\n---\n\nThe draft does not mention Friday. The volunteer asked for comments by Friday, but the draft says only \"share your comments and confirm the next steps and deadline.\" You may want to add the Friday deadline before review. The draft also includes the raw transcript as \"Evidence,\" which you may want to remove before sending."
+          },
+          {
+            "role": "user",
+            "content": "Call ReviewDraft once. Its draft argument must be exactly this text:\nDraft follow-up for review\n\nHello,\n\nFollowing up on the discussion below. Please share your comments and confirm the next steps and deadline before we proceed.\n\nThank you.\n\nEvidence:\nFacilitator: We agreed to review the library's opening-hours proposal.\nVolunteer: Please draft a follow-up asking for comments by Friday.\nFacilitator: Keep the message a draft. Do not send it."
+          },
+          {
+            "role": "assistant",
+            "content": "I sent the draft to ReviewDraft once, using the exact text you specified. The tool reports \"Ready for human review; nothing sent,\" and the draft's `sent` field is false.\n\nThe tool also says to \"check any conflicting dates before approving.\" The draft says \"deadline\" without a date, and the evidence mentions Friday, so someone should confirm the deadline before approval."
+          },
+          {
+            "role": "user",
+            "content": "Call LearnNew action create, name BookUpper, description: Return a JSON string with status success and result equal to query.upper(). Use exactly one return statement, no branching."
+          },
+          {
+            "role": "assistant",
+            "content": "I created the BookUpper agent with the description you gave. The tool reports \"Created and loaded agent 'BookUpper'\" and saved it to `agents/book_upper_agent.py`. It is loaded now.\n\nI haven't invoked it. I'll wait for your next message before running it."
+          }
+        ],
+        "session_id": "synthetic-book-session"
+      },
+      "response": {
+        "agent_logs": "[BookUpper] {\"status\": \"success\", \"query\": \"library\", \"result\": \"Processed by BookUpper: library\"}",
+        "model": "claude-haiku-5.5",
+        "requested_model": "claude-haiku-5.5",
+        "response": "BookUpper ran once with `library` and returned status `success`, but the result was `Processed by BookUpper: library`, not `LIBRARY`.\n\nThe agent's description said it should return `query.upper()`, so this output doesn't match what you specified. The generated agent may not have implemented that logic. I'd check `agents/book_upper_agent.py` before relying on it.",
+        "session_id": "synthetic-book-session",
+        "voice_mode": false
+      }
+    },
+    {
+      "chapter": 10,
+      "request": {
+        "user_input": "Call DraftFollowUp once with this exact transcript:\nFacilitator: We agreed to review the library's opening-hours proposal.\nVolunteer: Please draft a follow-up asking for comments by Friday.\nFacilitator: Keep the message a draft. Do not send it.\n",
+        "conversation_history": [
+          {
+            "role": "user",
+            "content": "Call DraftFollowUp once with this exact transcript:\nFacilitator: We agreed to review the library's opening-hours proposal.\nVolunteer: Please draft a follow-up asking for comments by Friday.\nFacilitator: Keep the message a draft. Do not send it.\n"
+          },
+          {
+            "role": "assistant",
+            "content": "I drafted the follow-up once and did not send it. The tool returned this draft for review:\n\n---\nHello,\n\nFollowing up on the discussion below. Please share your comments and confirm the next steps and deadline before we proceed.\n\nThank you.\n\nEvidence:\nFacilitator: We agreed to review the library's opening-hours proposal.\nVolunteer: Please draft a follow-up asking for comments by Friday.\nFacilitator: Keep the message a draft. Do not send it.\n---\n\nThe draft does not mention Friday. The volunteer asked for comments by Friday, but the draft says only \"share your comments and confirm the next steps and deadline.\" You may want to add the Friday deadline before review. The draft also includes the raw transcript as \"Evidence,\" which you may want to remove before sending."
+          },
+          {
+            "role": "user",
+            "content": "Call ReviewDraft once. Its draft argument must be exactly this text:\nDraft follow-up for review\n\nHello,\n\nFollowing up on the discussion below. Please share your comments and confirm the next steps and deadline before we proceed.\n\nThank you.\n\nEvidence:\nFacilitator: We agreed to review the library's opening-hours proposal.\nVolunteer: Please draft a follow-up asking for comments by Friday.\nFacilitator: Keep the message a draft. Do not send it."
+          },
+          {
+            "role": "assistant",
+            "content": "I sent the draft to ReviewDraft once, using the exact text you specified. The tool reports \"Ready for human review; nothing sent,\" and the draft's `sent` field is false.\n\nThe tool also says to \"check any conflicting dates before approving.\" The draft says \"deadline\" without a date, and the evidence mentions Friday, so someone should confirm the deadline before approval."
+          },
+          {
+            "role": "user",
+            "content": "Call LearnNew action create, name BookUpper, description: Return a JSON string with status success and result equal to query.upper(). Use exactly one return statement, no branching."
+          },
+          {
+            "role": "assistant",
+            "content": "I created the BookUpper agent with the description you gave. The tool reports \"Created and loaded agent 'BookUpper'\" and saved it to `agents/book_upper_agent.py`. It is loaded now.\n\nI haven't invoked it. I'll wait for your next message before running it."
+          },
+          {
+            "role": "user",
+            "content": "Call BookUpper once with query equal to library."
+          },
+          {
+            "role": "assistant",
+            "content": "BookUpper ran once with `library` and returned status `success`, but the result was `Processed by BookUpper: library`, not `LIBRARY`.\n\nThe agent's description said it should return `query.upper()`, so this output doesn't match what you specified. The generated agent may not have implemented that logic. I'd check `agents/book_upper_agent.py` before relying on it."
+          }
+        ],
+        "session_id": "synthetic-book-session"
+      },
+      "response": {
+        "agent_logs": "[DraftFollowUp] {\"status\": \"success\", \"summary\": \"Draft follow-up for review\\n\\nHello,\\n\\nFollowing up on the discussion below. Please share your comments and confirm the next steps and deadline before we proceed.\\n\\nThank you.\\n\\nEvidence:\\nFacilitator: We agreed to review the library's opening-hours proposal.\\nVolunteer: Please draft a follow-up asking for comments by Friday.\\nFacilitator: Keep the message a draft. Do not send it.\", \"instruction\": \"Review the evidence and draft; do not send automatically.\", \"data_slush\": {\"draft\": \"Draft follow-up for review\\n\\nHello,\\n\\nFollowing up on the discussion below. Please share your comments and confirm the next steps and deadline before we proceed.\\n\\nThank you.\\n\\nEvidence:\\nFacilitator: We agreed to review the library's opening-hours proposal.\\nVolunteer: Please draft a follow-up asking for comments by Friday.\\nFacilitator: Keep the message a draft. Do not send it.\", \"source_sha256\": \"2988ec78528ffedb2029c6f4d736ebb33dfdd44eb3aafc1f9152444758fd39a4\"}}",
+        "model": "claude-haiku-5.5",
+        "requested_model": "claude-haiku-5.5",
+        "response": "The follow-up draft is the same as before. The tool returned:\n\n---\nDraft follow-up for review\n\nHello,\n\nFollowing up on the discussion below. Please share your comments and confirm the next steps and deadline before we proceed.\n\nThank you.\n\nEvidence:\nFacilitator: We agreed to review the library's opening-hours proposal.\nVolunteer: Please draft a follow-up asking for comments by Friday.\nFacilitator: Keep the message a draft. Do not send it.\n---\n\nThe tool marked it `success` with the instruction \"do not send automatically.\" Nothing was sent. The draft still says \"deadline\" without naming Friday, and it still includes the raw transcript as \"Evidence,\" which you may want to remove before anyone sends it.",
+        "session_id": "synthetic-book-session",
+        "voice_mode": false
+      }
+    },
+    {
+      "chapter": 10,
+      "request": {
+        "user_input": "Call ReviewDraft once with this exact draft:\nDraft follow-up for review\n\nHello,\n\nFollowing up on the discussion below. Please share your comments and confirm the next steps and deadline before we proceed.\n\nThank you.\n\nEvidence:\nFacilitator: We agreed to review the library's opening-hours proposal.\nVolunteer: Please draft a follow-up asking for comments by Friday.\nFacilitator: Keep the message a draft. Do not send it.",
+        "conversation_history": [
+          {
+            "role": "user",
+            "content": "Call DraftFollowUp once with this exact transcript:\nFacilitator: We agreed to review the library's opening-hours proposal.\nVolunteer: Please draft a follow-up asking for comments by Friday.\nFacilitator: Keep the message a draft. Do not send it.\n"
+          },
+          {
+            "role": "assistant",
+            "content": "I drafted the follow-up once and did not send it. The tool returned this draft for review:\n\n---\nHello,\n\nFollowing up on the discussion below. Please share your comments and confirm the next steps and deadline before we proceed.\n\nThank you.\n\nEvidence:\nFacilitator: We agreed to review the library's opening-hours proposal.\nVolunteer: Please draft a follow-up asking for comments by Friday.\nFacilitator: Keep the message a draft. Do not send it.\n---\n\nThe draft does not mention Friday. The volunteer asked for comments by Friday, but the draft says only \"share your comments and confirm the next steps and deadline.\" You may want to add the Friday deadline before review. The draft also includes the raw transcript as \"Evidence,\" which you may want to remove before sending."
+          },
+          {
+            "role": "user",
+            "content": "Call ReviewDraft once. Its draft argument must be exactly this text:\nDraft follow-up for review\n\nHello,\n\nFollowing up on the discussion below. Please share your comments and confirm the next steps and deadline before we proceed.\n\nThank you.\n\nEvidence:\nFacilitator: We agreed to review the library's opening-hours proposal.\nVolunteer: Please draft a follow-up asking for comments by Friday.\nFacilitator: Keep the message a draft. Do not send it."
+          },
+          {
+            "role": "assistant",
+            "content": "I sent the draft to ReviewDraft once, using the exact text you specified. The tool reports \"Ready for human review; nothing sent,\" and the draft's `sent` field is false.\n\nThe tool also says to \"check any conflicting dates before approving.\" The draft says \"deadline\" without a date, and the evidence mentions Friday, so someone should confirm the deadline before approval."
+          },
+          {
+            "role": "user",
+            "content": "Call LearnNew action create, name BookUpper, description: Return a JSON string with status success and result equal to query.upper(). Use exactly one return statement, no branching."
+          },
+          {
+            "role": "assistant",
+            "content": "I created the BookUpper agent with the description you gave. The tool reports \"Created and loaded agent 'BookUpper'\" and saved it to `agents/book_upper_agent.py`. It is loaded now.\n\nI haven't invoked it. I'll wait for your next message before running it."
+          },
+          {
+            "role": "user",
+            "content": "Call BookUpper once with query equal to library."
+          },
+          {
+            "role": "assistant",
+            "content": "BookUpper ran once with `library` and returned status `success`, but the result was `Processed by BookUpper: library`, not `LIBRARY`.\n\nThe agent's description said it should return `query.upper()`, so this output doesn't match what you specified. The generated agent may not have implemented that logic. I'd check `agents/book_upper_agent.py` before relying on it."
+          },
+          {
+            "role": "user",
+            "content": "Call DraftFollowUp once with this exact transcript:\nFacilitator: We agreed to review the library's opening-hours proposal.\nVolunteer: Please draft a follow-up asking for comments by Friday.\nFacilitator: Keep the message a draft. Do not send it.\n"
+          },
+          {
+            "role": "assistant",
+            "content": "The follow-up draft is the same as before. The tool returned:\n\n---\nDraft follow-up for review\n\nHello,\n\nFollowing up on the discussion below. Please share your comments and confirm the next steps and deadline before we proceed.\n\nThank you.\n\nEvidence:\nFacilitator: We agreed to review the library's opening-hours proposal.\nVolunteer: Please draft a follow-up asking for comments by Friday.\nFacilitator: Keep the message a draft. Do not send it.\n---\n\nThe tool marked it `success` with the instruction \"do not send automatically.\" Nothing was sent. The draft still says \"deadline\" without naming Friday, and it still includes the raw transcript as \"Evidence,\" which you may want to remove before anyone sends it."
+          }
+        ],
+        "session_id": "synthetic-book-session"
+      },
+      "response": {
+        "agent_logs": "[ReviewDraft] {\"status\": \"success\", \"summary\": \"Ready for human review; nothing sent.\", \"instruction\": \"Check any conflicting dates before approving.\", \"data_slush\": {\"draft\": \"Draft follow-up for review\\n\\nHello,\\n\\nFollowing up on the discussion below. Please share your comments and confirm the next steps and deadline before we proceed.\\n\\nThank you.\\n\\nEvidence:\\nFacilitator: We agreed to review the library's opening-hours proposal.\\nVolunteer: Please draft a follow-up asking for comments by Friday.\\nFacilitator: Keep the message a draft. Do not send it.\", \"sent\": false}}",
+        "model": "claude-haiku-5.5",
+        "requested_model": "claude-haiku-5.5",
+        "response": "I sent the draft to ReviewDraft once, unchanged. The tool returned \"Ready for human review; nothing sent,\" and the draft's `sent` field is false.\n\nThe tool also says to \"check any conflicting dates before approving.\" The draft still says \"deadline\" without naming Friday, so confirm the deadline before anyone approves it. The \"Draft follow-up for review\" header and the raw \"Evidence\" block are also still in the text, so you may want to remove them before sending.",
+        "session_id": "synthetic-book-session",
+        "voice_mode": false
+      }
+    },
+    {
+      "chapter": 10,
+      "request": {
+        "user_input": "Replay only DraftFollowUp, not ReviewDraft. Call it once with this exact transcript:\nFacilitator: We agreed to review the library's opening-hours proposal.\nVolunteer: Please draft a follow-up asking for comments by Friday.\nFacilitator: Keep the message a draft. Do not send it.\n\n\nLater evidence:\nUpdate: The comments deadline is now Monday, not Friday.\n",
+        "conversation_history": [
+          {
+            "role": "user",
+            "content": "Call DraftFollowUp once with this exact transcript:\nFacilitator: We agreed to review the library's opening-hours proposal.\nVolunteer: Please draft a follow-up asking for comments by Friday.\nFacilitator: Keep the message a draft. Do not send it.\n"
+          },
+          {
+            "role": "assistant",
+            "content": "I drafted the follow-up once and did not send it. The tool returned this draft for review:\n\n---\nHello,\n\nFollowing up on the discussion below. Please share your comments and confirm the next steps and deadline before we proceed.\n\nThank you.\n\nEvidence:\nFacilitator: We agreed to review the library's opening-hours proposal.\nVolunteer: Please draft a follow-up asking for comments by Friday.\nFacilitator: Keep the message a draft. Do not send it.\n---\n\nThe draft does not mention Friday. The volunteer asked for comments by Friday, but the draft says only \"share your comments and confirm the next steps and deadline.\" You may want to add the Friday deadline before review. The draft also includes the raw transcript as \"Evidence,\" which you may want to remove before sending."
+          },
+          {
+            "role": "user",
+            "content": "Call ReviewDraft once. Its draft argument must be exactly this text:\nDraft follow-up for review\n\nHello,\n\nFollowing up on the discussion below. Please share your comments and confirm the next steps and deadline before we proceed.\n\nThank you.\n\nEvidence:\nFacilitator: We agreed to review the library's opening-hours proposal.\nVolunteer: Please draft a follow-up asking for comments by Friday.\nFacilitator: Keep the message a draft. Do not send it."
+          },
+          {
+            "role": "assistant",
+            "content": "I sent the draft to ReviewDraft once, using the exact text you specified. The tool reports \"Ready for human review; nothing sent,\" and the draft's `sent` field is false.\n\nThe tool also says to \"check any conflicting dates before approving.\" The draft says \"deadline\" without a date, and the evidence mentions Friday, so someone should confirm the deadline before approval."
+          },
+          {
+            "role": "user",
+            "content": "Call LearnNew action create, name BookUpper, description: Return a JSON string with status success and result equal to query.upper(). Use exactly one return statement, no branching."
+          },
+          {
+            "role": "assistant",
+            "content": "I created the BookUpper agent with the description you gave. The tool reports \"Created and loaded agent 'BookUpper'\" and saved it to `agents/book_upper_agent.py`. It is loaded now.\n\nI haven't invoked it. I'll wait for your next message before running it."
+          },
+          {
+            "role": "user",
+            "content": "Call BookUpper once with query equal to library."
+          },
+          {
+            "role": "assistant",
+            "content": "BookUpper ran once with `library` and returned status `success`, but the result was `Processed by BookUpper: library`, not `LIBRARY`.\n\nThe agent's description said it should return `query.upper()`, so this output doesn't match what you specified. The generated agent may not have implemented that logic. I'd check `agents/book_upper_agent.py` before relying on it."
+          },
+          {
+            "role": "user",
+            "content": "Call DraftFollowUp once with this exact transcript:\nFacilitator: We agreed to review the library's opening-hours proposal.\nVolunteer: Please draft a follow-up asking for comments by Friday.\nFacilitator: Keep the message a draft. Do not send it.\n"
+          },
+          {
+            "role": "assistant",
+            "content": "The follow-up draft is the same as before. The tool returned:\n\n---\nDraft follow-up for review\n\nHello,\n\nFollowing up on the discussion below. Please share your comments and confirm the next steps and deadline before we proceed.\n\nThank you.\n\nEvidence:\nFacilitator: We agreed to review the library's opening-hours proposal.\nVolunteer: Please draft a follow-up asking for comments by Friday.\nFacilitator: Keep the message a draft. Do not send it.\n---\n\nThe tool marked it `success` with the instruction \"do not send automatically.\" Nothing was sent. The draft still says \"deadline\" without naming Friday, and it still includes the raw transcript as \"Evidence,\" which you may want to remove before anyone sends it."
+          },
+          {
+            "role": "user",
+            "content": "Call ReviewDraft once with this exact draft:\nDraft follow-up for review\n\nHello,\n\nFollowing up on the discussion below. Please share your comments and confirm the next steps and deadline before we proceed.\n\nThank you.\n\nEvidence:\nFacilitator: We agreed to review the library's opening-hours proposal.\nVolunteer: Please draft a follow-up asking for comments by Friday.\nFacilitator: Keep the message a draft. Do not send it."
+          },
+          {
+            "role": "assistant",
+            "content": "I sent the draft to ReviewDraft once, unchanged. The tool returned \"Ready for human review; nothing sent,\" and the draft's `sent` field is false.\n\nThe tool also says to \"check any conflicting dates before approving.\" The draft still says \"deadline\" without naming Friday, so confirm the deadline before anyone approves it. The \"Draft follow-up for review\" header and the raw \"Evidence\" block are also still in the text, so you may want to remove them before sending."
+          }
+        ],
+        "session_id": "synthetic-book-session"
+      },
+      "response": {
+        "agent_logs": "[DraftFollowUp] {\"status\": \"success\", \"summary\": \"Draft follow-up for review\\n\\nHello,\\n\\nFollowing up on the discussion below. Please share your comments and confirm the next steps and deadline before we proceed.\\n\\nThank you.\\n\\nEvidence:\\nFacilitator: We agreed to review the library's opening-hours proposal.\\nVolunteer: Please draft a follow-up asking for comments by Friday.\\nFacilitator: Keep the message a draft. Do not send it.\\n\\n\\nLater evidence:\\nUpdate: The comments deadline is now Monday, not Friday.\", \"instruction\": \"Review the evidence and draft; do not send automatically.\", \"data_slush\": {\"draft\": \"Draft follow-up for review\\n\\nHello,\\n\\nFollowing up on the discussion below. Please share your comments and confirm the next steps and deadline before we proceed.\\n\\nThank you.\\n\\nEvidence:\\nFacilitator: We agreed to review the library's opening-hours proposal.\\nVolunteer: Please draft a follow-up asking for comments by Friday.\\nFacilitator: Keep the message a draft. Do not send it.\\n\\n\\nLater evidence:\\nUpdate: The comments deadline is now Monday, not Friday.\", \"source_sha256\": \"a7561ad8a7aee0ec18ba45f684a27ee5d063485f2bfa82fe61f19e912a0d001e\"}}",
+        "model": "claude-haiku-5.5",
+        "requested_model": "claude-haiku-5.5",
+        "response": "I called DraftFollowUp once with the transcript and the later update. I did not call ReviewDraft, and nothing was sent.\n\nThe tool returned \"success\" with the instruction \"Review the evidence and draft; do not send automatically.\" The draft body still says \"confirm the next steps and deadline\" and does not name a date. The update that the deadline is now Monday appears only in the \"Later evidence\" block, not in the message text.\n\nBefore anyone sends this, the message should say Monday instead of Friday, and the \"Draft follow-up for review\" header and the raw \"Evidence\" blocks should be removed.",
+        "session_id": "synthetic-book-session",
+        "voice_mode": false
+      }
+    }
+  ],
+  "initial_agents": [
+    "DraftFollowUp",
+    "ReviewDraft",
+    "LearnNew"
+  ],
+  "generated_source": "\"\"\"\nReturn a JSON string with status success and result equal to query.upper(). Use exactly one return statement, no branching.\n\nAuto-generated by LearnNewAgent on 2026-11-05 15:09.\nDrop this file into any RAPP brainstem's agents/ directory and it works.\nCompatible with the RAR registry at https://github.com/kody-w/RAR\n\"\"\"\n\nimport json\n\ntry:\n    from agents.basic_agent import BasicAgent\nexcept ImportError:\n    from basic_agent import BasicAgent\n\n\n__manifest__ = {\n    \"schema\": \"rapp-agent/1.0\",\n    \"name\": \"@rapp/book_upper\",\n    \"version\": \"1.0.0\",\n    \"display_name\": \"BookUpper\",\n    \"description\": \"Return a JSON string with status success and result equal to query.upper(). Use exactly one return statement, no branching.\",\n    \"author\": \"rapp\",\n    \"tags\": [\"custom\"],\n    \"category\": \"general\",\n    \"quality_tier\": \"community\",\n    \"requires_env\": [],\n    \"dependencies\": [\"@rapp/basic_agent\"],\n    \"example_call\": {\"args\": {\"query\": \"example query\"}},\n}\n\n\nclass BookUpperAgent(BasicAgent):\n    def __init__(self):\n        self.name = 'BookUpper'\n        self.metadata = {\n            \"name\": self.name,\n            \"description\": __manifest__[\"description\"],\n            \"parameters\": {\n                \"type\": \"object\",\n                \"properties\": {\n                    \"query\": {\n                        \"type\": \"string\",\n                        \"description\": \"The user's request or input.\"\n                    }\n                },\n                \"required\": []\n            }\n        }\n        super().__init__(name=self.name, metadata=self.metadata)\n\n    def perform(self, **kwargs):\n        \"\"\"Execute the agent's task.\"\"\"\n        query = kwargs.get('query', '')\n\n        # Default implementation - customize this\n        if not query:\n            return json.dumps({\n                \"status\": \"error\",\n                \"message\": \"No query provided\"\n            })\n\n        return json.dumps({\n            \"status\": \"success\",\n            \"query\": query,\n            \"result\": f\"Processed by {self.name}: {query}\"\n        })\n\n\nif __name__ == \"__main__\":\n    a = BookUpperAgent()\n    print(a.perform(query=\"test\"))\n",
+  "growth_behavior": {
+    "requested_result": "LIBRARY",
+    "actual_result": "Processed by BookUpper: library",
+    "semantic_request_met": false,
+    "stock_fallback_body": true
+  },
+  "checks": {
+    "chapters": [
+      1,
+      5,
+      7,
+      10
+    ],
+    "exact_handoff": true,
+    "learn_new_next_turn": true,
+    "replay_step1_only": true,
+    "sent": false
+  }
+}

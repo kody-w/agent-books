@@ -37,19 +37,26 @@ generate, or execute arbitrary remote code.
 
 ## 7.2 The learning cycle
 
-The [source essay](../ref-blog-post.html) describes LearnNew returning a message
-that a capability was created and will load on the next request.
-The caller then sees the new declaration beside the old ones, without needing to
-learn the implementation.
+The installed `agents/rar_rapp_learn_new_agent.py:344–442` writes a generated
+`*_agent.py` beside LearnNew itself, attempts an import, and reports `hot_loaded`
+separately from write success. `_hot_load_agent()` (lines 845–886) imports and
+registers a module; it does not add a tool to the current `/chat` request's local
+registry. `brainstem.py:1836–1864,2274–2284` scans and instantiates agent files on
+every new request. No directory watcher is needed: the next turn gets a fresh
+inventory. Within the current turn the original inventory remains in use.
 
-That is the intended cycle: create, validate, make available, advertise, invoke.
-The installed LearnNew source and its production loader were inaccessible during
-authoring, so automatic next-request hot loading is **(unverified)** here.
-The runnable program proves only explicit import and registration in our profile.
+Changing `AGENTS_PATH` alone is insufficient to redirect LearnNew's writes:
+`self.agents_dir = Path(__file__).parent`. The live runner copies LearnNew into
+its temporary agents directory rather than importing it from the real installation.
 
-A useful teaching example must say that plainly. A successful `importlib` call
-does not prove that a separate host watches a directory or refreshes a live model's
-tool inventory at the right boundary.
+The [real chapter 7 fixture](../fixtures/brainstem-live.json) records `LearnNew`
+creating `BookUpper` with `hot_loaded: true`, followed by a separate model turn
+calling `BookUpper`. Creation and next-turn discovery worked. The requested
+uppercase behavior did not: the tool returned `Processed by BookUpper: library`
+instead of `LIBRARY`. Its recorded source contains the stock fallback body.
+LearnNew invokes `copilot --message` (lines 780–807); the installed CLI rejects
+`--message` with exit 1. LearnNew silently substitutes its scaffold on that path.
+Do not treat its creation-success message as proof of the requested semantics.
 
 ## 7.3 Installation is not discovery
 

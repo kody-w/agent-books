@@ -1,0 +1,66 @@
+{
+  "schema": "agent-books-source-evidence/1.0",
+  "checked": "2026-11-05",
+  "source": "Read-only installed rapp_brainstem source; paths relative to its package root",
+  "files": [
+    {
+      "path": "brainstem.py",
+      "sha256": "35618683ebc3d1c2bfaff47f60182fd756f3a8de53c53dd907ec1099d631930a",
+      "observations": [
+        {"lines": [436, 462], "finding": "Absolute or package-relative AGENTS_PATH/SOUL_PATH and PORT settings"},
+        {"lines": [1528, 1698], "finding": "Public contract validation, quarantine, and fresh class instantiation"},
+        {"lines": [1836, 1864], "finding": "Each load_agents call scans *_agent.py and builds a new registry"},
+        {"lines": [2180, 2230], "finding": "Sequential perform calls; outputs serialized with str into tool messages and logs"},
+        {"lines": [2262, 2266], "finding": "Request-owned history and session label, with no history lookup by label"},
+        {"lines": [2274, 2302], "finding": "Fresh agents, soul/context collection, new local messages list from supplied history"},
+        {"lines": [2305, 2356], "finding": "Bounded tool loop and response/log return, with no conversation persistence"}
+      ]
+    },
+    {
+      "path": "agents/basic_agent.py",
+      "sha256": "701488bc00d536a7b23295e7da99c62f24e9b00f233daa325886430c736b78eb",
+      "observations": [
+        {"lines": [1, 34], "finding": "Base constructor, perform, optional system_context, OpenAI function declaration"}
+      ]
+    },
+    {
+      "path": "agents/rar_rapp_learn_new_agent.py",
+      "sha256": "0edcecec861b4dce7ad6c06ef77a320d4c8affe51f8a9944b8c77aca0803c21c",
+      "observations": [
+        {"lines": [344, 442], "finding": "Writes beside LearnNew source; reports file creation and hot-loaded result separately"},
+        {"lines": [763, 813], "finding": "copilot --message invocation; stock scaffold fallback on command failure"},
+        {"lines": [845, 886], "finding": "Dependency check and module import, not mutation of current request's tool registry"}
+      ]
+    },
+    {
+      "path": "agents/manage_memory_agent.py",
+      "sha256": "04c14c3f5597857909ec7d034b6fb8c1431676e3ba85b474066724c6b1d74f61",
+      "observations": [
+        {"lines": [59, 129], "finding": "Store initialization, scope argument, normalized tags/importance, persistent insertion"}
+      ]
+    },
+    {
+      "path": "agents/context_memory_agent.py",
+      "sha256": "d70b71ed41fcadc845313c81ee43d2f20d207019bce3095f8d08c9fb1f667f38",
+      "observations": [
+        {"lines": [19, 94], "finding": "Bounded recall/context; fresh shared scope; explicit perform can change instance scope"},
+        {"lines": [58, 79], "finding": "Untrusted-memory guidance and silent None on context-read exception"}
+      ]
+    },
+    {
+      "path": "memory_store.py",
+      "sha256": "b89e5322dbac3df61a18d32e11e6f47a8357372189a836eea65b831ffe192bd4",
+      "observations": [
+        {"lines": [16, 46], "finding": "Home-directory SQLite default, BRAINSTEM_MEMORY_DB override, WAL/busy timeout"}
+      ]
+    }
+  ],
+  "generator_probe": {
+    "command": "copilot --message \"Reply with LIBRARY\"",
+    "exit_code": 1,
+    "stderr": "error: unexpected argument '--message' found",
+    "interpretation": "Creation and next-request hot loading were observed, but code generation used the stock fallback and did not implement uppercase."
+  },
+  "protocol_source": "https://github.com/kody-w/rapp-1/blob/main/SPEC.md",
+  "protocol_sections_read": ["4", "5", "6", "7", "8", "9.1"]
+}

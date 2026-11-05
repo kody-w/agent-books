@@ -1,8 +1,8 @@
 {
   "schema": "agent-books/1.0",
-  "generated": "2026-11-05T19:38:34Z",
+  "generated": "2026-11-05T20:22:17Z",
   "docs_as_of": "2026-11-05",
-  "last_checked": "2026-11-05T19:38:34Z",
+  "last_checked": "2026-11-05T20:22:17Z",
   "books": [
     {
       "name": "brainstem",
@@ -17,11 +17,11 @@
           "source": "brainstem/00-preface.md",
           "html": "brainstem/00-preface.html",
           "doc_urls": [],
-          "last_checked": "2026-11-05T19:38:34Z",
-          "sha256": "c4e9eb123dddb341de1f8416869f20da52ac1afc424822574b701ae7af307c8c",
-          "sha8": "c4e9eb123ddd",
-          "snapshot": "versions/brainstem/00-preface/c4e9eb123ddd.md",
-          "words": 640
+          "last_checked": "2026-11-05T20:22:17Z",
+          "sha256": "b2239cbfedf5ca137a9a0e3b3130573c14ad0f0d7398aca48ddc746bb9727144",
+          "sha8": "b2239cbfedf5",
+          "snapshot": "versions/brainstem/00-preface/b2239cbfedf5.md",
+          "words": 536
         },
         {
           "number": "1",
@@ -32,11 +32,11 @@
           "source": "brainstem/01-a-tutorial-introduction.md",
           "html": "brainstem/01-a-tutorial-introduction.html",
           "doc_urls": [],
-          "last_checked": "2026-11-05T19:38:34Z",
-          "sha256": "83509a98da54f394b175a083b7dba3d31df32143b8e39df48cb8bdfa8a7a2315",
-          "sha8": "83509a98da54",
-          "snapshot": "versions/brainstem/01-a-tutorial-introduction/83509a98da54.md",
-          "words": 598
+          "last_checked": "2026-11-05T20:22:17Z",
+          "sha256": "4e3ae29ca711ded96e3beac808c7270f6891aa53c24b65368560e3f4a829c092",
+          "sha8": "4e3ae29ca711",
+          "snapshot": "versions/brainstem/01-a-tutorial-introduction/4e3ae29ca711.md",
+          "words": 517
         },
         {
           "number": "2",
@@ -47,11 +47,11 @@
           "source": "brainstem/02-the-interface.md",
           "html": "brainstem/02-the-interface.html",
           "doc_urls": [],
-          "last_checked": "2026-11-05T19:38:34Z",
-          "sha256": "267300b1813d5f293bc071c2a2898bbc6f9b42afa5e650283cd2b9d9605d28a5",
-          "sha8": "267300b1813d",
-          "snapshot": "versions/brainstem/02-the-interface/267300b1813d.md",
-          "words": 581
+          "last_checked": "2026-11-05T20:22:17Z",
+          "sha256": "b0d7a5f49e6073a077515ccf5d501efad0f0afe6a901232c2d941eb59a35dc73",
+          "sha8": "b0d7a5f49e60",
+          "snapshot": "versions/brainstem/02-the-interface/b0d7a5f49e60.md",
+          "words": 419
         },
         {
           "number": "3",
@@ -62,11 +62,11 @@
           "source": "brainstem/03-execution.md",
           "html": "brainstem/03-execution.html",
           "doc_urls": [],
-          "last_checked": "2026-11-05T19:38:34Z",
-          "sha256": "69fe21ec36a5e72de1ae2fb027980773c595f25b432460d614e3e663b6eb8566",
-          "sha8": "69fe21ec36a5",
-          "snapshot": "versions/brainstem/03-execution/69fe21ec36a5.md",
-          "words": 577
+          "last_checked": "2026-11-05T20:22:17Z",
+          "sha256": "41cf91dfce5ef3e634c6aa818d3e93dccc95e603f64c5e0a66cea9dbca0f43ff",
+          "sha8": "41cf91dfce5e",
+          "snapshot": "versions/brainstem/03-execution/41cf91dfce5e.md",
+          "words": 400
         },
         {
           "number": "4",
@@ -77,11 +77,11 @@
           "source": "brainstem/04-the-transcript.md",
           "html": "brainstem/04-the-transcript.html",
           "doc_urls": [],
-          "last_checked": "2026-11-05T19:38:34Z",
-          "sha256": "e2267287b01b45a7d4554acc44d96e25061824c39896a1c88fb328c76996d54e",
-          "sha8": "e2267287b01b",
-          "snapshot": "versions/brainstem/04-the-transcript/e2267287b01b.md",
-          "words": 570
+          "last_checked": "2026-11-05T20:22:17Z",
+          "sha256": "915d22ea73341461ca48ec1f78d9f01b1c6dbb64771292933cbb8e22a117fa0d",
+          "sha8": "915d22ea7334",
+          "snapshot": "versions/brainstem/04-the-transcript/915d22ea7334.md",
+          "words": 419
         },
         {
           "number": "5",
@@ -92,11 +92,11 @@
           "source": "brainstem/05-output-that-steers.md",
           "html": "brainstem/05-output-that-steers.html",
           "doc_urls": [],
-          "last_checked": "2026-11-05T19:38:34Z",
-          "sha256": "4c4733be3381becea788aff1647c8a22b48a495848eedcd333818d8240e6acc8",
-          "sha8": "4c4733be3381",
-          "snapshot": "versions/brainstem/05-output-that-steers/4c4733be3381.md",
-          "words": 555
+          "last_checked": "2026-11-05T20:22:17Z",
+          "sha256": "07c69e1b608c08bcd94fba32ce1df42e09311784bbfce8ce9b097c15d896754d",
+          "sha8": "07c69e1b608c",
+          "snapshot": "versions/brainstem/05-output-that-steers/07c69e1b608c.md",
+          "words": 478
         },
         {
           "number": "6",
@@ -107,11 +107,11 @@
           "source": "brainstem/06-memory.md",
           "html": "brainstem/06-memory.html",
           "doc_urls": [],
-          "last_checked": "2026-11-05T19:38:34Z",
-          "sha256": "c324e25ab5e790e579bd262bf087b2504c7e5b1632d96cd338730c9843b7dd47",
-          "sha8": "c324e25ab5e7",
-          "snapshot": "versions/brainstem/06-memory/c324e25ab5e7.md",
-          "words": 585
+          "last_checked": "2026-11-05T20:22:17Z",
+          "sha256": "0328c6df875e2bfd747db64bdc1db94d1fe59b4100245062239b212b8077a37f",
+          "sha8": "0328c6df875e",
+          "snapshot": "versions/brainstem/06-memory/0328c6df875e.md",
+          "words": 662
         },
         {
           "number": "7",
@@ -122,11 +122,11 @@
           "source": "brainstem/07-growing-mid-session.md",
           "html": "brainstem/07-growing-mid-session.html",
           "doc_urls": [],
-          "last_checked": "2026-11-05T19:38:34Z",
-          "sha256": "cf19826963a3597c616f9fe59340480a6827e6f7e16b25cb6a44e0cef9fb1f92",
-          "sha8": "cf19826963a3",
-          "snapshot": "versions/brainstem/07-growing-mid-session/cf19826963a3.md",
-          "words": 564
+          "last_checked": "2026-11-05T20:22:17Z",
+          "sha256": "f7e46e3f0d582787dbceceb314ef8c8bab3c22b0f1cda97e858538587701ac89",
+          "sha8": "f7e46e3f0d58",
+          "snapshot": "versions/brainstem/07-growing-mid-session/f7e46e3f0d58.md",
+          "words": 637
         },
         {
           "number": "8",
@@ -137,11 +137,11 @@
           "source": "brainstem/08-replay-and-time-travel.md",
           "html": "brainstem/08-replay-and-time-travel.html",
           "doc_urls": [],
-          "last_checked": "2026-11-05T19:38:34Z",
-          "sha256": "0771f7db2034af1b524fde0a4ca21e2dcc77397632de135cb87b3cd2b960b3b8",
-          "sha8": "0771f7db2034",
-          "snapshot": "versions/brainstem/08-replay-and-time-travel/0771f7db2034.md",
-          "words": 572
+          "last_checked": "2026-11-05T20:22:17Z",
+          "sha256": "45d4ef6472c42efc2823ce45c794f83bab3a2648584bb11994378437b6722ba7",
+          "sha8": "45d4ef6472c4",
+          "snapshot": "versions/brainstem/08-replay-and-time-travel/45d4ef6472c4.md",
+          "words": 481
         },
         {
           "number": "9",
@@ -152,11 +152,11 @@
           "source": "brainstem/09-hosts-and-portability.md",
           "html": "brainstem/09-hosts-and-portability.html",
           "doc_urls": [],
-          "last_checked": "2026-11-05T19:38:34Z",
-          "sha256": "9a286222dcabd7cb3d33c020cad49ef9b5b3e52a1581d029f1e503b16f063b0b",
-          "sha8": "9a286222dcab",
-          "snapshot": "versions/brainstem/09-hosts-and-portability/9a286222dcab.md",
-          "words": 585
+          "last_checked": "2026-11-05T20:22:17Z",
+          "sha256": "cb71c8ed4b2f37da6ecda76060f7b94f041f1cb4fb70dbaa1382e3e469f29d1a",
+          "sha8": "cb71c8ed4b2f",
+          "snapshot": "versions/brainstem/09-hosts-and-portability/cb71c8ed4b2f.md",
+          "words": 1130
         },
         {
           "number": "10",
@@ -167,11 +167,11 @@
           "source": "brainstem/10-building-a-real-system.md",
           "html": "brainstem/10-building-a-real-system.html",
           "doc_urls": [],
-          "last_checked": "2026-11-05T19:38:34Z",
-          "sha256": "43fa53755f307a5a1ec69438c6842816bad3ee2131f78cdea695feb5f52d7706",
-          "sha8": "43fa53755f30",
-          "snapshot": "versions/brainstem/10-building-a-real-system/43fa53755f30.md",
-          "words": 602
+          "last_checked": "2026-11-05T20:22:17Z",
+          "sha256": "b6d88b0771150280f27285f060c64ba9a1ca9b5ee79bb961c20cc1766a66d2c1",
+          "sha8": "b6d88b077115",
+          "snapshot": "versions/brainstem/10-building-a-real-system/b6d88b077115.md",
+          "words": 550
         },
         {
           "number": "Appendix A",
@@ -182,11 +182,11 @@
           "source": "brainstem/A-reference-manual.md",
           "html": "brainstem/A-reference-manual.html",
           "doc_urls": [],
-          "last_checked": "2026-11-05T19:38:34Z",
-          "sha256": "397dc294f7cfb28716b26c1e2f13fe29578491d1b112ad6d2ebc3c4475b62060",
-          "sha8": "397dc294f7cf",
-          "snapshot": "versions/brainstem/A-reference-manual/397dc294f7cf.md",
-          "words": 582
+          "last_checked": "2026-11-05T20:22:17Z",
+          "sha256": "e40143247036716c3cec5ffb360fffae9484c0ddde5b16db93d4f12de43681be",
+          "sha8": "e40143247036",
+          "snapshot": "versions/brainstem/A-reference-manual/e40143247036.md",
+          "words": 669
         },
         {
           "number": "Appendix B",
@@ -197,11 +197,11 @@
           "source": "brainstem/B-glossary.md",
           "html": "brainstem/B-glossary.html",
           "doc_urls": [],
-          "last_checked": "2026-11-05T19:38:34Z",
-          "sha256": "3869c07dcf20f8793b0c18cf3fa0d2d302f50a9af91bf5b7580a0a3796a48ae1",
-          "sha8": "3869c07dcf20",
-          "snapshot": "versions/brainstem/B-glossary/3869c07dcf20.md",
-          "words": 567
+          "last_checked": "2026-11-05T20:22:17Z",
+          "sha256": "bc931c0893183a487d01c0808cf8c42d7378a85190d0529d741d369f33ac4dc4",
+          "sha8": "bc931c089318",
+          "snapshot": "versions/brainstem/B-glossary/bc931c089318.md",
+          "words": 619
         },
         {
           "number": "Appendix C",
@@ -232,14 +232,29 @@
             "https://support.claude.com/en/articles/13345190-getting-started-with-cowork",
             "https://support.claude.com/en/articles/9517075-what-are-projects"
           ],
-          "last_checked": "2026-11-05T19:38:34Z",
-          "sha256": "6ab7fcc8d22de593e41f09f7f82e037512016474325a67199b1cc67a8081443d",
-          "sha8": "6ab7fcc8d22d",
-          "snapshot": "versions/brainstem/C-mapping-table/6ab7fcc8d22d.md",
-          "words": 653
+          "last_checked": "2026-11-05T20:22:17Z",
+          "sha256": "f07c3441136595f575b808f1889d3a718fd7a89fad512e32b4ddfc479f8b6b63",
+          "sha8": "f07c34411365",
+          "snapshot": "versions/brainstem/C-mapping-table/f07c34411365.md",
+          "words": 655
         }
       ],
-      "word_count": 8231,
+      "concepts": [
+        {
+          "name": "Described executable capability",
+          "chapter": "01-a-tutorial-introduction.md",
+          "section": "1.2 What the caller sees"
+        }
+      ],
+      "hosts": [
+        "Local CPython",
+        "Pyodide/browser",
+        "Copilot Studio"
+      ],
+      "concept_count": 1,
+      "host_count": 3,
+      "word_count": 8172,
+      "example_count": 11,
       "numbered_examples": [
         "brainstem/examples/01_hello.py",
         "brainstem/examples/02_interface.py",
@@ -276,11 +291,11 @@
             "https://support.claude.com/en/articles/12512180-using-skills-in-claude",
             "https://support.claude.com/en/articles/13345190-getting-started-with-cowork"
           ],
-          "last_checked": "2026-11-05T19:38:34Z",
-          "sha256": "1f06a8d407fc142175321bc7a043506ed7f1f44f53d8e55c699438922662a976",
-          "sha8": "1f06a8d407fc",
-          "snapshot": "versions/claude/00-preface/1f06a8d407fc.md",
-          "words": 551
+          "last_checked": "2026-11-05T20:22:17Z",
+          "sha256": "9e873644c4189689764878591c66a94b3e846f4ebd541915b5c662002c840e19",
+          "sha8": "9e873644c418",
+          "snapshot": "versions/claude/00-preface/9e873644c418.md",
+          "words": 564
         },
         {
           "number": "1",
@@ -291,13 +306,14 @@
           "source": "claude/01-a-tutorial-introduction.md",
           "html": "claude/01-a-tutorial-introduction.html",
           "doc_urls": [
+            "https://platform.claude.com/docs/en/agents-and-tools/tool-use/define-tools",
             "https://platform.claude.com/docs/en/agents-and-tools/tool-use/overview"
           ],
-          "last_checked": "2026-11-05T19:38:34Z",
-          "sha256": "9e7fb312b41d1203e0685031a3d824fcc4bc3d358f0f54d940f6d6234bced844",
-          "sha8": "9e7fb312b41d",
-          "snapshot": "versions/claude/01-a-tutorial-introduction/9e7fb312b41d.md",
-          "words": 534
+          "last_checked": "2026-11-05T20:22:17Z",
+          "sha256": "04668b19749b43206b6d9de09be087f321daacd34477f4ffeab929a79ef97bb9",
+          "sha8": "04668b19749b",
+          "snapshot": "versions/claude/01-a-tutorial-introduction/04668b19749b.md",
+          "words": 570
         },
         {
           "number": "2",
@@ -308,15 +324,21 @@
           "source": "claude/02-the-interface.md",
           "html": "claude/02-the-interface.html",
           "doc_urls": [
+            "https://code.claude.com/docs/en/commands",
             "https://code.claude.com/docs/en/skills",
             "https://code.claude.com/docs/en/sub-agents",
-            "https://platform.claude.com/docs/en/agents-and-tools/tool-use/overview"
+            "https://platform.claude.com/docs/en/agents-and-tools/tool-use/define-tools",
+            "https://platform.claude.com/docs/en/agents-and-tools/tool-use/handle-tool-calls",
+            "https://platform.claude.com/docs/en/agents-and-tools/tool-use/overview",
+            "https://platform.claude.com/docs/en/agents-and-tools/tool-use/parallel-tool-use",
+            "https://platform.claude.com/docs/en/agents-and-tools/tool-use/programmatic-tool-calling",
+            "https://platform.claude.com/docs/en/agents-and-tools/tool-use/strict-tool-use"
           ],
-          "last_checked": "2026-11-05T19:38:34Z",
-          "sha256": "7d2b1b6bc7949d42a90475e4a46a742e3ebe2d618b6ac0c0bfa56ab0d6739395",
-          "sha8": "7d2b1b6bc794",
-          "snapshot": "versions/claude/02-the-interface/7d2b1b6bc794.md",
-          "words": 547
+          "last_checked": "2026-11-05T20:22:17Z",
+          "sha256": "10fce80690ea4dce4401f21933ca1c55c4d0ea691c20a88d6e724a01a12d331b",
+          "sha8": "10fce80690ea",
+          "snapshot": "versions/claude/02-the-interface/10fce80690ea.md",
+          "words": 1272
         },
         {
           "number": "3",
@@ -330,14 +352,22 @@
             "https://code.claude.com/docs/en/hooks",
             "https://code.claude.com/docs/en/skills",
             "https://code.claude.com/docs/en/sub-agents",
+            "https://platform.claude.com/docs/en/agents-and-tools/tool-use/bash-tool",
+            "https://platform.claude.com/docs/en/agents-and-tools/tool-use/browser-use-sdk",
+            "https://platform.claude.com/docs/en/agents-and-tools/tool-use/browser-use-tool",
             "https://platform.claude.com/docs/en/agents-and-tools/tool-use/code-execution-tool",
-            "https://platform.claude.com/docs/en/agents-and-tools/tool-use/overview"
+            "https://platform.claude.com/docs/en/agents-and-tools/tool-use/computer-use-tool",
+            "https://platform.claude.com/docs/en/agents-and-tools/tool-use/overview",
+            "https://platform.claude.com/docs/en/agents-and-tools/tool-use/text-editor-tool",
+            "https://platform.claude.com/docs/en/agents-and-tools/tool-use/tool-runner",
+            "https://platform.claude.com/docs/en/agents-and-tools/tool-use/web-fetch-tool",
+            "https://platform.claude.com/docs/en/agents-and-tools/tool-use/web-search-tool"
           ],
-          "last_checked": "2026-11-05T19:38:34Z",
-          "sha256": "be21ec8d2101cf450476406de4ca5af63235a2bece7ffe60492a1c98fc59ff3c",
-          "sha8": "be21ec8d2101",
-          "snapshot": "versions/claude/03-execution/be21ec8d2101.md",
-          "words": 531
+          "last_checked": "2026-11-05T20:22:17Z",
+          "sha256": "5504a1a6bc3410a12a3847bba3973caf8e0ad5bd1316e5a7ce44553d423c5d87",
+          "sha8": "5504a1a6bc34",
+          "snapshot": "versions/claude/03-execution/5504a1a6bc34.md",
+          "words": 1528
         },
         {
           "number": "4",
@@ -350,15 +380,21 @@
           "doc_urls": [
             "https://code.claude.com/docs/en/skills",
             "https://code.claude.com/docs/en/sub-agents",
+            "https://platform.claude.com/docs/en/agents-and-tools/tool-use/fine-grained-tool-streaming",
             "https://platform.claude.com/docs/en/agents-and-tools/tool-use/overview",
             "https://platform.claude.com/docs/en/agents-and-tools/tool-use/programmatic-tool-calling",
-            "https://platform.claude.com/docs/en/build-with-claude/context-editing"
+            "https://platform.claude.com/docs/en/build-with-claude/compaction",
+            "https://platform.claude.com/docs/en/build-with-claude/compaction-background",
+            "https://platform.claude.com/docs/en/build-with-claude/compaction-on-demand",
+            "https://platform.claude.com/docs/en/build-with-claude/context-editing",
+            "https://platform.claude.com/docs/en/build-with-claude/message-threads",
+            "https://platform.claude.com/docs/en/build-with-claude/mid-conversation-system-messages"
           ],
-          "last_checked": "2026-11-05T19:38:34Z",
-          "sha256": "a3b73c9a5d05c041f75e91b4c44995e518e6f19c3917152470d277a3617fc359",
-          "sha8": "a3b73c9a5d05",
-          "snapshot": "versions/claude/04-the-transcript/a3b73c9a5d05.md",
-          "words": 550
+          "last_checked": "2026-11-05T20:22:17Z",
+          "sha256": "188ad03050dc5f40ba616d4105e0be4ab30c044311411a8b96f17e7464f598f8",
+          "sha8": "188ad03050dc",
+          "snapshot": "versions/claude/04-the-transcript/188ad03050dc.md",
+          "words": 1457
         },
         {
           "number": "5",
@@ -371,14 +407,18 @@
           "doc_urls": [
             "https://code.claude.com/docs/en/agent-sdk/custom-tools",
             "https://code.claude.com/docs/en/mcp",
+            "https://code.claude.com/docs/en/output-styles",
             "https://platform.claude.com/docs/en/agents-and-tools/tool-use/overview",
+            "https://platform.claude.com/docs/en/build-with-claude/citations",
+            "https://platform.claude.com/docs/en/build-with-claude/search-results",
+            "https://platform.claude.com/docs/en/build-with-claude/structured-outputs",
             "https://platform.claude.com/docs/en/managed-agents/tools.md"
           ],
-          "last_checked": "2026-11-05T19:38:34Z",
-          "sha256": "cd387be454144dab69973957ce3711ff36e001eead77c5f71ef6d3cbf7daa356",
-          "sha8": "cd387be45414",
-          "snapshot": "versions/claude/05-output-that-steers/cd387be45414.md",
-          "words": 549
+          "last_checked": "2026-11-05T20:22:17Z",
+          "sha256": "0bc2e33d4136f7b4a26e949d7a7e10ff171517ee14826f2848328a2dabe3c6b9",
+          "sha8": "0bc2e33d4136",
+          "snapshot": "versions/claude/05-output-that-steers/0bc2e33d4136.md",
+          "words": 1103
         },
         {
           "number": "6",
@@ -391,14 +431,15 @@
           "doc_urls": [
             "https://code.claude.com/docs/en/memory",
             "https://platform.claude.com/docs/en/agents-and-tools/tool-use/memory-tool",
+            "https://platform.claude.com/docs/en/build-with-claude/files",
             "https://platform.claude.com/docs/en/build-with-claude/prompt-caching",
             "https://support.claude.com/en/articles/9517075-what-are-projects"
           ],
-          "last_checked": "2026-11-05T19:38:34Z",
-          "sha256": "296bfce28c8bb062e3ded0e7a32f4f9a9dbf6ce6ad6cd116a3fa70f55a2e8640",
-          "sha8": "296bfce28c8b",
-          "snapshot": "versions/claude/06-memory/296bfce28c8b.md",
-          "words": 552
+          "last_checked": "2026-11-05T20:22:17Z",
+          "sha256": "7ded732d943f3a68b911a44356bc533ac87fae6f6155dd39ef8a6c9d6d6007ee",
+          "sha8": "7ded732d943f",
+          "snapshot": "versions/claude/06-memory/7ded732d943f.md",
+          "words": 1217
         },
         {
           "number": "7",
@@ -414,14 +455,19 @@
             "https://code.claude.com/docs/en/skills",
             "https://code.claude.com/docs/en/sub-agents",
             "https://platform.claude.com/docs/en/agents-and-tools/mcp-connector",
+            "https://platform.claude.com/docs/en/agents-and-tools/mcp-tunnels/quickstart",
             "https://platform.claude.com/docs/en/agents-and-tools/tool-use/tool-search-tool",
-            "https://platform.claude.com/docs/en/managed-agents/self-hosted-sandboxes-custom-tools.md"
+            "https://platform.claude.com/docs/en/manage-claude/inference-hooks",
+            "https://platform.claude.com/docs/en/manage-claude/inference-hooks-configuration",
+            "https://platform.claude.com/docs/en/manage-claude/inference-hooks-endpoint",
+            "https://platform.claude.com/docs/en/managed-agents/self-hosted-sandboxes-custom-tools.md",
+            "https://platform.claude.com/docs/mcp"
           ],
-          "last_checked": "2026-11-05T19:38:34Z",
-          "sha256": "544e503bf321fd4999c145d0132ff0f10a1de9ea84ee56597008d70cbec7b713",
-          "sha8": "544e503bf321",
-          "snapshot": "versions/claude/07-growing-mid-session/544e503bf321.md",
-          "words": 568
+          "last_checked": "2026-11-05T20:22:17Z",
+          "sha256": "b5928bffccbf2a20da7633011f3aa5f7e5ef208b1308a56df5cc4a7047c2a19e",
+          "sha8": "b5928bffccbf",
+          "snapshot": "versions/claude/07-growing-mid-session/b5928bffccbf.md",
+          "words": 1530
         },
         {
           "number": "8",
@@ -435,14 +481,16 @@
             "https://code.claude.com/docs/en/agent-sdk/python",
             "https://code.claude.com/docs/en/agent-sdk/sessions",
             "https://code.claude.com/docs/en/checkpointing",
+            "https://code.claude.com/docs/en/interactive-mode",
+            "https://code.claude.com/docs/en/sub-agents",
             "https://platform.claude.com/docs/en/agents-and-tools/tool-use/overview",
             "https://platform.claude.com/docs/en/build-with-claude/prompt-caching"
           ],
-          "last_checked": "2026-11-05T19:38:34Z",
-          "sha256": "55a1c82479a6de0a462bc2cb8da8a52cdd2388d5c0e20ba37c0a13388cc11ff8",
-          "sha8": "55a1c82479a6",
-          "snapshot": "versions/claude/08-replay-and-time-travel/55a1c82479a6.md",
-          "words": 573
+          "last_checked": "2026-11-05T20:22:17Z",
+          "sha256": "74e989f7895b4a4a8afbd9934ef9545cb7881f78061e745f6c9df0a3841a8384",
+          "sha8": "74e989f7895b",
+          "snapshot": "versions/claude/08-replay-and-time-travel/74e989f7895b.md",
+          "words": 940
         },
         {
           "number": "9",
@@ -454,20 +502,41 @@
           "html": "claude/09-hosts-and-portability.html",
           "doc_urls": [
             "https://code.claude.com/docs/en/agent-sdk/custom-tools",
+            "https://code.claude.com/docs/en/agent-sdk/permissions",
             "https://code.claude.com/docs/en/agent-sdk/python",
+            "https://code.claude.com/docs/en/agent-teams",
+            "https://code.claude.com/docs/en/channels",
             "https://code.claude.com/docs/en/chrome",
+            "https://code.claude.com/docs/en/remote-control",
             "https://code.claude.com/docs/en/skills",
+            "https://platform.claude.com/docs/en/agents-and-tools/agent-skills/overview",
             "https://platform.claude.com/docs/en/agents-and-tools/tool-use/overview",
-            "https://platform.claude.com/docs/en/managed-agents/self-hosted-sandboxes-custom-tools.md",
-            "https://platform.claude.com/docs/en/managed-agents/tools.md",
+            "https://platform.claude.com/docs/en/build-with-claude/skills-guide",
+            "https://platform.claude.com/docs/en/managed-agents/agent-setup",
+            "https://platform.claude.com/docs/en/managed-agents/define-outcomes",
+            "https://platform.claude.com/docs/en/managed-agents/dreams",
+            "https://platform.claude.com/docs/en/managed-agents/memory",
+            "https://platform.claude.com/docs/en/managed-agents/multiagent-orchestration",
+            "https://platform.claude.com/docs/en/managed-agents/overview",
+            "https://platform.claude.com/docs/en/managed-agents/quickstart",
+            "https://platform.claude.com/docs/en/managed-agents/scheduled-deployments",
+            "https://platform.claude.com/docs/en/managed-agents/self-hosted-sandboxes",
+            "https://platform.claude.com/docs/en/managed-agents/self-hosted-sandboxes-custom-tools",
+            "https://platform.claude.com/docs/en/managed-agents/self-hosted-sandboxes-workers",
+            "https://platform.claude.com/docs/en/managed-agents/session-operations",
+            "https://platform.claude.com/docs/en/managed-agents/sessions",
+            "https://platform.claude.com/docs/en/managed-agents/skills",
+            "https://platform.claude.com/docs/en/managed-agents/tools",
+            "https://platform.claude.com/docs/en/managed-agents/workflow-runs",
+            "https://support.claude.com/en/articles/11175166-getting-started-with-custom-connectors-using-remote-mcp",
             "https://support.claude.com/en/articles/12512180-using-skills-in-claude",
             "https://support.claude.com/en/articles/13345190-getting-started-with-cowork"
           ],
-          "last_checked": "2026-11-05T19:38:34Z",
-          "sha256": "e68710c59abbd8b7e6bfd8abd6c69f24e72ab7bebc7e19b2d6f68c97c21c9250",
-          "sha8": "e68710c59abb",
-          "snapshot": "versions/claude/09-hosts-and-portability/e68710c59abb.md",
-          "words": 614
+          "last_checked": "2026-11-05T20:22:17Z",
+          "sha256": "29c13a8e946d08826121476c836091e9b0771dfc3f30d42c48b6af3510697854",
+          "sha8": "29c13a8e946d",
+          "snapshot": "versions/claude/09-hosts-and-portability/29c13a8e946d.md",
+          "words": 4190
         },
         {
           "number": "10",
@@ -479,13 +548,20 @@
           "html": "claude/10-building-a-real-system.html",
           "doc_urls": [
             "https://code.claude.com/docs/en/agent-sdk/sessions",
-            "https://platform.claude.com/docs/en/agents-and-tools/tool-use/overview"
+            "https://platform.claude.com/docs/en/agents-and-tools/tool-use/advisor-tool",
+            "https://platform.claude.com/docs/en/agents-and-tools/tool-use/define-tools",
+            "https://platform.claude.com/docs/en/agents-and-tools/tool-use/overview",
+            "https://platform.claude.com/docs/en/build-with-claude/batch-processing",
+            "https://platform.claude.com/docs/en/build-with-claude/effort",
+            "https://platform.claude.com/docs/en/build-with-claude/task-budgets",
+            "https://platform.claude.com/docs/en/build-with-claude/thinking",
+            "https://platform.claude.com/docs/en/build-with-claude/token-counting"
           ],
-          "last_checked": "2026-11-05T19:38:34Z",
-          "sha256": "d6358fe00be5f016f73950fcbe0c447119a3f1e67f883721721f01dcda8f8015",
-          "sha8": "d6358fe00be5",
-          "snapshot": "versions/claude/10-building-a-real-system/d6358fe00be5.md",
-          "words": 602
+          "last_checked": "2026-11-05T20:22:17Z",
+          "sha256": "735c4757fadaf65df2b8c212f0a04bbc2217ea3818e180ee28e84f38289bab57",
+          "sha8": "735c4757fada",
+          "snapshot": "versions/claude/10-building-a-real-system/735c4757fada.md",
+          "words": 1362
         },
         {
           "number": "Appendix A",
@@ -507,23 +583,26 @@
             "https://code.claude.com/docs/en/skills",
             "https://code.claude.com/docs/en/sub-agents",
             "https://platform.claude.com/docs/en/agents-and-tools/tool-use/code-execution-tool",
+            "https://platform.claude.com/docs/en/agents-and-tools/tool-use/define-tools",
             "https://platform.claude.com/docs/en/agents-and-tools/tool-use/memory-tool",
             "https://platform.claude.com/docs/en/agents-and-tools/tool-use/overview",
             "https://platform.claude.com/docs/en/agents-and-tools/tool-use/programmatic-tool-calling",
             "https://platform.claude.com/docs/en/agents-and-tools/tool-use/tool-search-tool",
             "https://platform.claude.com/docs/en/build-with-claude/context-editing",
             "https://platform.claude.com/docs/en/build-with-claude/prompt-caching",
+            "https://platform.claude.com/docs/en/managed-agents/overview",
             "https://platform.claude.com/docs/en/managed-agents/self-hosted-sandboxes-custom-tools.md",
             "https://platform.claude.com/docs/en/managed-agents/tools.md",
+            "https://platform.claude.com/docs/llms.txt",
             "https://support.claude.com/en/articles/12512180-using-skills-in-claude",
             "https://support.claude.com/en/articles/13345190-getting-started-with-cowork",
             "https://support.claude.com/en/articles/9517075-what-are-projects"
           ],
-          "last_checked": "2026-11-05T19:38:34Z",
-          "sha256": "c5da5e182039c96372e48c484bb794f5bf9721e78347d2d9458dc4c598baa9dd",
-          "sha8": "c5da5e182039",
-          "snapshot": "versions/claude/A-reference-manual/c5da5e182039.md",
-          "words": 480
+          "last_checked": "2026-11-05T20:22:17Z",
+          "sha256": "3acb7229c5b967ad75ec8369470af4ccea64bf9f95057228f69d547eadd36462",
+          "sha8": "3acb7229c5b9",
+          "snapshot": "versions/claude/A-reference-manual/3acb7229c5b9.md",
+          "words": 755
         },
         {
           "number": "Appendix B",
@@ -536,10 +615,13 @@
           "doc_urls": [
             "https://code.claude.com/docs/en/agent-sdk/custom-tools",
             "https://code.claude.com/docs/en/agent-sdk/sessions",
+            "https://code.claude.com/docs/en/agent-teams",
+            "https://code.claude.com/docs/en/channels",
             "https://code.claude.com/docs/en/checkpointing",
             "https://code.claude.com/docs/en/hooks",
             "https://code.claude.com/docs/en/memory",
             "https://code.claude.com/docs/en/plugins/overview",
+            "https://code.claude.com/docs/en/remote-control",
             "https://code.claude.com/docs/en/skills",
             "https://code.claude.com/docs/en/sub-agents",
             "https://platform.claude.com/docs/en/agents-and-tools/tool-use/memory-tool",
@@ -547,14 +629,17 @@
             "https://platform.claude.com/docs/en/agents-and-tools/tool-use/programmatic-tool-calling",
             "https://platform.claude.com/docs/en/agents-and-tools/tool-use/tool-search-tool",
             "https://platform.claude.com/docs/en/build-with-claude/context-editing",
+            "https://platform.claude.com/docs/en/build-with-claude/files",
             "https://platform.claude.com/docs/en/build-with-claude/prompt-caching",
+            "https://platform.claude.com/docs/en/managed-agents/overview",
+            "https://platform.claude.com/docs/llms.txt",
             "https://support.claude.com/en/articles/9517075-what-are-projects"
           ],
-          "last_checked": "2026-11-05T19:38:34Z",
-          "sha256": "210eb9ec5ff9107079c3bddb7e61aa63ee3c9cc05ce769f050f42ffff649fde9",
-          "sha8": "210eb9ec5ff9",
-          "snapshot": "versions/claude/B-glossary/210eb9ec5ff9.md",
-          "words": 530
+          "last_checked": "2026-11-05T20:22:17Z",
+          "sha256": "5a9f17f3db388cf9a45a13f6a56099188dc3d14d40152d20ee73019f63a216e0",
+          "sha8": "5a9f17f3db38",
+          "snapshot": "versions/claude/B-glossary/5a9f17f3db38.md",
+          "words": 810
         },
         {
           "number": "Appendix C",
@@ -585,14 +670,373 @@
             "https://support.claude.com/en/articles/13345190-getting-started-with-cowork",
             "https://support.claude.com/en/articles/9517075-what-are-projects"
           ],
-          "last_checked": "2026-11-05T19:38:34Z",
-          "sha256": "6ab7fcc8d22de593e41f09f7f82e037512016474325a67199b1cc67a8081443d",
-          "sha8": "6ab7fcc8d22d",
-          "snapshot": "versions/claude/C-mapping-table/6ab7fcc8d22d.md",
-          "words": 653
+          "last_checked": "2026-11-05T20:22:17Z",
+          "sha256": "f07c3441136595f575b808f1889d3a718fd7a89fad512e32b4ddfc479f8b6b63",
+          "sha8": "f07c34411365",
+          "snapshot": "versions/claude/C-mapping-table/f07c34411365.md",
+          "words": 655
         }
       ],
-      "word_count": 7834,
+      "concepts": [
+        {
+          "name": "client tools",
+          "chapter": "02-the-interface.md",
+          "section": "2.1 Client tools: publish an executable boundary"
+        },
+        {
+          "name": "tool_choice",
+          "chapter": "02-the-interface.md",
+          "section": "2.5 tool_choice: control selection without granting authority"
+        },
+        {
+          "name": "web search",
+          "chapter": "03-execution.md",
+          "section": "3.5 Server tools: web search"
+        },
+        {
+          "name": "web fetch",
+          "chapter": "03-execution.md",
+          "section": "3.6 Server tools: web fetch"
+        },
+        {
+          "name": "code execution",
+          "chapter": "03-execution.md",
+          "section": "3.1 Server tools: code execution"
+        },
+        {
+          "name": "tool runner",
+          "chapter": "03-execution.md",
+          "section": "3.7 Tool runner: let the SDK maintain the loop"
+        },
+        {
+          "name": "programmatic tool calling",
+          "chapter": "04-the-transcript.md",
+          "section": "4.3 Programmatic tool calling"
+        },
+        {
+          "name": "tool search",
+          "chapter": "07-growing-mid-session.md",
+          "section": "7.1 Tool search: load only relevant definitions"
+        },
+        {
+          "name": "memory tool",
+          "chapter": "06-memory.md",
+          "section": "6.1 Memory tool: application-owned durable notes"
+        },
+        {
+          "name": "context editing",
+          "chapter": "04-the-transcript.md",
+          "section": "4.1 Context editing: retain the archive, trim active context"
+        },
+        {
+          "name": "prompt caching",
+          "chapter": "06-memory.md",
+          "section": "6.5 Prompt caching"
+        },
+        {
+          "name": "Files API",
+          "chapter": "06-memory.md",
+          "section": "6.6 Files API: reuse inputs and retrieve generated artifacts"
+        },
+        {
+          "name": "MCP connector",
+          "chapter": "07-growing-mid-session.md",
+          "section": "7.5 MCP connector in the Messages API"
+        },
+        {
+          "name": "Agent Skills: Claude Code",
+          "chapter": "02-the-interface.md",
+          "section": "2.2 Agent Skills in Claude Code"
+        },
+        {
+          "name": "Agent Skills: API",
+          "chapter": "09-hosts-and-portability.md",
+          "section": "9.9 Agent Skills in the API"
+        },
+        {
+          "name": "Agent Skills: claude.ai",
+          "chapter": "09-hosts-and-portability.md",
+          "section": "9.10 Agent Skills in claude.ai"
+        },
+        {
+          "name": "subagents",
+          "chapter": "02-the-interface.md",
+          "section": "2.3 Subagents: delegate a separate context"
+        },
+        {
+          "name": "slash commands",
+          "chapter": "02-the-interface.md",
+          "section": "2.6 Slash commands: invoke a procedure explicitly"
+        },
+        {
+          "name": "hooks",
+          "chapter": "03-execution.md",
+          "section": "3.4 Hooks: run deterministic lifecycle checks"
+        },
+        {
+          "name": "plugins",
+          "chapter": "07-growing-mid-session.md",
+          "section": "7.4 Plugins: package a reviewed capability set"
+        },
+        {
+          "name": "MCP servers in Claude Code",
+          "chapter": "07-growing-mid-session.md",
+          "section": "7.3 MCP servers in Claude Code"
+        },
+        {
+          "name": "output styles",
+          "chapter": "05-output-that-steers.md",
+          "section": "5.6 Output styles: change Claude Code's working voice"
+        },
+        {
+          "name": "CLAUDE.md and auto memory",
+          "chapter": "06-memory.md",
+          "section": "6.3 CLAUDE.md and auto memory"
+        },
+        {
+          "name": "checkpoints and rewind",
+          "chapter": "08-replay-and-time-travel.md",
+          "section": "8.2 Checkpoints and rewind"
+        },
+        {
+          "name": "background tasks",
+          "chapter": "08-replay-and-time-travel.md",
+          "section": "8.5 Background tasks: keep working while independent work runs"
+        },
+        {
+          "name": "Agent SDK",
+          "chapter": "09-hosts-and-portability.md",
+          "section": "9.2 Agent SDK query(): one bounded task"
+        },
+        {
+          "name": "Managed Agents",
+          "chapter": "09-hosts-and-portability.md",
+          "section": "9.5 Managed Agents: define a versioned agent"
+        },
+        {
+          "name": "Projects",
+          "chapter": "06-memory.md",
+          "section": "6.4 Projects"
+        },
+        {
+          "name": "connectors",
+          "chapter": "09-hosts-and-portability.md",
+          "section": "9.11 Connectors: product integrations and service identity"
+        },
+        {
+          "name": "Cowork",
+          "chapter": "09-hosts-and-portability.md",
+          "section": "9.12 Cowork: a knowledge-work agent host"
+        },
+        {
+          "name": "Claude in Chrome",
+          "chapter": "09-hosts-and-portability.md",
+          "section": "9.13 Claude in Chrome: the signed-in browser as a host"
+        },
+        {
+          "name": "strict tool use",
+          "chapter": "02-the-interface.md",
+          "section": "2.7 Strict tool use and parallel tool use"
+        },
+        {
+          "name": "parallel tool use",
+          "chapter": "02-the-interface.md",
+          "section": "2.7 Strict tool use and parallel tool use"
+        },
+        {
+          "name": "Bash tool",
+          "chapter": "03-execution.md",
+          "section": "3.8 Bash and text editor tools: client execution, standard schemas"
+        },
+        {
+          "name": "text editor tool",
+          "chapter": "03-execution.md",
+          "section": "3.8 Bash and text editor tools: client execution, standard schemas"
+        },
+        {
+          "name": "browser use toolsets",
+          "chapter": "03-execution.md",
+          "section": "3.9 Browser and computer use: a client-controlled environment"
+        },
+        {
+          "name": "computer use toolsets",
+          "chapter": "03-execution.md",
+          "section": "3.9 Browser and computer use: a client-controlled environment"
+        },
+        {
+          "name": "compaction",
+          "chapter": "04-the-transcript.md",
+          "section": "4.5 Compaction: summarize a long conversation"
+        },
+        {
+          "name": "message threads",
+          "chapter": "04-the-transcript.md",
+          "section": "4.6 Message threads: send only the new turns"
+        },
+        {
+          "name": "mid-conversation system messages and tool changes",
+          "chapter": "04-the-transcript.md",
+          "section": "4.7 Mid-conversation system messages and tool changes"
+        },
+        {
+          "name": "fine-grained tool streaming",
+          "chapter": "04-the-transcript.md",
+          "section": "4.8 Fine-grained tool streaming"
+        },
+        {
+          "name": "structured outputs",
+          "chapter": "05-output-that-steers.md",
+          "section": "5.5 Structured outputs: make the final answer machine-readable"
+        },
+        {
+          "name": "citations",
+          "chapter": "05-output-that-steers.md",
+          "section": "5.7 Citations and search-result blocks: preserve evidence links"
+        },
+        {
+          "name": "search-result blocks",
+          "chapter": "05-output-that-steers.md",
+          "section": "5.7 Citations and search-result blocks: preserve evidence links"
+        },
+        {
+          "name": "MCP tunnels",
+          "chapter": "07-growing-mid-session.md",
+          "section": "7.6 MCP tunnels: reach a private server without an inbound port"
+        },
+        {
+          "name": "Enterprise inference hooks",
+          "chapter": "07-growing-mid-session.md",
+          "section": "7.7 Enterprise inference hooks: govern requests before inference"
+        },
+        {
+          "name": "Agent SDK sessions: resume and fork",
+          "chapter": "08-replay-and-time-travel.md",
+          "section": "8.1 Agent SDK sessions: resume and fork"
+        },
+        {
+          "name": "Agent SDK custom tools",
+          "chapter": "09-hosts-and-portability.md",
+          "section": "9.1 Agent SDK custom tools: wrap domain logic in MCP"
+        },
+        {
+          "name": "Agent SDK ClaudeSDKClient",
+          "chapter": "09-hosts-and-portability.md",
+          "section": "9.3 Agent SDK ClaudeSDKClient: a continuing application"
+        },
+        {
+          "name": "Agent SDK permissions",
+          "chapter": "09-hosts-and-portability.md",
+          "section": "9.4 Agent SDK permissions: availability is not approval"
+        },
+        {
+          "name": "Managed Agents sessions",
+          "chapter": "09-hosts-and-portability.md",
+          "section": "9.6 Managed Agents sessions: hosted state and streamed events"
+        },
+        {
+          "name": "Managed Agents custom tools",
+          "chapter": "09-hosts-and-portability.md",
+          "section": "9.7 Managed Agents custom tools: pair events with results"
+        },
+        {
+          "name": "Managed Agents self-hosted workers",
+          "chapter": "09-hosts-and-portability.md",
+          "section": "9.8 Managed Agents self-hosted workers: move execution, not inference"
+        },
+        {
+          "name": "Managed memory stores",
+          "chapter": "09-hosts-and-portability.md",
+          "section": "9.14 Managed memory stores: share selected durable context"
+        },
+        {
+          "name": "Managed Agent Skills",
+          "chapter": "09-hosts-and-portability.md",
+          "section": "9.15 Managed Agent Skills: mount a versioned procedure"
+        },
+        {
+          "name": "Managed multiagent orchestration",
+          "chapter": "09-hosts-and-portability.md",
+          "section": "9.16 Managed multiagent orchestration: delegate hosted work"
+        },
+        {
+          "name": "scheduled deployments",
+          "chapter": "09-hosts-and-portability.md",
+          "section": "9.17 Scheduled deployments: run a configured task later"
+        },
+        {
+          "name": "define outcomes",
+          "chapter": "09-hosts-and-portability.md",
+          "section": "9.18 Define outcomes: a rubric-driven completion loop"
+        },
+        {
+          "name": "workflow runs",
+          "chapter": "09-hosts-and-portability.md",
+          "section": "9.19 Workflow runs: observe parallel work to completion"
+        },
+        {
+          "name": "Dreams",
+          "chapter": "09-hosts-and-portability.md",
+          "section": "9.20 Dreams: consolidate session learning into memory"
+        },
+        {
+          "name": "Claude Code agent teams",
+          "chapter": "09-hosts-and-portability.md",
+          "section": "9.21 Claude Code agent teams: collaborating sessions"
+        },
+        {
+          "name": "Remote Control",
+          "chapter": "09-hosts-and-portability.md",
+          "section": "9.22 Remote Control: another view of a local session"
+        },
+        {
+          "name": "channels",
+          "chapter": "09-hosts-and-portability.md",
+          "section": "9.23 Channels: receive external events in a Code session"
+        },
+        {
+          "name": "adaptive thinking",
+          "chapter": "10-building-a-real-system.md",
+          "section": "10.5 Thinking and effort: spend reasoning where it helps"
+        },
+        {
+          "name": "effort",
+          "chapter": "10-building-a-real-system.md",
+          "section": "10.5 Thinking and effort: spend reasoning where it helps"
+        },
+        {
+          "name": "task budgets",
+          "chapter": "10-building-a-real-system.md",
+          "section": "10.6 Task budgets: give a multi-turn job a resource target"
+        },
+        {
+          "name": "advisor tool",
+          "chapter": "10-building-a-real-system.md",
+          "section": "10.7 Advisor tool: consult a specialist model mid-generation"
+        },
+        {
+          "name": "token counting",
+          "chapter": "10-building-a-real-system.md",
+          "section": "10.8 Token counting: estimate before a large request"
+        },
+        {
+          "name": "Message Batches",
+          "chapter": "10-building-a-real-system.md",
+          "section": "10.9 Message Batches: independent jobs without an interactive loop"
+        }
+      ],
+      "hosts": [
+        "Messages API",
+        "Claude Code",
+        "Agent SDK",
+        "Managed Agents",
+        "claude.ai",
+        "Cowork",
+        "Claude in Chrome"
+      ],
+      "concept_count": 69,
+      "host_count": 7,
+      "word_count": 17953,
+      "example_count": 71,
       "numbered_examples": [
         "claude/examples/01_hello.py",
         "claude/examples/02_interface.py",

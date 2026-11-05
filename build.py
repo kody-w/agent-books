@@ -13,6 +13,8 @@ ROOT = Path(__file__).resolve().parent
 OFFICIAL = {"platform.claude.com", "code.claude.com", "support.claude.com"}
 URL_RE = re.compile(r"https://[^\s<>\"')]+")
 LINK_RE = re.compile(r"(?<!!)\[([^\]]+)\]\(([^)\s]+)\)")
+COUNTS_RE = re.compile(r"<!-- book-counts:start -->.*?<!-- book-counts:end -->", re.S)
+EXAMPLE_RE = re.compile(r"^```(?:python|bash|sh|json|yaml|toml|javascript|markdown)\s*$", re.M)
 
 
 def official(url):
@@ -33,12 +35,21 @@ def frontmatter(text):
         raise ValueError("missing frontmatter")
     head, body = text[4:].split("\n---\n", 1)
     metadata = {}
+    optional = {"concepts", "hosts"}
+    key = None
     for line in head.splitlines():
+        if line.startswith("  "):
+            if key not in optional:
+                raise ValueError("only JSON list metadata may span lines")
+            metadata[key] += "\n" + line.strip()
+            continue
         key, value = line.split(":", 1)
         metadata[key] = value.strip()
     required = {"layout", "title", "book_label", "book_progress", "book_order", "description"}
-    if set(metadata) != required:
-        raise ValueError(f"frontmatter keys differ: {set(metadata) ^ required}")
+    if not required <= set(metadata) or set(metadata) - required - optional:
+        raise ValueError(f"invalid frontmatter keys: {set(metadata)}")
+    for key in optional & set(metadata):
+        metadata[key] = json.loads(metadata[key])
     return metadata, body.lstrip()
 
 
@@ -56,6 +67,47 @@ def stable_write(path, data):
 
 def json_bytes(value):
     return (json.dumps(value, ensure_ascii=False, indent=2) + "\n").encode("utf-8")
+
+
+def book_counts(root, manifest):
+    counts = {}
+    for book in manifest["books"]:
+        directory = root / book["name"]
+        metadata, _ = frontmatter((directory / "00-preface.md").read_text())
+        concepts, hosts = metadata["concepts"], metadata["hosts"]
+        if not concepts or len({c["name"] for c in concepts}) != len(concepts):
+            raise ValueError(f"empty or duplicate concepts: {book['name']}")
+        if not hosts or len(set(hosts)) != len(hosts):
+            raise ValueError(f"empty or duplicate hosts: {book['name']}")
+        bodies = [
+            COUNTS_RE.sub("", frontmatter((directory / filename).read_text())[1])
+            for filename in manifest["chapters"]
+        ]
+        counts[book["name"]] = {
+            "concepts": concepts, "hosts": hosts,
+            "concept_count": len(concepts), "host_count": len(hosts),
+            "word_count": sum(len(body.split()) for body in bodies),
+            "example_count": sum(len(EXAMPLE_RE.findall(body)) for body in bodies),
+        }
+    return counts
+
+
+def write_counts(root, manifest, counts):
+    lines = ["<!-- book-counts:start -->",
+             "| Book | Concepts | Hosts | Words | Examples |",
+             "|---|---:|---:|---:|---:|"]
+    for book in manifest["books"]:
+        count = counts[book["name"]]
+        lines.append(f"| {book['name'].capitalize()} | {count['concept_count']} | "
+                     f"{count['host_count']} | {count['word_count']} | {count['example_count']} |")
+    lines.append("<!-- book-counts:end -->")
+    table = "\n".join(lines)
+    for book in manifest["books"]:
+        path = root / book["name"] / "00-preface.md"
+        text = path.read_text()
+        if len(COUNTS_RE.findall(text)) != 1:
+            raise ValueError(f"expected one generated counts region: {path}")
+        stable_write(path, COUNTS_RE.sub(lambda _: table, text))
 
 
 def inline(text, source, rendered):
@@ -162,6 +214,8 @@ def markdown(text, source, rendered):
         elif line == "---":
             flush()
             output.append("<hr>")
+        elif line in {"<!-- book-counts:start -->", "<!-- book-counts:end -->"}:
+            flush()
         elif not line.strip():
             flush()
         else:
@@ -190,8 +244,8 @@ def contents(book, chapters, date):
              "## A tutorial, programming workbook, and field reference", "",
              f"**Docs as of {date}.**", "",
              "[Companion shelf](../index.html) · [Complete print edition](print.html)", "",
-             "Read chapter N beside chapter N in the other book. Ten numbered examples",
-             "accompany the ten chapters; helpers are not additional numbered examples.", "",
+             "Read chapter N beside chapter N in the other book. Ten numbered programs",
+             "accompany the ten chapters; additional examples and configurations appear inline.", "",
              "## Contents", ""]
     for chapter in chapters:
         lines.append(f"- [{chapter['label']}: {chapter['title']}]({chapter['file']})")
@@ -246,6 +300,8 @@ def build(root=ROOT):
     shared = (root / "shared/C-mapping-table.md").read_bytes()
     for book in manifest["books"]:
         stable_write(root / book["name"] / "C-mapping-table.md", shared)
+    counts = book_counts(root, manifest)
+    write_counts(root, manifest, counts)
     rendered = {
         (root / b["name"] / filename).resolve()
         for b in manifest["books"] for filename in manifest["chapters"] + ["README.md"]
@@ -274,7 +330,7 @@ def build(root=ROOT):
                 "html": f"{book['name']}/{source.stem}.html",
                 "doc_urls": doc_urls(body), "last_checked": manifest["last_checked"],
                 "sha256": digest, "sha8": digest[:12], "snapshot": snapshot,
-                "words": len(body.split()),
+                "words": len(COUNTS_RE.sub("", body).split()),
             }
             chapters.append(chapter)
             entries.append({
@@ -297,7 +353,7 @@ def build(root=ROOT):
         ))
         stable_write(directory / "print.html", page(book["title"], "\n<hr>\n".join(print_parts)))
         books.append({
-            **book, "chapters": chapters, "word_count": sum(c["words"] for c in chapters),
+            **book, "chapters": chapters, **counts[book["name"]],
             "numbered_examples": [str(p.relative_to(root)) for p in sorted(
                 (directory / "examples").glob("[0-9][0-9]_*.py"))],
         })
@@ -341,4 +397,6 @@ if __name__ == "__main__":
           f"{sum(len(b['chapters']) for b in result['books'])} chapters/appendices.")
     for book in result["books"]:
         print(f"{book['name']}: {book['word_count']} manuscript words, "
-              f"{len(book['numbered_examples'])} numbered examples")
+              f"{book['concept_count']} concepts, {book['host_count']} hosts, "
+              f"{book['example_count']} examples "
+              f"({len(book['numbered_examples'])} numbered programs)")

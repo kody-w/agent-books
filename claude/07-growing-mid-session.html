@@ -2,7 +2,7 @@
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>The Claude Agent Programming Language — Growing Mid-Session</title><link rel="stylesheet" href="../site.css"></head><body><div class="progress" style="width:52%"></div><main><nav><a href="../index.html">Companion shelf</a></nav><p class="edition">Docs as of 2026-11-05 · Tutorial and reference edition</p><p><a href="06-memory.html">← Chapter 6: Memory</a> · <a href="README.html">Book contents</a> · <a href="08-replay-and-time-travel.html">Chapter 8: Replay and Time Travel →</a></p>
 <h1 id="chapter-7--growing-mid-session">Chapter 7 — Growing Mid-Session</h1>
 <blockquote><p><strong>In this chapter:</strong> discover a deferred tool, update live instruction files, and distinguish creation, installation, discovery, and session configuration.</p></blockquote>
-<h2 id="71-discover-a-deferred-capability">7.1 Discover a deferred capability</h2>
+<h2 id="71-tool-search-load-only-relevant-definitions">7.1 Tool search: load only relevant definitions</h2>
 <p>Run <code>python3 claude/examples/07_growth.py</code>.</p>
 <pre><code class="language-python">import copy
 import sys
@@ -19,17 +19,66 @@ result = run(
 assert any(e[&quot;name&quot;] == &quot;draft_follow_up&quot; for e in result[&quot;events&quot;])
 print(result[&quot;text&quot;])</code></pre>
 <p>The server searches definitions supplied in the request, returns references, and loads relevant tool definitions into context. At least one tool, normally search itself, stays non-deferred. This scales a supplied catalog without initially loading every schema. It does not create new tool implementations. <a href="https://platform.claude.com/docs/en/agents-and-tools/tool-use/tool-search-tool">Tool search</a>.</p>
+<p><strong>When:</strong> a catalog has many rarely used tools, so loading all schemas wastes context and can make selection harder. Regex and BM25 search variants give different discovery interfaces. <strong>Limits:</strong> search operates on supplied tool names, descriptions, and schema metadata, not on unseen Python source. Keep at least one tool non-deferred. Avoid deferring a tool the task needs on nearly every turn; discovery adds its own latency. Search finds a declaration, while your executor must still implement and authorize the selected operation. <a href="https://platform.claude.com/docs/en/agents-and-tools/tool-use/tool-search-tool">Search variants and trade-offs</a>.</p>
 <h2 id="72-create-skills-and-subagents-during-work">7.2 Create skills and subagents during work</h2>
 <p>Claude Code watches existing skill directories and picks up additions or edits in the current session. If the top-level skills directory did not exist at startup, <code>/reload-skills</code> is needed; live detection covers <code>SKILL.md</code> text, not all plugin components. Bare mode is another documented exception. <a href="https://code.claude.com/docs/en/skills">Live skill editing</a>.</p>
 <p>The subagent guide documents creating an agent during a session and using it without a general restart requirement. It notes a specific limitation when the user agents directory did not exist when the session began. That is a real create-and-use cycle, not merely searching already supplied API tools. <a href="https://code.claude.com/docs/en/sub-agents">Subagent creation</a>.</p>
 <p>Application guidance: have Claude write a reviewed, project-local skill or subagent file, inspect its permissions and instructions, then invoke it on synthetic input. Do not infer that a new Python implementation has been safely installed merely because a Markdown file appeared.</p>
-<h2 id="73-mcp-connects-execution">7.3 MCP connects execution</h2>
+<h2 id="73-mcp-servers-in-claude-code">7.3 MCP servers in Claude Code</h2>
 <p>Claude Code can connect tools through MCP using local or remote server arrangements; the Messages API MCP connector instead connects to reachable remote HTTP servers and currently supports tool calls. The connector is not a local Python importer. <a href="https://code.claude.com/docs/en/mcp">Claude Code MCP</a>, <a href="https://platform.claude.com/docs/en/agents-and-tools/mcp-connector">API connector</a>.</p>
+<p><strong>What:</strong> MCP servers advertise tools, resources, and prompts to the host. <strong>Example:</strong> this read-only official documentation server needs no private application credential:</p>
+<pre><code class="language-sh">claude mcp add --transport http --scope project anthropic-docs https://platform.claude.com/docs/mcp
+claude mcp list</code></pre>
+<p>In the resulting Claude Code session, use <code>/mcp</code> to inspect connection state and ask it to search the Anthropic documentation. <strong>When:</strong> reuse a maintained integration rather than writing one adapter for each host. Project scope writes shared <code>.mcp.json</code>; a collaborator must still trust and authenticate a server when required. Local stdio servers can instead run a reviewed executable on the host; a remote URL does not imply a local process. <a href="https://code.claude.com/docs/en/mcp">Transport, scope, and authentication</a>.</p>
 <p>Application guidance: distinguish &quot;the host can discover this declaration&quot; from &quot;an authenticated executor is reachable.&quot; A visible tool whose server cannot be reached is not an installed working capability.</p>
-<h2 id="74-plugins-package-the-set">7.4 Plugins package the set</h2>
+<p><strong>Limits:</strong> server tool descriptions and results can carry prompt injections. OAuth authorization is service-specific; it is not permission to let every tool run without review. Keep credentials out of committed <code>.mcp.json</code>, restrict available operations, and distinguish host permission prompts from the remote service&#x27;s own access control. <a href="https://code.claude.com/docs/en/mcp">MCP security</a>.</p>
+<h2 id="74-plugins-package-a-reviewed-capability-set">7.4 Plugins: package a reviewed capability set</h2>
 <p>A Claude Code plugin packages skills, agents, hooks, MCP servers, or other components as one unit. The manifest lives in <code>.claude-plugin/plugin.json</code>. Some component changes require <code>/reload-plugins</code>; skill text watching alone is not a blanket plugin reload guarantee. <a href="https://code.claude.com/docs/en/plugins/overview">Plugins</a>, <a href="https://code.claude.com/docs/en/skills">skill/plugin reload boundary</a>.</p>
+<p><strong>Example:</strong> copy <a href="config/plugin/.claude-plugin/plugin.json">the minimal manifest</a> and <a href="config/plugin/skills/follow-up/SKILL.md">its skill</a> as this exact tree:</p>
+<pre><code class="language-text">library-plugin/
+  .claude-plugin/plugin.json
+  skills/follow-up/SKILL.md</code></pre>
+<p>The manifest is:</p>
+<pre><code class="language-json">{&quot;name&quot;:&quot;library-book&quot;,&quot;version&quot;:&quot;1.0.0&quot;,&quot;description&quot;:&quot;Draft-only library follow-up procedures&quot;}</code></pre>
+<p>Load that reviewed local directory with <code>claude --plugin-dir ./library-plugin</code> and invoke <code>/library-book:follow-up</code>. <strong>When:</strong> distribute related skills, agents, hooks, servers, and styles together with a versioned identity. <strong>Limits:</strong> component directories belong at the plugin root, not inside <code>.claude-plugin</code>. Installation is a trust decision: hooks and server commands can execute code. A manifest is packaging, not sandboxing or proof that all dependencies are available. <a href="https://code.claude.com/docs/en/plugins/overview">Plugin structure and loading</a>.</p>
 <p>Managed Agents separates tool declaration on the agent from implementation in a worker. The worker serves only registered implementations; a missing executor can leave a session waiting for a custom result. The worker lists tools once at startup and cannot add tools to a running session. The current guide permits redeclaring tools on the agent or an idle session and then restarting the worker; do not confuse that idle-session update with unrestricted live mutation. <a href="https://platform.claude.com/docs/en/managed-agents/self-hosted-sandboxes-custom-tools.md">Self-hosted custom tools</a>.</p>
-<h2 id="75-exercises">7.5 Exercises</h2>
+<h2 id="75-mcp-connector-in-the-messages-api">7.5 MCP connector in the Messages API</h2>
+<pre><code class="language-python">import anthropic
+
+with anthropic.Anthropic() as client:
+    response = client.beta.messages.create(
+        model=&quot;claude-opus-5-5&quot;, max_tokens=1024,
+        betas=[&quot;mcp-client-2025-11-20&quot;],
+        mcp_servers=[{
+            &quot;type&quot;: &quot;url&quot;, &quot;name&quot;: &quot;anthropic-docs&quot;,
+            &quot;url&quot;: &quot;https://platform.claude.com/docs/mcp&quot;,
+        }],
+        tools=[{&quot;type&quot;: &quot;mcp_toolset&quot;, &quot;mcp_server_name&quot;: &quot;anthropic-docs&quot;}],
+        messages=[{&quot;role&quot;: &quot;user&quot;, &quot;content&quot;:
+                   &quot;Find official guidance about client tool result IDs.&quot;}],
+    )
+    print(response.model_dump_json(indent=2))</code></pre>
+<p><strong>What:</strong> the API connects to a remote HTTP MCP server and handles tool calls without requiring your application to run an MCP client loop. <strong>When:</strong> the integration is already exposed as a reachable MCP service. The example uses a real public documentation endpoint from the fetched index. <a href="https://platform.claude.com/docs/en/agents-and-tools/mcp-connector">MCP connector</a>.</p>
+<p><strong>Limits:</strong> this connector currently supports MCP tool calls, not every resource or prompt feature of the protocol, and does not launch a local stdio server. Each server must have exactly one corresponding <code>mcp_toolset</code>. Put a private service token in <code>authorization_token</code> from your secret manager, never in the manuscript or committed configuration. Pinning a returned tool list requires the newer <code>mcp-client-2026-09-15</code> beta and its documented listing fields; the simpler example intentionally uses the supported basic connector header. <a href="https://platform.claude.com/docs/en/agents-and-tools/mcp-connector">Connector capabilities and tool-list pinning</a>.</p>
+<h2 id="76-mcp-tunnels-reach-a-private-server-without-an-inbound-port">7.6 MCP tunnels: reach a private server without an inbound port</h2>
+<p><strong>What:</strong> a tunnel agent makes an outbound connection that lets the platform reach an MCP server running on a private network. It solves connectivity, not tool authorization. <strong>When:</strong> use the API connector with a development or internal service that cannot accept public inbound connections. <strong>Example:</strong> follow the Console-created tunnel flow in the official quickstart: create a tunnel, obtain its tunnel credential, start the supplied tunnel agent beside your MCP server, then use the returned tunnel endpoint as the connector&#x27;s server URL. Do not substitute your API key for the tunnel credential. <a href="https://platform.claude.com/docs/en/agents-and-tools/mcp-tunnels/quickstart">MCP tunnel quickstart</a>.</p>
+<p><strong>Exact proxy configuration:</strong> after provisioning the tunnel and a trusted certificate through the documented Console flow, <code>config/mcp-proxy.yaml</code> uses:</p>
+<pre><code class="language-yaml">listen_addr: &quot;:8080&quot;
+tunnel_domain: YOUR_TUNNEL_DOMAIN
+tls:
+  cert_file: /data/tls.crt
+  key_file: /data/tls.key
+routes:
+  library: http://library-mcp:9000</code></pre>
+<p>Replace <code>YOUR_TUNNEL_DOMAIN</code> with the Console-issued domain and supply the certificate/key at the mounted paths. The <code>library</code> route becomes host <code>library.YOUR_TUNNEL_DOMAIN</code> with HTTPS and path <code>/mcp</code>; run the proxy plus <code>cloudflared</code> using the quickstart&#x27;s pinned Compose images. There is deliberately no credential in this configuration. <a href="https://platform.claude.com/docs/en/agents-and-tools/mcp-tunnels/quickstart">Proxy and Compose configuration</a>.</p>
+<p><strong>Limits:</strong> tunnels are a research preview requiring access. A tunnel exposes the configured MCP service to authorized platform requests; it is not a general VPN and does not make untrusted tool output safe. Use scoped credentials and review the service&#x27;s effective operations before connecting it. Certificate provisioning and tunnel-domain ownership are required; a route configuration alone does not establish a working connection. <a href="https://platform.claude.com/docs/en/agents-and-tools/mcp-tunnels/quickstart">Tunnel setup contract</a>.</p>
+<h2 id="77-enterprise-inference-hooks-govern-requests-before-inference">7.7 Enterprise inference hooks: govern requests before inference</h2>
+<p><strong>What:</strong> a Claude Enterprise organization can send governed prompts to its HTTPS policy service for an allow/deny verdict before the model runs. Optional <code>tool_call</code> validation checks calls before execution. These are server-side organizational inference hooks, not Claude Code&#x27;s local shell hooks. <strong>Exact verdict examples:</strong></p>
+<pre><code class="language-json">{&quot;action&quot;: &quot;allow&quot;}</code></pre>
+<pre><code class="language-json">{&quot;action&quot;: &quot;deny&quot;, &quot;deny_reason&quot;: &quot;Use approved synthetic evidence for this workflow.&quot;}</code></pre>
+<p><strong>When:</strong> a governed deployment needs a uniform policy boundary across supported Claude products instead of relying on each local client. An owner configures the endpoint, signs/verifies requests under the documented webhook protocol, and tests first in shadow mode. Set failure handling explicitly rather than assuming a timeout always blocks. <a href="https://platform.claude.com/docs/en/manage-claude/inference-hooks">Inference hooks</a>, <a href="https://platform.claude.com/docs/en/manage-claude/inference-hooks-configuration">configuration</a>.</p>
+<p><strong>Limits:</strong> this feature is for Claude Enterprise organizations, not Platform API organizations. The endpoint receives transcript text, tool calls/results, and extracted attachment text, not raw image bytes or system prompts. Verdicts allow or deny; they do not rewrite content. The default verdict timeout is five seconds; failures and the circuit breaker apply the organization&#x27;s configured fail-open/fail-closed behavior. Validate signatures and account for the endpoint as another data recipient. <a href="https://platform.claude.com/docs/en/manage-claude/inference-hooks-endpoint">Endpoint contract and boundaries</a>.</p>
+<h2 id="78-exercises">7.8 Exercises</h2>
 <p><strong>Exercise 7-1.</strong> Add a skill in an existing watched directory and observe its availability without restarting.</p>
 <p><strong>Exercise 7-2.</strong> Compare a tool-search request with a newly authored subagent. Identify which changes implementation and which changes visibility.</p>
 <p><strong>Exercise 7-3.</strong> Package the skill, reviewer, and hook templates into a plugin in a disposable project and test reload behavior.</p>

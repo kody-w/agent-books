@@ -84,11 +84,20 @@ of the production memory system.
 
 ## 6.4 Make scope explicit
 
-The source reader keeps `_current_guid` on the instance after `perform()`.
-A shared instance reused across users needs careful host binding and lifecycle
-management. The optional `user_guid` argument alone is not an authorization boundary.
-The installed runtime's binding and reuse behavior could not be inspected and is
-**(unverified)**.
+The installed reader sets `_current_guid = None` in its constructor
+(`agents/context_memory_agent.py:55`) and changes it in `perform()` (lines 81–94).
+The runtime creates fresh instances on every `/chat` loader sweep
+(`brainstem.py:1668–1692,1836–1864,2274–2294`) and calls `system_context()` before
+executing tools. Thus automatic recall begins in shared scope; a later explicit
+user-scoped recall does not bind the next request's fresh instance. The runtime
+does not pass an authenticated user identity into either memory method.
+The optional model-supplied `user_guid` is not an authorization boundary.
+
+The inspected `memory_store.py:16–32` defaults to `~/.brainstem/data/memory.db`;
+`BRAINSTEM_MEMORY_DB` selects a different SQLite file. WAL and a busy timeout are
+configured in lines 39–46. Moving only the server directory does not isolate this
+default database. The live book runner excludes both memory agents, and therefore
+never opens that store.
 
 The miniature caller does not automatically invoke `system_context()` before calls.
 The snippet does so explicitly. A model-facing host must decide when to inject

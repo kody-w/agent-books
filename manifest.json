@@ -1,7 +1,7 @@
 {
   "schema": "agent-books-manifest/1.0",
   "docs_as_of": "2026-11-05",
-  "last_checked": "2026-11-05T19:38:34Z",
+  "last_checked": "2026-11-05T20:22:17Z",
   "pages_base_url": "https://kody-w.github.io/agent-books/",
   "raw_base_url": "https://raw.githubusercontent.com/kody-w/agent-books/main/",
   "policy": "observe",
@@ -27,8 +27,8 @@
   ],
   "source_notes": {
     "anthropic": "Official URLs cited inline were fetched and read on docs_as_of; last_checked is the editorial verification date, not every build time.",
-    "reference_book": "The five requested local reference files were inaccessible; their public kody-w/rapp-1/main/book counterparts were fetched and read.",
-    "brainstem": "Local runtime source access was denied. Supplied ref-*.py files and ref-blog-post.html are the observed source evidence.",
+    "reference_book": "Conventions follow the public kody-w/rapp-1 reference book.",
+    "brainstem": "Read-only installed runtime and memory source inspected; synthetic chapters 1, 5, 7 and 10 ran through real /chat in an isolated temporary copy. Source identities and real transcripts are in fixtures. LearnNew hot loading succeeded but its generator fell back to a scaffold.",
     "hosting": "Pages URL is the intended destination, not a claim of a live deployment. No remote or push is performed by the build."
   }
 }

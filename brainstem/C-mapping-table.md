@@ -25,9 +25,9 @@ description: Chapter-by-chapter concept map between the companion books
 | 4 Transcript | Relevant outputs cross the execution boundary; replay also records arguments | Tool results, isolated subagent summaries, script outputs, programmatic filtering, and context editing |
 | 5 Steering output | Summary, next-step guidance, structured `data_slush` convention | Adoptable tool-result convention; API text or SDK MCP structured content can carry it |
 | 6 Memory | ManageMemory writes; ContextMemory recalls and offers `system_context()` | Client-owned memory tool; Code instructions and auto memory; Projects have distinct scope |
-| 7 Growth | LearnNew cycle described in source essay; installed loader unverified in this edition | Live skill/subagent file updates with documented limits; API tool search discovers supplied definitions; MCP and plugins supply execution and packaging |
+| 7 Growth | Source-inspected LearnNew creation and real next-turn invocation; stock generator fallback recorded | Live skill/subagent file updates with documented limits; API tool search discovers supplied definitions; MCP and plugins supply execution and packaging |
 | 8 Replay | Book archive re-executes one pinned pure handler with later evidence | Checkpoints restore tracked state; SDK resume/fork continues or branches history; application-owned replay can re-execute a pure tool |
-| 9 Hosts | Local Python pattern; browser and studio adapters require verification | Code, API, Agent SDK, Managed Agents, Cowork, chat skills, and Chrome have distinct execution and permission contracts |
+| 9 Hosts | Caller-carried conversation state, local model run, RAPP/1 framing boundary; browser/studio not deployed | Code, API, Agent SDK, Managed Agents, Cowork, chat skills, and Chrome have distinct execution and permission contracts |
 | 10 System | Chat file → draft → exact review handoff → selected draft replay | Same files and task; real model tool calls for initial steps, then local pure-handler replay |
 | A Reference | Teaching-profile contracts and source-agent boundaries | Host-aware interface and lifecycle reference |
 | B Glossary | Caller, declaration, result, context, archive, replay | Tool, skill, subagent, hook, cache, checkpoint, session, fork |

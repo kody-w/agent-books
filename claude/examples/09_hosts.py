@@ -26,6 +26,7 @@ async def main():
     options = ClaudeAgentOptions(
         model=MODEL, tools=[], mcp_servers={"book": server},
         allowed_tools=["mcp__book__review_draft"], max_turns=5,
+        permission_mode="dontAsk", setting_sources=[],
     )
     final = None
     async for message in query(

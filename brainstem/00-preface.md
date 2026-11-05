@@ -5,6 +5,8 @@ book_label: Preface
 book_progress: 4
 book_order: 0
 description: A tutorial and reference for the agent.py programming pattern
+concepts: [{"name":"Described executable capability","chapter":"01-a-tutorial-introduction.md","section":"1.2 What the caller sees"}]
+hosts: ["Local CPython", "Pyodide/browser", "Copilot Studio"]
 ---
 
 [Book contents](README.md) · [Chapter 1: A Tutorial Introduction →](01-a-tutorial-introduction.md)
@@ -25,17 +27,9 @@ An agent is a capability that a caller can select without learning its implement
 The caller sees a name, a description, and parameters. Code does the work. Its result
 returns to the conversation, where the next step can use it.
 
-This book calls that arrangement a language because it has recurring forms and
-composition rules. Python supplies the executable grammar. The agent pattern supplies
-the boundary: describe what can be done, keep execution behind that description, and
-make the result useful to whoever reads it next.
-
-The supplied [Hacker News agent](../ref-hacker_news_agent.py) makes the arrangement
-concrete. Its metadata describes fetching stories; its `perform()` fetches and shapes
-them; its return value contains a linked summary and structured records. The
-[memory writer](../ref-manage_memory_agent.py) and
-[memory reader](../ref-context_memory_agent.py) show persistence and context injection.
-These are source evidence, not dependencies of the book's examples.
+Python supplies the grammar; the pattern supplies this one boundary.
+The [news](../ref-hacker_news_agent.py), [memory writer](../ref-manage_memory_agent.py),
+and [memory reader](../ref-context_memory_agent.py) sources make it concrete.
 
 ## 0.2 Six rules
 
@@ -61,29 +55,37 @@ or the assistant's ordinary messages.
 
 ## 0.3 How to read
 
-Run chapter 1, then read chapters 2 through 5 as one unit: interface, execution,
-transcript, and handoff. Chapters 6 through 9 add memory, growth, replay, and hosts.
-Chapter 10 assembles the same library follow-up task as the companion Claude book.
-Appendix A is the working reference; B names the terms; C maps chapters without ranking
-the systems. Keep both chapter N pages open when comparing.
+Chapters 1–5 teach interface, execution, transcript, and handoff. Chapters 6–9
+apply that boundary to memory, growth, replay, and hosts. Chapter 10 assembles the
+library follow-up shared with the Claude book. Appendices supply reference,
+vocabulary, and the chapter map.
 
 The ten numbered programs run with Python alone. `mini_loop.py` is a deterministic
-test caller: you supply the tool name, and it dispatches that name. It does not choose
-tools intelligently, contact a model, or implement the full Brainstem runtime.
-The draft is deliberately an evidence-preserving template, not generated prose.
+test caller: you supply the tool name. It is not a model or the full runtime.
+The draft is an evidence-preserving template, not generated prose.
 
 ## 0.4 Evidence and limits
 
-Local access to `~/.brainstem/src/rapp_brainstem/` was unavailable during authoring.
-Installed loader behavior, the concrete `LearnNew` implementation, and working
-Copilot Studio and Pyodide adapters are **(unverified)**. They are identified again
-where relevant; this book does not present its small caller as proof of those hosts.
-The requested local reference-book directory was also inaccessible; its five named
-files were read from the public `kody-w/rapp-1` repository instead.
+The installed `brainstem.py`, `BasicAgent`, LearnNew, and memory agents were read
+without changing the installation. Chapters 1, 5, 7, and 10 also ran through a real
+model and `/chat` in a temporary, book-only runtime. The
+[recorded fixture](../fixtures/brainstem-live.json) preserves the synthetic requests,
+responses, and tool outputs. LearnNew created and exposed a new tool on the next
+turn, but its code-generation command failed and used its stock scaffold instead.
+That is a hot-load observation, not a successful implementation of the requested behavior.
 
-The shipped examples establish the portable pattern and selected failure behavior.
-They do not establish sandboxing, production durability, or semantic drafting quality.
-That separation is part of the lesson: know exactly what your evidence proves.
+The stdlib examples remain a small deterministic teaching caller. Browser execution
+and Copilot Studio deployment are **(unverified)**. No example establishes
+sandboxing, production durability, or semantic drafting quality.
+
+## 0.5 Counts
+
+<!-- book-counts:start -->
+| Book | Concepts | Hosts | Words | Examples |
+|---|---:|---:|---:|---:|
+| Brainstem | 1 | 3 | 8172 | 11 |
+| Claude | 69 | 7 | 17953 | 71 |
+<!-- book-counts:end -->
 
 ---
 

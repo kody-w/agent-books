@@ -30,14 +30,8 @@ assert result["status"] == "success"
 print(result["summary"])
 ```
 
-The first line of output is `Draft follow-up for review`. A short message asks for
-comments and confirmation of next steps; its evidence section contains the
-library discussion verbatim. It is a useful starting artifact: someone can check
-the source before turning it into a message. Nothing is sent.
-
-Start with this small behavior rather than a model that can write plausible prose.
-If you cannot prove which text the tool received, a polished draft makes the defect
-harder to see. The fixture is synthetic; it carries no private chat history.
+Output starts with `Draft follow-up for review`, asks for comments, and includes
+the synthetic library discussion as evidence. Nothing is sent.
 
 ## 1.2 What the caller sees
 
@@ -45,15 +39,22 @@ Open [agent.py](examples/agent.py). `DraftFollowUp.metadata` contains three publ
 pieces: a name, a description, and an object schema with one required string,
 `transcript`. The description says both what to do and what not to do.
 
-The caller does not need to know about hashing or the template. An actual model-facing
-host would translate the metadata into that model's tool declaration. Here
-`MiniLoop.call()` is deliberately less ambitious: it checks the requested name and a
-small subset of schema rules, invokes `perform()`, and records the result.
+`MiniLoop.call()` checks the requested name and a small schema subset, invokes
+`perform()`, and records the result. The caller never needs the template internals.
 
-Read [mini_loop.py](examples/mini_loop.py) now. There is no model inside it.
-Tests choose names explicitly. Consequently this example proves dispatch, validation,
-and data movement; it says nothing about whether a particular model will select the
-right tool from a vague request.
+Read [mini_loop.py](examples/mini_loop.py): explicit names test dispatch, validation,
+and data movement, not a model's selection from a vague request.
+
+The real loader needs a `name`, `to_tool()`, and `system_context()` as well.
+`BasicAgent` supplies the last two; the standalone example does not inherit it.
+The [live runner](../scripts/run_brainstem_live.py) therefore wraps the same draft
+implementation in a small `BasicAgent` adapter. In the
+[real chapter 1 turn](../fixtures/brainstem-live.json), the Copilot model selected
+`DraftFollowUp`, the runtime executed it, and `agent_logs` contains its actual result.
+This tests an explicitly named request, not selection from an ambiguous brief.
+The model removed the file's final newline before constructing its tool argument:
+the returned digest identifies that supplied argument, not the original file bytes.
+Keep file hashes at the caller boundary when byte-exact provenance matters.
 
 ## 1.3 What execution returns
 
@@ -63,10 +64,8 @@ The result has `status`, `summary`, `instruction`, and `data_slush`.
 The digest gives the review artifact a source identity; it is not proof that the
 source is true or that the draft is good.
 
-The teaching profile uses Python dictionaries. The supplied production-style
-Hacker News agent returns a JSON string. Those are different transport
-representations of a similar boundary. Do not silently assume every host accepts
-both; put serialization at its adapter.
+The profile returns dictionaries; the news agent returns JSON text.
+The host adapter must serialize the chosen representation.
 
 ## 1.4 Make it fail
 
@@ -74,13 +73,8 @@ Try a missing `transcript` key. The caller refuses before execution. Try an empt
 string: the schema accepts a string, but `perform()` returns an error because there
 is no useful text. Try an unknown name: no implementation runs.
 
-These are three different failures. A schema checks shape, a tool checks domain
-meaning, and a registry checks availability. Treating every refusal as "the model
-did not understand" prevents you from repairing the right layer.
-
-The example has no side effects beyond reading the fixture and printing output.
-That is why rerunning it is safe. Adding a mail sender later would change this
-property even if its interface looked almost identical.
+The registry checks availability, the schema checks shape, and the method checks
+meaning. Rerunning is safe because the tool cannot send anything.
 
 ## 1.5 Exercises
 

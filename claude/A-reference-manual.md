@@ -25,6 +25,10 @@ client call. Error results use `is_error`.
 Our helper uses `claude-opus-5-5`, bounds the loop at eight requests, checks terminal
 stop reasons, and validates domain arguments. The helper's result shape and replay
 format are application conventions, not SDK requirements.
+Opus 5.5 rejects forced `any` and named `tool` selection. Use `auto`, strict
+schemas, and an application check for required events; schema validity does not
+force an operation to run.
+[Selection restrictions](https://platform.claude.com/docs/en/agents-and-tools/tool-use/define-tools).
 
 ## A.2 Execution and scale
 
@@ -37,6 +41,12 @@ generated program call tools and filter intermediate data.
 [code execution](https://platform.claude.com/docs/en/agents-and-tools/tool-use/code-execution-tool),
 [tool search](https://platform.claude.com/docs/en/agents-and-tools/tool-use/tool-search-tool),
 [programmatic calls](https://platform.claude.com/docs/en/agents-and-tools/tool-use/programmatic-tool-calling).
+
+This edition declares `code_execution_20260521` and uses the same value in
+`allowed_callers`. Both the `20260120` and `20260521` caller values are accepted;
+returned caller tags normalize to `code_execution_20260120`. That response tag
+does not identify a different container runtime.
+[Caller identifiers](https://platform.claude.com/docs/en/agents-and-tools/tool-use/programmatic-tool-calling).
 
 ## A.3 Files and callbacks
 
@@ -94,7 +104,35 @@ They are not implied by importing a Python package.
 [chat skills](https://support.claude.com/en/articles/12512180-using-skills-in-claude),
 [Chrome](https://code.claude.com/docs/en/chrome).
 
-## A.7 Exercises
+## A.7 Additional API mechanisms
+
+| Mechanism | Exact interface or configuration | Detailed treatment |
+|---|---|---|
+| Strict arguments | `strict: true` on a client tool | 2.7 |
+| Web search/fetch | `web_search_20260318`, `web_fetch_20260318` | 3.5–3.6 |
+| SDK runner | `client.beta.messages.tool_runner()` | 3.7 |
+| Client computer/browser toolsets | `computer_toolset_20260801`, `browser_toolset_20260801` | 3.9 |
+| Compaction | `compaction={"type":"summarize"}`, `compact-2026-09-04` | 4.5 |
+| Message threads | `client.beta.messages.thread()` | 4.6 |
+| Inline changes | `inline-tools-2026-09-15` | 4.7 |
+| Early argument streaming | `eager_input_streaming: true` | 4.8 |
+| Typed final output | `client.messages.parse(output_format=...)` | 5.5 |
+| File resources | Stable `client.files` | 6.6 |
+| Skills resources | Stable `client.skills`; `container.skills` | 9.9 |
+| Managed resources | `client.beta.agents`, `.sessions`, `.environments` | 9.5–9.8 |
+| Managed orchestration | `multiagent_20261001`, session event stream | 9.16, 9.19 |
+| Managed outcomes | `user.define_outcome` | 9.18 |
+| Memory consolidation | `client.beta.dreams` | 9.20 |
+| Thinking/effort/budgets | `thinking`, `output_config` | 10.5–10.6 |
+| Advisor | `advisor_20260301` | 10.7 |
+| Capacity planning | `messages.count_tokens`, `messages.batches` | 10.8–10.9 |
+
+These are not interchangeable transports. Keep source data, authorization,
+continuation state, and final stop-reason handling explicit in each host.
+[API feature index](https://platform.claude.com/docs/llms.txt),
+[Managed Agents overview](https://platform.claude.com/docs/en/managed-agents/overview).
+
+## A.8 Exercises
 
 **Exercise A-1.** Choose one operation and specify its host, declaration, executor,
 result envelope, persistence, and approval boundary.

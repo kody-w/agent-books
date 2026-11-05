@@ -80,7 +80,38 @@ invalid arguments, handler refusal, exact-evidence mismatch, and missing executo
 A final paragraph does not prove that the intended tool ran. An import check does
 not prove live account access. A context summary does not prove filesystem rollback.
 
-## B.5 Exercises
+## B.5 Resource and orchestration vocabulary
+
+| Term | Meaning |
+|---|---|
+| Files API | Workspace-scoped reusable uploads and downloadable generated artifacts. |
+| Structured output | Schema-constrained final answer, distinct from strict tool arguments. |
+| Tool runner | SDK helper that executes declared functions and maintains the model loop. |
+| Compaction | A condensed representation of earlier conversation for future turns. |
+| Message thread | Beta server-side Messages prefix storage, with client recovery history. |
+| Connector | A product or API integration surface; its host and authentication must be named. |
+| Managed agent | Versioned hosted model/instruction/tool definition. |
+| Managed session | Stateful work resource with events, environment, and configured agent. |
+| Environment worker | Self-hosted executor serving a managed environment's work queue. |
+| Memory store | Hosted addressable memories explicitly attached to a session. |
+| Deployment | Persistent agent/environment/task configuration that can have a schedule. |
+| Outcome | Desired result plus an evaluation rubric and bounded iteration policy. |
+| Workflow run | Hosted multi-phase work with its own status inside a session. |
+| Dream | Preview consolidation process producing a rebuilt memory store. |
+| Agent team | Experimental collaborating Claude Code sessions with task coordination. |
+| Channel | Preview external-event delivery into an enabled running Code session. |
+| Remote Control | A remote UI for execution that remains on the original local machine. |
+| Advisor | Separately billed model consultation within the server-side turn. |
+| Effort | Requested reasoning intensity, not a proof of quality or a hard budget. |
+
+[Files](https://platform.claude.com/docs/en/build-with-claude/files),
+[API feature index](https://platform.claude.com/docs/llms.txt),
+[Managed resources](https://platform.claude.com/docs/en/managed-agents/overview),
+[teams](https://code.claude.com/docs/en/agent-teams),
+[channels](https://code.claude.com/docs/en/channels),
+[Remote Control](https://code.claude.com/docs/en/remote-control).
+
+## B.6 Exercises
 
 **Exercise B-1.** Describe one failure using both the product's transport term and
 the application's domain term. Decide where each should be reported.

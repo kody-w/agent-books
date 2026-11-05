@@ -6,8 +6,8 @@
 
 [Companion shelf](../index.html) · [Complete print edition](print.html)
 
-Read chapter N beside chapter N in the other book. Ten numbered examples
-accompany the ten chapters; helpers are not additional numbered examples.
+Read chapter N beside chapter N in the other book. Ten numbered programs
+accompany the ten chapters; additional examples and configurations appear inline.
 
 ## Contents
 

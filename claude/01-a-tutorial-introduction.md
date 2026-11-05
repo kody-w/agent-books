@@ -61,10 +61,13 @@ exact input. It has no mail sender. The helper also checks that the model suppli
 the source text verbatim. If Claude paraphrases the transcript before calling,
 the example raises instead of claiming exact provenance.
 
-The first request requires the named draft tool. Later requests permit automatic
-selection so the model can finish. Named tool choice is an API facility, not evidence
-that a model would always choose this tool from an ambiguous prompt.
-[Tool choice](https://platform.claude.com/docs/en/agents-and-tools/tool-use/overview).
+The prompt explicitly requests the draft tool, and the application rejects a
+completed conversation unless that operation succeeded. Requests use `auto`
+selection with strict schemas: Opus 5.5 does not support forcing a named tool
+through `tool_choice`. Strictness constrains argument shape, not whether the
+model elects to call the tool. A missing call is a failed workflow, not a
+successful draft inferred from final prose.
+[Tool choice and model restrictions](https://platform.claude.com/docs/en/agents-and-tools/tool-use/define-tools).
 
 ## 1.4 Know what a successful run proves
 
@@ -83,8 +86,9 @@ success is never relabeled as an authenticated API success.
 **Exercise 1-1.** Run with a separate synthetic chat file. Check the returned
 digest against a local SHA-256 calculation.
 
-**Exercise 1-2.** Remove required tool choice and evaluate whether descriptions
-alone select the tool for five different requests.
+**Exercise 1-2.** Remove the explicit tool instruction from the prompt and evaluate
+whether descriptions alone select the tool for five requests. Keep the
+application's required-operation check.
 
 **Exercise 1-3.** Trigger a domain refusal and inspect the paired `tool_use_id`
 and `is_error` fields without printing your API key.

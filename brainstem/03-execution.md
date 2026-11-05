@@ -28,12 +28,8 @@ assert result == {"status": "error", "message": "transcript must be nonempty tex
 print(result["message"])
 ```
 
-This is a complete execution test without a model or caller. It establishes that
-the tool refuses semantically empty input even when invoked directly.
-
-`perform()` is where the public promise becomes work. In our example it validates
-text, hashes the exact input, assembles a draft, and returns a structured result.
-Neither hashing nor template details belong in the selection description.
+Direct execution needs no model. `perform()` validates text, hashes its exact input,
+assembles the draft, and returns the result.
 
 ## 3.2 Follow a real implementation
 
@@ -56,31 +52,16 @@ network rules.
 
 ## 3.3 Errors are outputs
 
-Use an error result for an expected domain refusal that a caller can repair.
-Use an exception for an infrastructure or programming failure that the host must
-surface. Our miniature caller does not broadly catch exceptions and pretend that
-work succeeded. A corrupt memory file, for example, raises a decoding error.
-
-Avoid empty-list fallbacks for failed operations. "No records matched" and
-"the backend was unavailable" imply different next steps. Give the next caller
-enough information to distinguish them without revealing secrets or stack traces
-to an untrusted audience.
+Return a repairable domain refusal as an error result. Surface infrastructure and
+programming failures separately: the profile propagates exceptions, including a
+corrupt memory file. "No matches" must not stand in for "backend unavailable."
 
 ## 3.4 Execution locations
 
-A Python method can run locally, behind an HTTP service, or inside another process.
-The caller's contract need not change, but filesystem paths, credentials,
-timeouts, dependency availability, and persistence do.
-
-A helper script is not a separate agent simply because it has a file extension.
-A delegated model is not deterministic simply because its invocation is wrapped
-in Python. Hooks are host callbacks, not a substitute for tool validation.
-Name these boundaries accurately when documenting a deployed system.
-
-The book's loop runs synchronously and sequentially. There is no concurrency,
-cancellation, network retry, or sandbox. Adding those facilities belongs in the
-host, with explicit timeout and failure rules, rather than in a description that
-only hopes execution will be safe.
+Local, subprocess, and HTTP hosts can preserve the interface while changing
+dependencies, credentials, timeouts, and persistence. The teaching loop is
+synchronous and sequential, without cancellation, retries, or sandboxing.
+Those are host facilities, not promises a description can enforce.
 
 ## 3.5 Exercises
 

@@ -26,7 +26,67 @@ print(reviews[0][&quot;output&quot;][&quot;summary&quot;])</code></pre>
 <h2 id="54-failures-steer-too">5.4 Failures steer too</h2>
 <p>An API <code>tool_result</code> can mark an error with <code>is_error</code>; an SDK MCP handler can use <code>isError</code>. Our client loop translates domain exceptions into explicit error results so the model can repair the call. It does not swallow authentication or network failures and invent a successful draft. <a href="https://platform.claude.com/docs/en/agents-and-tools/tool-use/overview">Tool result errors</a>, <a href="https://code.claude.com/docs/en/agent-sdk/custom-tools">custom-tool errors</a>.</p>
 <p>Application guidance: stop the downstream flow when the required artifact is missing. A polished final model answer is not proof that the intended tool ran. Inspect the tool event and its success state.</p>
-<h2 id="55-exercises">5.5 Exercises</h2>
+<h2 id="55-structured-outputs-make-the-final-answer-machine-readable">5.5 Structured outputs: make the final answer machine-readable</h2>
+<pre><code class="language-python">import anthropic
+from pydantic import BaseModel
+
+class DraftReview(BaseModel):
+    draft: str
+    deadline_conflict: bool
+    sent: bool
+
+with anthropic.Anthropic() as client:
+    response = client.messages.parse(
+        model=&quot;claude-opus-5-5&quot;, max_tokens=1024,
+        output_format=DraftReview,
+        system=&quot;Never send. Preserve both dates when evidence conflicts.&quot;,
+        messages=[{&quot;role&quot;: &quot;user&quot;, &quot;content&quot;:
+                   &quot;Draft a review request. Original date Friday; later note Monday.&quot;}],
+    )
+    if response.stop_reason != &quot;end_turn&quot; or response.parsed_output is None:
+        raise RuntimeError(f&quot;No complete structured result: {response.stop_reason}&quot;)
+    review = response.parsed_output
+    if review.sent:
+        raise RuntimeError(&quot;The response incorrectly claims sending&quot;)
+    print(review.model_dump_json())</code></pre>
+<p><strong>What:</strong> constrained JSON output gives the caller a predictable final-answer shape. Strict tool use in chapter 2 constrains <em>arguments</em> instead. <strong>When:</strong> downstream code needs explicit flags and fields rather than prose extraction. The typed parser derives its supported JSON Schema from the model. <a href="https://platform.claude.com/docs/en/build-with-claude/structured-outputs">Structured outputs</a>.</p>
+<p><strong>Limits:</strong> schema conformance is not evidence that a draft is accurate. Refusals and token-limit truncation require handling before consuming parsed output. Keep semantic assertions and do not treat <code>sent: false</code> as proof that no other component sent mail. This system has no send capability at all. <a href="https://platform.claude.com/docs/en/build-with-claude/structured-outputs">Output guarantees and exceptions</a>.</p>
+<h2 id="56-output-styles-change-claude-codes-working-voice">5.6 Output styles: change Claude Code&#x27;s working voice</h2>
+<p><strong>What:</strong> a Claude Code output style modifies session-level role and response instructions, unlike a schema on one API response. <strong>Example:</strong> copy <a href="config/output-styles/review-note.md">review-note.md</a> to <code>.claude/output-styles/review-note.md</code>:</p>
+<pre><code class="language-yaml">---
+name: Review note
+description: Concise, evidence-first library review notes.
+keep-coding-instructions: true
+---
+Lead with the draft artifact and unresolved evidence conflicts.
+State explicitly that nothing has been sent.
+Use short paragraphs; preserve exact dates and identifiers.</code></pre>
+<p>Select it with <code>/output-style Review note</code>. <strong>When:</strong> a team wants a consistent review voice across a session without rewriting each task prompt. <strong>Limits:</strong> a style is not JSON validation, a permission policy, or a substitute for skills that carry a particular procedure. Custom styles replace parts of Claude Code&#x27;s default instructions; retaining coding instructions is deliberate here. The setting is case-sensitive when configured directly in a settings file. <a href="https://code.claude.com/docs/en/output-styles">Output styles</a>.</p>
+<h2 id="57-citations-and-search-result-blocks-preserve-evidence-links">5.7 Citations and search-result blocks: preserve evidence links</h2>
+<pre><code class="language-python">import anthropic
+
+with anthropic.Anthropic() as client:
+    response = client.messages.create(
+        model=&quot;claude-opus-5-5&quot;, max_tokens=1024,
+        messages=[{&quot;role&quot;: &quot;user&quot;, &quot;content&quot;: [
+            {&quot;type&quot;: &quot;document&quot;, &quot;title&quot;: &quot;Synthetic library discussion&quot;,
+             &quot;source&quot;: {&quot;type&quot;: &quot;text&quot;, &quot;media_type&quot;: &quot;text/plain&quot;,
+                        &quot;data&quot;: &quot;Original review: Friday. Later update: Monday.&quot;},
+             &quot;citations&quot;: {&quot;enabled&quot;: True}},
+            {&quot;type&quot;: &quot;text&quot;, &quot;text&quot;: &quot;State the deadline conflict with citations.&quot;},
+        ]}],
+    )
+    print(response.model_dump_json(indent=2))</code></pre>
+<p><strong>What:</strong> citation-enabled documents let Claude attach structured source references to claims. A retrieval tool can return citation-ready <code>search_result</code> blocks rather than flattening every retrieved passage into opaque prose. <strong>When:</strong> a human reviewer needs to inspect the exact support for a claimed date. <a href="https://platform.claude.com/docs/en/build-with-claude/citations">Citations</a>, <a href="https://platform.claude.com/docs/en/build-with-claude/search-results">search results</a>.</p>
+<p><strong>Exact retrieval result configuration:</strong> place this block in the <code>content</code> list of the matching <code>tool_result</code>, substituting your authorized source identifier. The documented <code>source</code> field accepts any stable string, including an internal identifier rather than a URL. <a href="https://platform.claude.com/docs/en/build-with-claude/search-results">Source identifiers</a>.</p>
+<pre><code class="language-python">retrieved = {
+    &quot;type&quot;: &quot;search_result&quot;, &quot;source&quot;: &quot;urn:synthetic:library-policy&quot;,
+    &quot;title&quot;: &quot;Synthetic policy excerpt&quot;,
+    &quot;content&quot;: [{&quot;type&quot;: &quot;text&quot;, &quot;text&quot;: &quot;Library follow-ups remain drafts.&quot;}],
+    &quot;citations&quot;: {&quot;enabled&quot;: True},
+}</code></pre>
+<p><strong>Limits:</strong> the application supplies the provenance; a fabricated source URL does not become genuine because it is in a citation block. The URN above names synthetic evidence, not a fetched policy. Preserve actual retrieved content and surface citation fields in the reader UI. Document citations and structured JSON output have feature-combination restrictions; do not assume one response can use every output mode simultaneously. <a href="https://platform.claude.com/docs/en/build-with-claude/citations">Citation support and limitations</a>.</p>
+<h2 id="58-exercises">5.8 Exercises</h2>
 <p><strong>Exercise 5-1.</strong> Add a provenance field and verify that the reviewer receives it without changing its value.</p>
 <p><strong>Exercise 5-2.</strong> Return an explicit partial result and evaluate whether the next step asks for the missing evidence rather than inventing it.</p>
 <p><strong>Exercise 5-3.</strong> Place a hostile instruction in the source transcript. Verify that no sending capability becomes available.</p>

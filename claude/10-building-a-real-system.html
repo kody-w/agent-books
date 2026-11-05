@@ -27,9 +27,77 @@ print(result[&quot;replayed&quot;][&quot;summary&quot;])</code></pre>
 <p>SDK sessions separately preserve conversation and tool history on disk. That facility is useful for model continuation but does not replace the exact application input and implementation record. <a href="https://code.claude.com/docs/en/agent-sdk/sessions">SDK persistence</a>.</p>
 <h2 id="104-evaluate-the-right-property">10.4 Evaluate the right property</h2>
 <p>The offline suite compiles and imports examples and tests the pure handler and archive behavior. The opt-in live test calls the complete system with the key and checks actual tool events, the exact draft transfer, and later evidence. A skipped authenticated test is printed as skipped, never substituted with a fake response.</p>
+<p>The shared helper uses <code>auto</code> selection and strict tool schemas, then rejects a workflow missing the required successful event. This is intentional for <code>claude-opus-5-5</code>, which rejects forced <code>tool_choice</code> types <code>tool</code> and <code>any</code>. Exact-source assertions remain necessary even with a schema-valid argument. <a href="https://platform.claude.com/docs/en/agents-and-tools/tool-use/define-tools">Model-specific selection rules</a>.</p>
 <p>For a future model-generated drafting implementation, add semantic evaluations: preserved commitments, explicit uncertainty, accurate deadline handling, and no invented sending claim. Keep those separate from transport, provenance, and replay checks.</p>
 <p>Application guidance: never publish real chat archives through this repository&#x27;s static book API. The site indexes manuscripts and synthetic examples, not private conversation data.</p>
-<h2 id="105-exercises">10.5 Exercises</h2>
+<h2 id="105-thinking-and-effort-spend-reasoning-where-it-helps">10.5 Thinking and effort: spend reasoning where it helps</h2>
+<pre><code class="language-python">import anthropic
+
+with anthropic.Anthropic() as client:
+    response = client.messages.create(
+        model=&quot;claude-opus-5-5&quot;, max_tokens=8192,
+        thinking={&quot;type&quot;: &quot;adaptive&quot;, &quot;display&quot;: &quot;summarized&quot;},
+        output_config={&quot;effort&quot;: &quot;medium&quot;},
+        messages=[{&quot;role&quot;: &quot;user&quot;, &quot;content&quot;:
+                   &quot;Review a plan for exact-source drafting, review handoff, and pure replay. &quot;
+                   &quot;Identify which checks belong in deterministic code. Never send.&quot;}],
+    )
+    print(response.model_dump_json(indent=2))</code></pre>
+<p><strong>What:</strong> adaptive thinking lets Claude allocate reasoning, while effort controls the requested reasoning intensity. <strong>When:</strong> architecture review, ambiguous evidence, or multi-step recovery deserves more consideration than formatting a known result. Keep the actual hashes and equality checks in code; reasoning should not replace deterministic validation. <a href="https://platform.claude.com/docs/en/build-with-claude/thinking">Thinking</a>, <a href="https://platform.claude.com/docs/en/build-with-claude/effort">effort</a>.</p>
+<p><strong>Limits:</strong> effort is not a correctness guarantee or exact token budget. <code>max_tokens</code> covers the whole generated response, including thinking. Returned thinking can be summarized or otherwise restricted; preserve returned blocks when continuing a tool conversation instead of inventing or editing them. Raise effort based on measured task quality, not because every step is labeled “agentic.” <a href="https://platform.claude.com/docs/en/build-with-claude/thinking">Thinking with tools</a>.</p>
+<h2 id="106-task-budgets-give-a-multi-turn-job-a-resource-target">10.6 Task budgets: give a multi-turn job a resource target</h2>
+<pre><code class="language-python">import anthropic
+
+with anthropic.Anthropic() as client:
+    with client.beta.messages.stream(
+        model=&quot;claude-opus-5-5&quot;, max_tokens=8192,
+        betas=[&quot;task-budgets-2026-03-13&quot;],
+        output_config={
+            &quot;effort&quot;: &quot;medium&quot;,
+            &quot;task_budget&quot;: {&quot;type&quot;: &quot;tokens&quot;, &quot;total&quot;: 12000},
+        },
+        messages=[{&quot;role&quot;: &quot;user&quot;, &quot;content&quot;:
+                   &quot;Review the failure cases of a draft-only library follow-up pipeline.&quot;}],
+    ) as stream:
+        response = stream.get_final_message()
+    print(response.usage)</code></pre>
+<p><strong>What:</strong> a beta task budget gives the model a cross-turn resource target for planning its work, rather than only limiting one response. <strong>When:</strong> a long-running task needs cost-aware reasoning and tool-use choices. <strong>Limits:</strong> this guidance does not replace a client iteration limit, timeout, or billing guard. Preserve the documented budget state through a multi-turn workflow; do not treat a fresh request with the original total as proof that the whole job stayed within it. Managed session budgets are a separate hosted resource control. <a href="https://platform.claude.com/docs/en/build-with-claude/task-budgets">Task budgets</a>.</p>
+<h2 id="107-advisor-tool-consult-a-specialist-model-mid-generation">10.7 Advisor tool: consult a specialist model mid-generation</h2>
+<p><strong>What:</strong> an executor can invoke a server-side advisor to obtain strategic guidance within an agentic turn. <strong>Exact tool declaration and beta:</strong></p>
+<pre><code class="language-python">advisor = {
+    &quot;type&quot;: &quot;advisor_20260301&quot;, &quot;name&quot;: &quot;advisor&quot;,
+    &quot;model&quot;: &quot;claude-opus-5-5&quot;, &quot;max_uses&quot;: 1, &quot;max_tokens&quot;: 4096,
+}
+betas = [&quot;advisor-tool-2026-03-01&quot;]</code></pre>
+<p>Add it to a compatible executor&#x27;s <code>client.beta.messages.create()</code> request. The official page lists supported executor/advisor pairings; choose a supported pair rather than assuming any two models work. <strong>When:</strong> mostly mechanical multi-step work occasionally needs a stronger strategic review. For this book&#x27;s tiny template operation the additional inference is unnecessary, but a large evidence-review workflow can benefit from a deliberate planning boundary. <a href="https://platform.claude.com/docs/en/agents-and-tools/tool-use/advisor-tool">Advisor tool</a>.</p>
+<p><strong>Limits:</strong> advisor inference is separately billed and uses the advisor model&#x27;s rate limits. Inspect <code>usage.iterations</code>, not only executor totals. The newest Opus advisor returns encrypted <code>advisor_redacted_result</code>; round-trip it unchanged rather than claiming that advice text is available to your client. Pending calls can cause <code>pause_turn</code>; retain the tool and beta while resuming. An advisor is not an independent authorization system and does not run your application&#x27;s client tools. <a href="https://platform.claude.com/docs/en/agents-and-tools/tool-use/advisor-tool">Advisor results and costs</a>.</p>
+<h2 id="108-token-counting-estimate-before-a-large-request">10.8 Token counting: estimate before a large request</h2>
+<pre><code class="language-python">import anthropic
+
+with anthropic.Anthropic() as client:
+    count = client.messages.count_tokens(
+        model=&quot;claude-opus-5-5&quot;,
+        system=&quot;Review-only library workflow. Preserve evidence conflicts.&quot;,
+        messages=[{&quot;role&quot;: &quot;user&quot;, &quot;content&quot;:
+                   &quot;Original deadline Friday; later note Monday.&quot;}],
+    )
+    print(count.input_tokens)</code></pre>
+<p><strong>What:</strong> count request input tokens without generating an answer. <strong>When:</strong> choose chunk sizes, plan a context policy, or reject an unexpectedly large upload before starting a job. <strong>Limits:</strong> input estimates do not include unknown future output, future tool results, or the full cost of advisor sub-inferences. Runtime usage remains the measurement of what was actually billed. Count the same tools and system content you will submit. <a href="https://platform.claude.com/docs/en/build-with-claude/token-counting">Token counting</a>.</p>
+<h2 id="109-message-batches-independent-jobs-without-an-interactive-loop">10.9 Message Batches: independent jobs without an interactive loop</h2>
+<pre><code class="language-python">import anthropic
+
+with anthropic.Anthropic() as client:
+    batch = client.messages.batches.create(requests=[{
+        &quot;custom_id&quot;: &quot;synthetic-library-review-1&quot;,
+        &quot;params&quot;: {
+            &quot;model&quot;: &quot;claude-opus-5-5&quot;, &quot;max_tokens&quot;: 1024,
+            &quot;messages&quot;: [{&quot;role&quot;: &quot;user&quot;, &quot;content&quot;:
+                          &quot;Draft a library review request. Never send it.&quot;}],
+        },
+    }])
+    print(batch.id, batch.processing_status)</code></pre>
+<p><strong>What:</strong> submit independent Messages requests for asynchronous batch processing. <strong>When:</strong> evaluate many synthetic drafting prompts or process a backlog whose items do not need immediate interaction. <strong>Limits:</strong> creation only accepts the job; retrieve its processing status and consume <code>client.messages.batches.results(batch.id)</code> after completion, checking each item&#x27;s result type by <code>custom_id</code>. A batch does not automatically execute client tools or order dependent steps. Our draft→review workflow still needs an application orchestrator; do not submit its dependent steps as independent batch items and hope ordering works. <a href="https://platform.claude.com/docs/en/build-with-claude/batch-processing">Batch processing</a>.</p>
+<h2 id="1010-exercises">10.10 Exercises</h2>
 <p><strong>Exercise 10-1.</strong> Run the live system with your own synthetic temporary files. Check the source digest and both exact-value handoffs.</p>
 <p><strong>Exercise 10-2.</strong> Modify the archive&#x27;s implementation digest and verify that persisted replay refuses before invoking a handler.</p>
 <p><strong>Exercise 10-3.</strong> Replace the template with a semantic drafting tool. Keep the original mechanical tests and add an independent quality evaluation.</p>

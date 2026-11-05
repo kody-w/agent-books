@@ -34,7 +34,9 @@ description: Vocabulary and common boundary mistakes
 | Memory | Persisted information, distinct from its current presentation in context. |
 | `system_context()` | Optional method producing pre-turn context in the supplied agent pattern. |
 | Scope | The authenticated storage or execution boundary; not merely a model-supplied user identifier. |
-| LearnNew | Capability-creation cycle described in the essay; installed implementation not observed here. |
+| LearnNew | Agent generator that writes beside its own source; creation and next-turn invocation were observed, with a stock scaffold fallback. |
+| Conversation statelessness | The core reconstructs each conversation from caller-supplied history, not a session-ID lookup; files and optional memory still persist. |
+| RAPP/1 frame | Protocol event envelope with canonical payload/frame addresses and chain rules; not emitted automatically by this runtime. |
 | Hot load | Making a new implementation or declaration available without replacing the whole caller. |
 | Discovery | Revealing existing capabilities; not necessarily creating or installing code. |
 | Replay | Re-executing a selected recorded operation. |

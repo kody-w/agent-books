@@ -72,7 +72,10 @@ Malformed storage raises rather than becoming an empty recall.
 
 `load_trusted_file(path)` imports reviewed Python and instantiates `ReviewDraft`.
 Importing executes code; there is no safety guarantee from successful compilation.
-Automatic installed LearnNew and loader behavior is **(unverified)**.
+Installed LearnNew writes beside its own source, imports the new module, and reports
+import success separately. The runtime reloads the directory on the next request.
+The live fixture verifies creation and next-turn invocation, but also records the
+generator's stock scaffold fallback rather than the requested uppercase behavior.
 
 `save(path)` writes `schema: book-replay/1.0`, `source_sha256`, and `events`.
 `replay(archive, index, later)` requires that schema, the current `agent.py` digest,
@@ -86,8 +89,14 @@ Re-executing a model or network call does not guarantee identical results.
 
 Before deploying, establish authenticated scope, allowed operations, dependency
 versions, timeouts, data retention, error mapping, and tests for each destination.
-Local runtime lifecycle, Pyodide deployment, and Copilot Studio integration remain
-**(unverified)** in this edition.
+Local lifecycle and `/chat` execution were observed in a book-only temporary copy.
+Pyodide deployment and Copilot Studio integration remain **(unverified)**.
+
+Source line citations in this book refer to the read-only installation inspected on
+2026-11-05, not a mutable remote branch. The
+[source evidence ledger](../fixtures/brainstem-source.json) records file hashes,
+line ranges, and observations; the [live fixture](../fixtures/brainstem-live.json)
+pins the copied runtime and includes every synthetic turn.
 
 ## A.7 Exercises
 

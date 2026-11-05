@@ -47,15 +47,10 @@ Our archive stores all four and a schema version. Its source hash covers `agent.
 If that file changes, `replay()` refuses rather than quietly claiming to reproduce
 the old implementation.
 
-The profile relies on the checked-in caller and Python environment. It does not
-pin interpreter binaries, imported dependencies, external responses, clocks, or a
-production runtime. Because the draft method uses only supplied text and standard
-hashing, this is a manageable teaching boundary. A network tool would need recorded
-responses or a clear statement that it is performing a fresh observation.
-
-Hashing a file identifies bytes; it does not preserve those bytes forever.
-Archive the corresponding revision or source artifact if replay must work after
-the working tree changes.
+The profile pins neither interpreter nor external responses. Its pure draft method
+needs only supplied text and standard hashing. A network tool must distinguish
+recorded responses from fresh observations. Preserve the matching source artifact:
+a digest identifies bytes but does not store them.
 
 ## 8.3 Replay is not rewind
 
@@ -63,14 +58,10 @@ Rewind restores a selected prior state. Replay executes a selected prior operati
 A fork preserves history and continues along a new branch. These can be combined,
 but their effects differ.
 
-Our function copies the arguments and appends later evidence. It does not mutate
-the source archive or erase the earlier result. Rerunning the whole program is not
-equivalent: it might repeat later side effects or make different choices before the
-selected step.
-
-In particular, "static caller" does not make a model deterministic. If the operation
-calls a model, new sampling or a model update may change the result. Distinguish
-the ability to resubmit a recorded step from a guarantee of byte-identical output.
+The function copies arguments and appends evidence without mutating the archive.
+Rerunning the whole system could repeat side effects; resubmitting a model call
+could change its result. Selected-step replay promises neither undo nor deterministic
+model output.
 
 ## 8.4 Side effects set the boundary
 

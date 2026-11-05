@@ -11,21 +11,19 @@ from agent import DraftFollowUp
 
 print(json.dumps(DraftFollowUp.metadata, indent=2))
 assert DraftFollowUp.metadata[&quot;parameters&quot;][&quot;required&quot;] == [&quot;transcript&quot;]</code></pre>
-<p>The printed object is the public surface. It says nothing about a particular mail provider or database. It can therefore remain stable when the implementation changes.</p>
-<p>Names should describe capabilities rather than implementation details: <code>DraftFollowUp</code>, not <code>ReadFileThenFormatV3</code>. The description should tell a caller when this capability is relevant and how to recognize its result.</p>
+<p>Name the capability, not its internals: <code>DraftFollowUp</code>, not <code>ReadFileThenFormatV3</code>. Describe when to call and what result to expect.</p>
 <h2 id="22-description-and-schema">2.2 Description and schema</h2>
 <p>The source <a href="../ref-hacker_news_agent.py">Hacker News agent</a> describes its selection conditions directly:</p>
 <pre><code class="language-text">&quot;Use when the user asks what&#x27;s on Hacker News, what&#x27;s trending in tech,
 or for news headlines.&quot;</code></pre>
-<p>Its <code>count</code> parameter is an integer with minimum 1 and maximum 30. A reader does not need to know how the stories are fetched to ask for five. The declaration is compact because it does not document the Firebase response inside the selection interface.</p>
-<p>Our draft tool takes free text because a conversation may contain qualifications, disagreements, corrections, or unfamiliar topics. Replacing that field with a short enum of approved phrases would destroy useful evidence. An enum belongs where a downstream operation really requires one, such as a known output format.</p>
+<p>Its <code>count</code> schema bounds an integer from 1 to 30. Asking for five does not require knowing the network implementation.</p>
+<p>The draft takes free text to preserve qualifications and corrections. Reserve enums for genuinely finite choices, such as an output format.</p>
 <p>The miniature caller supports required fields, unknown-field rejection, and strings. It is <strong>not</strong> a JSON Schema implementation. A production adapter must use its host&#x27;s validator or an appropriate schema library; do not extend a few <code>if</code> statements until they impersonate a standard.</p>
 <h2 id="23-liberty-is-not-authorization">2.3 Liberty is not authorization</h2>
-<p>The third rule grants the caller freedom to supply useful information. It does not grant freedom to read arbitrary files, send messages, change tenants, or bypass a permission check. <code>perform()</code> must enforce those limits even if a model supplies persuasive arguments.</p>
+<p>Freedom to supply information is not permission to read files or send messages. Enforce authority outside model-supplied arguments.</p>
 <p>In the memory writer&#x27;s real metadata, <code>memory_type</code> is an enum, <code>importance</code> has a range, and <code>user_guid</code> is optional. A user identifier is a scope hint, not proof of identity. A multi-user host must bind scope to authenticated identity outside the model&#x27;s discretion. Our examples avoid that issue by storing only synthetic, single-user working notes.</p>
 <h2 id="24-a-file-is-not-necessarily-a-tool">2.4 A file is not necessarily a tool</h2>
-<p>Keep three different surfaces distinct. An agent.py declaration describes an executable entry point. A skill file supplies a procedure for a caller to follow. A subagent declaration describes delegated work in a separate execution context. They can cooperate without being interchangeable.</p>
-<p>There is no skill or subagent frontmatter parser in this teaching profile. There is ordinary Jekyll frontmatter in the book&#x27;s own chapters; that controls publication, not agent permissions. Do not mistake every YAML header for a common runtime interface. The companion chapter shows the actual Claude file formats.</p>
+<p>An executable declaration, a skill procedure, and a delegated model&#x27;s configuration are distinct surfaces. This profile parses neither skills nor subagent frontmatter. The chapters&#x27; Jekyll headers control publication only; the companion book shows Claude&#x27;s runtime formats.</p>
 <h2 id="25-exercises">2.5 Exercises</h2>
 <p><strong>Exercise 2-1.</strong> Add an optional tone field to the declaration and implementation. Decide whether arbitrary text or an enum is justified, and test the decision.</p>
 <p><strong>Exercise 2-2.</strong> Write two descriptions that differ only in the phrase &quot;never send.&quot; Explain why neither description can replace removing the sending capability.</p>
