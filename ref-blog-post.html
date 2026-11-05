@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Caller Knows Nothing</title>
+<style>
+  body { font-family: "Segoe UI", -apple-system, system-ui, sans-serif; max-width: 720px; margin: 48px auto; padding: 0 20px; line-height: 1.65; color: #242424; }
+  h1 { font-size: 2.1rem; line-height: 1.2; margin-bottom: 4px; }
+  .sub { color: #616161; font-size: 1.1rem; margin-top: 0; }
+  h2 { margin-top: 2.2em; font-size: 1.35rem; }
+  pre { background: #f5f5f5; padding: 14px 16px; border-radius: 6px; overflow-x: auto; font-size: 0.88rem; line-height: 1.45; }
+  code { font-family: "Cascadia Code", Menlo, monospace; }
+  blockquote { border-left: 3px solid #0f6cbd; margin: 1.5em 0; padding: 4px 18px; color: #424242; }
+  table { border-collapse: collapse; width: 100%; font-size: 0.92rem; margin: 1em 0; }
+  th, td { border: 1px solid #e0e0e0; padding: 8px 10px; text-align: left; vertical-align: top; }
+  th { background: #f5f5f5; }
+  .rule { background: #ebf3fc; padding: 14px 18px; border-radius: 6px; }
+</style>
+</head>
+<body>
+
+<h1>The Caller Knows Nothing</h1>
+<p class="sub">The simplest idea in agent design, and why almost everyone, including the AI that helps me build, keeps missing it.</p>
+
+<p><strong>In short:</strong> an AI agent works best when the model calling it knows nothing about its insides. It sees a name, a description and a few typed parameters, nothing more. The agent's result comes back into the conversation, written to steer the next step. Because that conversation is a plain record, any step can be replayed later with more data. Anthropic ships most of these parts across separate features; one Python file can carry all of them at once. Below: the pattern, the rules, a comparison with SKILL.md, and a cited check against Anthropic's documentation.</p>
+
+
+<p>When you need to remember something, you don't open a database. You don't look up a schema, pick a table, or decide which index to use. You just know you <em>can</em> remember, and when something in the conversation sounds important, you do. Later, the memory is simply there.</p>
+
+<p>That's the whole idea. It's the pattern behind every agent in a Brainstem, and I've watched people and models talk right past it for months. This afternoon I watched it happen again, so I'm writing it down.</p>
+
+<h2>Two small files</h2>
+
+<p>A Brainstem (see <a href="https://kodyw.com/the-personless-harness/">The Personless Harness</a>) ships with two memory agents. The first saves:</p>
+
+<pre><code>class ManageMemoryAgent(BasicAgent):
+    metadata = {
+      "name": "ManageMemory",
+      "description": "Saves information to persistent memory for future
+        conversations. You MUST call this tool whenever the user asks you to
+        remember something ... or the information will be lost.",
+      "parameters": { "memory_type": ..., "content": ..., "importance": ... }
+    }
+    def perform(self, **kwargs):
+        # clamp, default, store; none of this is the caller's business</code></pre>
+
+<p>The second recalls. It doesn't even wait to be called: before every turn it puts what it knows straight into the context.</p>
+
+<pre><code>class ContextMemoryAgent(BasicAgent):
+    def system_context(self):
+        return "&lt;memory&gt;...what you already know...&lt;/memory&gt;"</code></pre>
+
+<p>Look at what the model, the <em>caller</em>, knows about these. It knows a name, a sentence about what the thing is for, and a few parameters. That's all. It doesn't know there's a SQLite file. It doesn't know about clamping, deduplication, or how a timestamp is formatted. It doesn't need to. When the user says "remember my favorite color is blue," the model reaches for the thing in its context that sounds like remembering. When the next turn starts, the memory is already in front of it.</p>
+
+<blockquote>We just know we have something we can invoke in our current context that lets us remember, if that sounds important in the current conversation. That's it.</blockquote>
+
+<h2>The rules</h2>
+
+<div class="rule">
+<p><strong>1. The caller knows nothing about the inside.</strong> Name, description, parameters. Storage, checks, shaping and formats stay hidden in <code>perform()</code>.</p>
+<p><strong>2. The description is the whole interface.</strong> It says what's needed and when it matters. Every bit of quality you want lives there, not in glue code around it.</p>
+<p><strong>3. The caller has full liberty.</strong> The description invites; it never confines. The caller may put anything it judges useful into a parameter. The agent takes whatever comes and handles it, and that freedom is where the surprising, good behavior comes from.</p>
+</div>
+
+<h2>How smart people get it wrong</h2>
+
+<p>Today I asked my AI collaborator to make our pipeline's lenses (small agents that each do one language job) "dynamic, with the caller armed to give the right information in the right shape." It came back with a careful plan. Its centerpiece was a <em>shared caller</em>: host code that would read each lens's contract and fill its parameters from the case, turning free-text fields into fixed lists of choices.</p>
+
+<p>That's thoughtful, rigorous, and exactly backwards. It took a few corrections to get it there:</p>
+
+<ul>
+  <li><strong>First wrong turn: cages.</strong> Turning every field into a fixed list of choices does give you the "right shape," and it kills the caller's ability to add what you didn't think to ask for. Constrain only where something downstream truly needs exact values.</li>
+  <li><strong>Second wrong turn: a smart host.</strong> A caller that knows each agent's insides is coupling. Every new agent now needs host code. That's the machinery we were trying to delete.</li>
+  <li><strong>The fix: nothing in between.</strong> The transcript is the input. The agents are loaded beside it. The model invokes what sounds right. Results come back into the transcript. Done.</li>
+</ul>
+
+<p>It's the same reason Unix pipes worked. The tools knew nothing about each other, and they composed through a plain, shared stream. Here the stream is the conversation.</p>
+
+<h2>The evidence is in a chat log</h2>
+
+<p>I asked a small model to "just make up" an agent that drafts content from a chat transcript. Its first attempt, built from a thin description, returned <code>count: 0</code> twice: empty. The second, built with a precise description (who reads the draft, what goes in it, nothing sent automatically), came back as a real tool. Same model, same plumbing. The only difference was the description.</p>
+
+<p>The same log shows the other half. Several times the model said it had saved or recalled something when it hadn't, or said it hadn't when it had. The truth was in the tool log the whole time, outside its view. When a result doesn't come back into the conversation, the caller has to guess. So the loop has to be closed: whatever an agent does goes back into the context, the way memory does.</p>
+
+<h2>The transcript carries only what came out</h2>
+
+<p>Here is the part that makes it compound. The transcript doesn't hold the agent's insides, its prompts, or its working state. It holds only what came <em>out</em>: the relevant result of the agent that was just called.</p>
+
+<p>When ContextMemory runs, what lands in the conversation is the handful of memories that matter, not the database. When LearnNew runs, what lands is "created TranscriptFollowUp, here's what it does," and on the next turn that new agent is hot-loaded, sitting in the context beside all the others, ready to be invoked. The conversation didn't just get information. It got a new capability.</p>
+
+<p>So every step downstream starts from a better place. The next call sees the previous result and can build on it: use the recalled preference, call the agent that didn't exist a minute ago, refine the draft that came back. Nobody wired those steps together. Each one just leaves its output in the shared stream, and the next one picks up whatever helps.</p>
+
+<div class="rule">
+<p><strong>4. The transcript carries only outputs.</strong> Each agent leaves just its relevant result. Nothing from inside it leaks, and nothing that matters is lost. Downstream steps use it to their advantage, and that's how the whole thing gets better as it goes.</p>
+</div>
+
+<h2>The agent writes the next prompt</h2>
+
+<p>A tool's return value is usually treated as data, and the next move is left to a framework or the model. These agents return something written for whoever reads it next. Here is what a small Hacker News agent hands back:</p>
+
+<pre><code>{
+  "status": "success",
+  "stories": [ ...full records... ],
+  "summary": "Top Hacker News stories:\n\n1. **[Title](url)** ...
+              \n\nWhen presenting these to the user, render the titles as
+              clickable markdown links exactly as written above.",
+  "data_slush": { "count": 10, "top_url": "https://..." }
+}</code></pre>
+
+<p>Three things travel in that one result:</p>
+<ul>
+  <li><strong>A finished piece</strong> (<code>summary</code>), already shaped the way it should be shown. The code comment says it plainly: the model tends to copy this format word for word, so the agent writes it right once.</li>
+  <li><strong>An instruction for the next step</strong>, inside the result itself: render these as links. The agent doesn't know who reads it next, and it doesn't need to.</li>
+  <li><strong>A structured payload</strong> (<code>data_slush</code>) for the next step to use as-is, not for the model to reword.</li>
+</ul>
+
+<p>The agent that learns new agents does the same. Its result says "created TranscriptFollowUp; it loads on the next request; re-run with submit to share it." The output carries the data, the instruction and, here, a new capability.</p>
+
+<p>That's where the orchestration lives. Not in a graph, a router or a planner, but in the return values. Each agent steers what happens next by what it leaves in the transcript, without knowing who comes next. That's why one file can be dropped in and immediately work with everything else.</p>
+
+<div class="rule">
+<p><strong>5. The agent writes the next prompt.</strong> Its result is shaped for the reader, carries the next instruction, and passes structured data along, so the steps coordinate through what they leave behind.</p>
+</div>
+
+<h2>Time travel</h2>
+
+<p>There's one more thing this buys you, and I missed it until it was pointed out. The transcript is static: a plain record of what went in and what came out. The caller is a static loop with the agent loaded beside it. So any turn can be replayed.</p>
+
+<p>That means you can go back. Rewind to the turn where the draft was written, add what you only learned later (the file that arrived Tuesday, the answer a downstream step produced, the agent that was learned three turns on), and run that turn again. The past step gets a second try with data it never had. You don't rerun the whole pipeline, just the one turn, and you can keep both versions side by side and pick the better one.</p>
+
+<div class="rule">
+<p><strong>6. You can time travel.</strong> A static transcript through a static caller can be replayed from any turn, with more than it knew the first time.</p>
+</div>
+
+<h2>"Isn't this just SKILL.md?"</h2>
+
+<p>People say so, and I see why. In both, the caller sees only a name and a description and decides when to reach for it. Both are a file you drop in, and both work with any model. But the similarity stops at the front door.</p>
+
+<table>
+  <tr><th></th><th>SKILL.md</th><th>agent.py</th></tr>
+  <tr><td>When invoked</td><td>Its instructions load <em>into</em> the caller's context. The caller reads the insides and does the work.</td><td>The insides never enter the context. <code>perform()</code> does the work; only the output comes back.</td></tr>
+  <tr><td>Input</td><td>No typed parameters.</td><td>A JSON Schema call that can be checked.</td></tr>
+  <tr><td>Who executes</td><td>The model, by following prose.</td><td>Code, the same way every time.</td></tr>
+  <tr><td>The transcript</td><td>Instructions stay loaded and shape every later turn.</td><td>Only the relevant result goes in.</td></tr>
+  <tr><td>What comes next</td><td>Steered by instructions the caller must remember.</td><td>Steered by the output itself.</td></tr>
+  <tr><td>Replaying a step</td><td>The outcome depends on the model following the instructions again.</td><td>The same code runs again with more data, so you compare results.</td></tr>
+  <tr><td>Host needs</td><td>A filesystem, usually a sandbox.</td><td>Just a tool-calling loop, even in a browser.</td></tr>
+</table>
+
+<p><strong>A skill teaches the caller how to do something. An agent does it for the caller.</strong> A skill makes the caller know more. This pattern keeps the caller knowing nothing. They're opposites at the one point this post is about.</p>
+
+<p>They're not rivals, though. Skills are great for know-how a person wants to read and edit: long procedures, style guides, judgment. Agents win where you need the same result every time, a typed input, a clean transcript and replay. A skill can tell the caller when to reach for agents, and once a skill's procedure is stable, it can become an agent.</p>
+
+<h2>"Anthropic already does this." Let's check.</h2>
+
+<p>This is the debate I keep having, so I settled it the boring way: I had every claim checked against Anthropic's own documentation, with several independent reviewers trying to refute each one and a claim kept only when a majority couldn't. Here's what holds up, as of November 5, 2026. Every row links the page it rests on.</p>
+
+<table>
+<tr><th>Property of the pattern</th><th>Does Anthropic have it?</th><th>Where</th></tr>
+<tr><td>The caller sees only a name, a description and a schema; the code is hidden</td><td><strong>Yes.</strong> This is ordinary tool use. Your app runs the tool and returns a result.</td><td><a href="https://platform.claude.com/docs/en/agents-and-tools/tool-use/overview">Tool use overview</a>, <a href="https://platform.claude.com/docs/en/managed-agents/tools.md">Managed Agents tools</a>, <a href="https://code.claude.com/docs/en/agent-sdk/custom-tools">Agent SDK custom tools</a>, <a href="https://platform.claude.com/docs/en/agents-and-tools/mcp-connector">MCP connector</a></td></tr>
+<tr><td>Only the relevant output enters the transcript</td><td><strong>Yes, in several ways.</strong> Subagents return a summary from a separate context; skill scripts are executed, not loaded; programmatic tool calling shrinks large results; hooks cost no context unless they return output; context editing clears old tool results.</td><td><a href="https://code.claude.com/docs/en/sub-agents">Subagents</a>, <a href="https://code.claude.com/docs/en/skills">Skills</a>, <a href="https://www.anthropic.com/engineering/advanced-tool-use">Advanced tool use</a>, <a href="https://code.claude.com/docs/en/features-overview">Features overview</a>, <a href="https://platform.claude.com/docs/en/build-with-claude/context-editing">Context editing</a></td></tr>
+<tr><td>Selection by description</td><td><strong>Yes.</strong> Skills and subagents keep their name and description in context and load the body when used.</td><td><a href="https://code.claude.com/docs/en/features-overview">Features overview</a></td></tr>
+<tr><td>Typed parameters on that description-driven unit</td><td><strong>Not for skills or subagents.</strong> A subagent gets a free-text prompt; a skill's body is instructions. Typed schemas live on tools, a separate mechanism.</td><td><a href="https://code.claude.com/docs/en/sub-agents">Subagents</a></td></tr>
+<tr><td>The model creates a capability mid-conversation and uses it next turn</td><td><strong>Partly.</strong> Claude Code picks up skills and subagents written to disk, including ones Claude writes itself, without a restart. On the API, tool search only reveals tools the client already sent, and Managed Agents can't add tools to a running session.</td><td><a href="https://code.claude.com/docs/en/skills">Skills</a>, <a href="https://platform.claude.com/docs/en/agents-and-tools/tool-use/tool-search-tool">Tool search</a>, <a href="https://platform.claude.com/docs/en/managed-agents/self-hosted-sandboxes-custom-tools.md">Managed Agents custom tools</a></td></tr>
+<tr><td>The return value is deliberately shaped to steer the next step</td><td><strong>Advice, not a pattern.</strong> Managed Agents suggests returning "only the fields Claude needs to determine its next step." Nothing defines a result that carries a shaped piece, an instruction for the next step and a structured payload.</td><td><a href="https://platform.claude.com/docs/en/managed-agents/tools.md">Managed Agents tools</a>, <a href="https://platform.claude.com/docs/en/agents-and-tools/tool-use/memory-tool">Memory tool</a></td></tr>
+<tr><td>Replay a fixed transcript from any turn with more data</td><td><strong>No.</strong> Claude Code checkpoints each prompt and /rewind restores code or conversation; the Agent SDK can fork a saved session. Both ask the model again. Neither re-runs a fixed step with new data.</td><td><a href="https://code.claude.com/docs/en/checkpointing">Checkpointing</a>, <a href="https://platform.claude.com/docs/en/agent-sdk/sessions">SDK sessions</a></td></tr>
+<tr><td>One portable file that is all of the above</td><td><strong>No.</strong> Each property above lives in a different mechanism with its own host: Claude Code, the API, the SDK, Managed Agents, or Cowork (which runs on Claude Code's architecture in the cloud).</td><td><a href="https://support.claude.com/en/articles/13345190-getting-started-with-cowork">Cowork</a>, <a href="https://support.claude.com/en/articles/12512180-using-skills-in-claude">Skills in Claude</a></td></tr>
+</table>
+
+<p><strong>So the honest verdict:</strong> Anthropic built excellent parts, and if someone says "tools already hide their code," they're right. The claim here isn't that any single property is new. It's that one file carries all of them at once, on purpose: typed and described going in, hidden code inside, a result written for the next step coming out, creatable mid-conversation, and replayable as a fixed step. That combination is the pattern, and I couldn't find it anywhere in Anthropic's documentation.</p>
+
+<p>To be fair about the limits of this check: docs change fast, and "I couldn't find it" rests on absence. Shaping a tool's result to steer the next step is a convention anyone can adopt in any tool, today. That's rather the point: it's not a feature to wait for, it's a way of writing.</p>
+
+<h2>Depth without the descent</h2>
+
+<p>In <a href="https://kodyw.com/own-the-engine/">Own the Engine</a> I wrote about Karpathy's funnel: most people will never climb down to the layer where AI really does the work by learning prompts, picking models and wiring tools together. They shouldn't have to.</p>
+
+<p>The comparison above is that funnel in miniature. To combine what Anthropic offers, you learn roughly 25 separate concepts across four hosts: tool use, server tools, tool search, programmatic tool calling, the memory tool, context editing, caching, the MCP connector, skills, subagents, hooks, plugins, checkpoints, SDK sessions, Managed Agents, Cowork and more. Each one is good. Together they are a descent.</p>
+
+<p>The pattern asks you to learn one thing: a file with a name, a description, a perform() and a result written for whoever comes next. It doesn't teach you the 25 concepts; it carries their properties for you. That's why I hold it to a bar of one hour to learn, and why the file runs on an engine you own rather than one you rent. Depth, without the descent.</p>
+
+<h2>Why it matters</h2>
+
+<p>If the caller has to know the insides, every agent is a project. If the caller knows nothing, an agent is a file you drop in. Anyone can write one, any model can use one, and agents you never planned to combine start working together, because each one just says plainly what it's for.</p>
+
+<p>You don't build intelligence into the plumbing. You give the model things it can reach for, describe them well, and get out of the way.</p>
+
+<p><em>It's that simple. That's why it's so easy to miss.</em></p>
+
+</body>
+</html>

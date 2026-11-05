@@ -1,0 +1,39 @@
+# Two Agent Programming Books
+
+> Docs as of 2026-11-05; source and host limits are explicit.
+
+## Machine-readable
+- [Registry](registry.json)
+- [Books and official citations](api/v1/books.json)
+
+## Books
+- [The Brainstem Agent Programming Language](brainstem/README.md)
+- [Preface: Preface](brainstem/00-preface.md)
+- [Chapter 1: A Tutorial Introduction](brainstem/01-a-tutorial-introduction.md)
+- [Chapter 2: The Interface](brainstem/02-the-interface.md)
+- [Chapter 3: Execution](brainstem/03-execution.md)
+- [Chapter 4: The Transcript](brainstem/04-the-transcript.md)
+- [Chapter 5: Output That Steers the Next Step](brainstem/05-output-that-steers.md)
+- [Chapter 6: Memory](brainstem/06-memory.md)
+- [Chapter 7: Growing Mid-Session](brainstem/07-growing-mid-session.md)
+- [Chapter 8: Replay and Time Travel](brainstem/08-replay-and-time-travel.md)
+- [Chapter 9: Hosts and Portability](brainstem/09-hosts-and-portability.md)
+- [Chapter 10: Building a Real System End to End](brainstem/10-building-a-real-system.md)
+- [Appendix A: Brainstem Reference Manual](brainstem/A-reference-manual.md)
+- [Appendix B: Glossary](brainstem/B-glossary.md)
+- [Appendix C: Mapping Table](brainstem/C-mapping-table.md)
+- [The Claude Agent Programming Language](claude/README.md)
+- [Preface: Preface](claude/00-preface.md)
+- [Chapter 1: A Tutorial Introduction](claude/01-a-tutorial-introduction.md)
+- [Chapter 2: The Interface](claude/02-the-interface.md)
+- [Chapter 3: Execution](claude/03-execution.md)
+- [Chapter 4: The Transcript](claude/04-the-transcript.md)
+- [Chapter 5: Output That Steers the Next Step](claude/05-output-that-steers.md)
+- [Chapter 6: Memory](claude/06-memory.md)
+- [Chapter 7: Growing Mid-Session](claude/07-growing-mid-session.md)
+- [Chapter 8: Replay and Time Travel](claude/08-replay-and-time-travel.md)
+- [Chapter 9: Hosts and Portability](claude/09-hosts-and-portability.md)
+- [Chapter 10: Building a Real System End to End](claude/10-building-a-real-system.md)
+- [Appendix A: Claude Reference Manual](claude/A-reference-manual.md)
+- [Appendix B: Glossary](claude/B-glossary.md)
+- [Appendix C: Mapping Table](claude/C-mapping-table.md)

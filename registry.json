@@ -1,0 +1,483 @@
+{
+  "schema": "rapp-static-api/1.1",
+  "generated": "2026-11-05T19:38:34Z",
+  "pages_base_url": "https://kody-w.github.io/agent-books/",
+  "raw_base_url": "https://raw.githubusercontent.com/kody-w/agent-books/main/",
+  "policy": "observe",
+  "summary": {
+    "books": 2,
+    "chapters": 28,
+    "official_doc_urls": 24
+  },
+  "endpoints": {
+    "books": "api/v1/books.json"
+  },
+  "endpoint_sha256": "0d2139701f9f73e67201b3edd6409eddbd132b8f4d0798691c97a891ca8f9e80",
+  "entries": [
+    {
+      "name": "brainstem/00-preface",
+      "title": "Preface",
+      "source": "brainstem/00-preface.md",
+      "source_urls": [
+        "https://kody-w.github.io/agent-books/brainstem/00-preface.md"
+      ],
+      "sha256": "c4e9eb123dddb341de1f8416869f20da52ac1afc424822574b701ae7af307c8c",
+      "sha8": "c4e9eb123ddd",
+      "snapshot": "versions/brainstem/00-preface/c4e9eb123ddd.md",
+      "html": "brainstem/00-preface.html"
+    },
+    {
+      "name": "brainstem/01-a-tutorial-introduction",
+      "title": "A Tutorial Introduction",
+      "source": "brainstem/01-a-tutorial-introduction.md",
+      "source_urls": [
+        "https://kody-w.github.io/agent-books/brainstem/01-a-tutorial-introduction.md"
+      ],
+      "sha256": "83509a98da54f394b175a083b7dba3d31df32143b8e39df48cb8bdfa8a7a2315",
+      "sha8": "83509a98da54",
+      "snapshot": "versions/brainstem/01-a-tutorial-introduction/83509a98da54.md",
+      "html": "brainstem/01-a-tutorial-introduction.html"
+    },
+    {
+      "name": "brainstem/02-the-interface",
+      "title": "The Interface",
+      "source": "brainstem/02-the-interface.md",
+      "source_urls": [
+        "https://kody-w.github.io/agent-books/brainstem/02-the-interface.md"
+      ],
+      "sha256": "267300b1813d5f293bc071c2a2898bbc6f9b42afa5e650283cd2b9d9605d28a5",
+      "sha8": "267300b1813d",
+      "snapshot": "versions/brainstem/02-the-interface/267300b1813d.md",
+      "html": "brainstem/02-the-interface.html"
+    },
+    {
+      "name": "brainstem/03-execution",
+      "title": "Execution",
+      "source": "brainstem/03-execution.md",
+      "source_urls": [
+        "https://kody-w.github.io/agent-books/brainstem/03-execution.md"
+      ],
+      "sha256": "69fe21ec36a5e72de1ae2fb027980773c595f25b432460d614e3e663b6eb8566",
+      "sha8": "69fe21ec36a5",
+      "snapshot": "versions/brainstem/03-execution/69fe21ec36a5.md",
+      "html": "brainstem/03-execution.html"
+    },
+    {
+      "name": "brainstem/04-the-transcript",
+      "title": "The Transcript",
+      "source": "brainstem/04-the-transcript.md",
+      "source_urls": [
+        "https://kody-w.github.io/agent-books/brainstem/04-the-transcript.md"
+      ],
+      "sha256": "e2267287b01b45a7d4554acc44d96e25061824c39896a1c88fb328c76996d54e",
+      "sha8": "e2267287b01b",
+      "snapshot": "versions/brainstem/04-the-transcript/e2267287b01b.md",
+      "html": "brainstem/04-the-transcript.html"
+    },
+    {
+      "name": "brainstem/05-output-that-steers",
+      "title": "Output That Steers the Next Step",
+      "source": "brainstem/05-output-that-steers.md",
+      "source_urls": [
+        "https://kody-w.github.io/agent-books/brainstem/05-output-that-steers.md"
+      ],
+      "sha256": "4c4733be3381becea788aff1647c8a22b48a495848eedcd333818d8240e6acc8",
+      "sha8": "4c4733be3381",
+      "snapshot": "versions/brainstem/05-output-that-steers/4c4733be3381.md",
+      "html": "brainstem/05-output-that-steers.html"
+    },
+    {
+      "name": "brainstem/06-memory",
+      "title": "Memory",
+      "source": "brainstem/06-memory.md",
+      "source_urls": [
+        "https://kody-w.github.io/agent-books/brainstem/06-memory.md"
+      ],
+      "sha256": "c324e25ab5e790e579bd262bf087b2504c7e5b1632d96cd338730c9843b7dd47",
+      "sha8": "c324e25ab5e7",
+      "snapshot": "versions/brainstem/06-memory/c324e25ab5e7.md",
+      "html": "brainstem/06-memory.html"
+    },
+    {
+      "name": "brainstem/07-growing-mid-session",
+      "title": "Growing Mid-Session",
+      "source": "brainstem/07-growing-mid-session.md",
+      "source_urls": [
+        "https://kody-w.github.io/agent-books/brainstem/07-growing-mid-session.md"
+      ],
+      "sha256": "cf19826963a3597c616f9fe59340480a6827e6f7e16b25cb6a44e0cef9fb1f92",
+      "sha8": "cf19826963a3",
+      "snapshot": "versions/brainstem/07-growing-mid-session/cf19826963a3.md",
+      "html": "brainstem/07-growing-mid-session.html"
+    },
+    {
+      "name": "brainstem/08-replay-and-time-travel",
+      "title": "Replay and Time Travel",
+      "source": "brainstem/08-replay-and-time-travel.md",
+      "source_urls": [
+        "https://kody-w.github.io/agent-books/brainstem/08-replay-and-time-travel.md"
+      ],
+      "sha256": "0771f7db2034af1b524fde0a4ca21e2dcc77397632de135cb87b3cd2b960b3b8",
+      "sha8": "0771f7db2034",
+      "snapshot": "versions/brainstem/08-replay-and-time-travel/0771f7db2034.md",
+      "html": "brainstem/08-replay-and-time-travel.html"
+    },
+    {
+      "name": "brainstem/09-hosts-and-portability",
+      "title": "Hosts and Portability",
+      "source": "brainstem/09-hosts-and-portability.md",
+      "source_urls": [
+        "https://kody-w.github.io/agent-books/brainstem/09-hosts-and-portability.md"
+      ],
+      "sha256": "9a286222dcabd7cb3d33c020cad49ef9b5b3e52a1581d029f1e503b16f063b0b",
+      "sha8": "9a286222dcab",
+      "snapshot": "versions/brainstem/09-hosts-and-portability/9a286222dcab.md",
+      "html": "brainstem/09-hosts-and-portability.html"
+    },
+    {
+      "name": "brainstem/10-building-a-real-system",
+      "title": "Building a Real System End to End",
+      "source": "brainstem/10-building-a-real-system.md",
+      "source_urls": [
+        "https://kody-w.github.io/agent-books/brainstem/10-building-a-real-system.md"
+      ],
+      "sha256": "43fa53755f307a5a1ec69438c6842816bad3ee2131f78cdea695feb5f52d7706",
+      "sha8": "43fa53755f30",
+      "snapshot": "versions/brainstem/10-building-a-real-system/43fa53755f30.md",
+      "html": "brainstem/10-building-a-real-system.html"
+    },
+    {
+      "name": "brainstem/A-reference-manual",
+      "title": "Brainstem Reference Manual",
+      "source": "brainstem/A-reference-manual.md",
+      "source_urls": [
+        "https://kody-w.github.io/agent-books/brainstem/A-reference-manual.md"
+      ],
+      "sha256": "397dc294f7cfb28716b26c1e2f13fe29578491d1b112ad6d2ebc3c4475b62060",
+      "sha8": "397dc294f7cf",
+      "snapshot": "versions/brainstem/A-reference-manual/397dc294f7cf.md",
+      "html": "brainstem/A-reference-manual.html"
+    },
+    {
+      "name": "brainstem/B-glossary",
+      "title": "Glossary",
+      "source": "brainstem/B-glossary.md",
+      "source_urls": [
+        "https://kody-w.github.io/agent-books/brainstem/B-glossary.md"
+      ],
+      "sha256": "3869c07dcf20f8793b0c18cf3fa0d2d302f50a9af91bf5b7580a0a3796a48ae1",
+      "sha8": "3869c07dcf20",
+      "snapshot": "versions/brainstem/B-glossary/3869c07dcf20.md",
+      "html": "brainstem/B-glossary.html"
+    },
+    {
+      "name": "brainstem/C-mapping-table",
+      "title": "Mapping Table",
+      "source": "brainstem/C-mapping-table.md",
+      "source_urls": [
+        "https://kody-w.github.io/agent-books/brainstem/C-mapping-table.md",
+        "https://code.claude.com/docs/en/agent-sdk/custom-tools",
+        "https://code.claude.com/docs/en/agent-sdk/sessions",
+        "https://code.claude.com/docs/en/checkpointing",
+        "https://code.claude.com/docs/en/chrome",
+        "https://code.claude.com/docs/en/hooks",
+        "https://code.claude.com/docs/en/mcp",
+        "https://code.claude.com/docs/en/memory",
+        "https://code.claude.com/docs/en/plugins/overview",
+        "https://code.claude.com/docs/en/skills",
+        "https://code.claude.com/docs/en/sub-agents",
+        "https://platform.claude.com/docs/en/agents-and-tools/tool-use/memory-tool",
+        "https://platform.claude.com/docs/en/agents-and-tools/tool-use/overview",
+        "https://platform.claude.com/docs/en/agents-and-tools/tool-use/programmatic-tool-calling",
+        "https://platform.claude.com/docs/en/agents-and-tools/tool-use/tool-search-tool",
+        "https://platform.claude.com/docs/en/build-with-claude/context-editing",
+        "https://platform.claude.com/docs/en/managed-agents/tools.md",
+        "https://support.claude.com/en/articles/12512180-using-skills-in-claude",
+        "https://support.claude.com/en/articles/13345190-getting-started-with-cowork",
+        "https://support.claude.com/en/articles/9517075-what-are-projects"
+      ],
+      "sha256": "6ab7fcc8d22de593e41f09f7f82e037512016474325a67199b1cc67a8081443d",
+      "sha8": "6ab7fcc8d22d",
+      "snapshot": "versions/brainstem/C-mapping-table/6ab7fcc8d22d.md",
+      "html": "brainstem/C-mapping-table.html"
+    },
+    {
+      "name": "claude/00-preface",
+      "title": "Preface",
+      "source": "claude/00-preface.md",
+      "source_urls": [
+        "https://kody-w.github.io/agent-books/claude/00-preface.md",
+        "https://code.claude.com/docs/en/agent-sdk/python",
+        "https://code.claude.com/docs/en/chrome",
+        "https://code.claude.com/docs/en/hooks",
+        "https://code.claude.com/docs/en/skills",
+        "https://code.claude.com/docs/en/sub-agents",
+        "https://platform.claude.com/docs/en/agents-and-tools/tool-use/overview",
+        "https://platform.claude.com/docs/en/managed-agents/tools.md",
+        "https://support.claude.com/en/articles/12512180-using-skills-in-claude",
+        "https://support.claude.com/en/articles/13345190-getting-started-with-cowork"
+      ],
+      "sha256": "1f06a8d407fc142175321bc7a043506ed7f1f44f53d8e55c699438922662a976",
+      "sha8": "1f06a8d407fc",
+      "snapshot": "versions/claude/00-preface/1f06a8d407fc.md",
+      "html": "claude/00-preface.html"
+    },
+    {
+      "name": "claude/01-a-tutorial-introduction",
+      "title": "A Tutorial Introduction",
+      "source": "claude/01-a-tutorial-introduction.md",
+      "source_urls": [
+        "https://kody-w.github.io/agent-books/claude/01-a-tutorial-introduction.md",
+        "https://platform.claude.com/docs/en/agents-and-tools/tool-use/overview"
+      ],
+      "sha256": "9e7fb312b41d1203e0685031a3d824fcc4bc3d358f0f54d940f6d6234bced844",
+      "sha8": "9e7fb312b41d",
+      "snapshot": "versions/claude/01-a-tutorial-introduction/9e7fb312b41d.md",
+      "html": "claude/01-a-tutorial-introduction.html"
+    },
+    {
+      "name": "claude/02-the-interface",
+      "title": "The Interface",
+      "source": "claude/02-the-interface.md",
+      "source_urls": [
+        "https://kody-w.github.io/agent-books/claude/02-the-interface.md",
+        "https://code.claude.com/docs/en/skills",
+        "https://code.claude.com/docs/en/sub-agents",
+        "https://platform.claude.com/docs/en/agents-and-tools/tool-use/overview"
+      ],
+      "sha256": "7d2b1b6bc7949d42a90475e4a46a742e3ebe2d618b6ac0c0bfa56ab0d6739395",
+      "sha8": "7d2b1b6bc794",
+      "snapshot": "versions/claude/02-the-interface/7d2b1b6bc794.md",
+      "html": "claude/02-the-interface.html"
+    },
+    {
+      "name": "claude/03-execution",
+      "title": "Execution",
+      "source": "claude/03-execution.md",
+      "source_urls": [
+        "https://kody-w.github.io/agent-books/claude/03-execution.md",
+        "https://code.claude.com/docs/en/hooks",
+        "https://code.claude.com/docs/en/skills",
+        "https://code.claude.com/docs/en/sub-agents",
+        "https://platform.claude.com/docs/en/agents-and-tools/tool-use/code-execution-tool",
+        "https://platform.claude.com/docs/en/agents-and-tools/tool-use/overview"
+      ],
+      "sha256": "be21ec8d2101cf450476406de4ca5af63235a2bece7ffe60492a1c98fc59ff3c",
+      "sha8": "be21ec8d2101",
+      "snapshot": "versions/claude/03-execution/be21ec8d2101.md",
+      "html": "claude/03-execution.html"
+    },
+    {
+      "name": "claude/04-the-transcript",
+      "title": "The Transcript",
+      "source": "claude/04-the-transcript.md",
+      "source_urls": [
+        "https://kody-w.github.io/agent-books/claude/04-the-transcript.md",
+        "https://code.claude.com/docs/en/skills",
+        "https://code.claude.com/docs/en/sub-agents",
+        "https://platform.claude.com/docs/en/agents-and-tools/tool-use/overview",
+        "https://platform.claude.com/docs/en/agents-and-tools/tool-use/programmatic-tool-calling",
+        "https://platform.claude.com/docs/en/build-with-claude/context-editing"
+      ],
+      "sha256": "a3b73c9a5d05c041f75e91b4c44995e518e6f19c3917152470d277a3617fc359",
+      "sha8": "a3b73c9a5d05",
+      "snapshot": "versions/claude/04-the-transcript/a3b73c9a5d05.md",
+      "html": "claude/04-the-transcript.html"
+    },
+    {
+      "name": "claude/05-output-that-steers",
+      "title": "Output That Steers the Next Step",
+      "source": "claude/05-output-that-steers.md",
+      "source_urls": [
+        "https://kody-w.github.io/agent-books/claude/05-output-that-steers.md",
+        "https://code.claude.com/docs/en/agent-sdk/custom-tools",
+        "https://code.claude.com/docs/en/mcp",
+        "https://platform.claude.com/docs/en/agents-and-tools/tool-use/overview",
+        "https://platform.claude.com/docs/en/managed-agents/tools.md"
+      ],
+      "sha256": "cd387be454144dab69973957ce3711ff36e001eead77c5f71ef6d3cbf7daa356",
+      "sha8": "cd387be45414",
+      "snapshot": "versions/claude/05-output-that-steers/cd387be45414.md",
+      "html": "claude/05-output-that-steers.html"
+    },
+    {
+      "name": "claude/06-memory",
+      "title": "Memory",
+      "source": "claude/06-memory.md",
+      "source_urls": [
+        "https://kody-w.github.io/agent-books/claude/06-memory.md",
+        "https://code.claude.com/docs/en/memory",
+        "https://platform.claude.com/docs/en/agents-and-tools/tool-use/memory-tool",
+        "https://platform.claude.com/docs/en/build-with-claude/prompt-caching",
+        "https://support.claude.com/en/articles/9517075-what-are-projects"
+      ],
+      "sha256": "296bfce28c8bb062e3ded0e7a32f4f9a9dbf6ce6ad6cd116a3fa70f55a2e8640",
+      "sha8": "296bfce28c8b",
+      "snapshot": "versions/claude/06-memory/296bfce28c8b.md",
+      "html": "claude/06-memory.html"
+    },
+    {
+      "name": "claude/07-growing-mid-session",
+      "title": "Growing Mid-Session",
+      "source": "claude/07-growing-mid-session.md",
+      "source_urls": [
+        "https://kody-w.github.io/agent-books/claude/07-growing-mid-session.md",
+        "https://code.claude.com/docs/en/mcp",
+        "https://code.claude.com/docs/en/plugins/overview",
+        "https://code.claude.com/docs/en/skills",
+        "https://code.claude.com/docs/en/sub-agents",
+        "https://platform.claude.com/docs/en/agents-and-tools/mcp-connector",
+        "https://platform.claude.com/docs/en/agents-and-tools/tool-use/tool-search-tool",
+        "https://platform.claude.com/docs/en/managed-agents/self-hosted-sandboxes-custom-tools.md"
+      ],
+      "sha256": "544e503bf321fd4999c145d0132ff0f10a1de9ea84ee56597008d70cbec7b713",
+      "sha8": "544e503bf321",
+      "snapshot": "versions/claude/07-growing-mid-session/544e503bf321.md",
+      "html": "claude/07-growing-mid-session.html"
+    },
+    {
+      "name": "claude/08-replay-and-time-travel",
+      "title": "Replay and Time Travel",
+      "source": "claude/08-replay-and-time-travel.md",
+      "source_urls": [
+        "https://kody-w.github.io/agent-books/claude/08-replay-and-time-travel.md",
+        "https://code.claude.com/docs/en/agent-sdk/python",
+        "https://code.claude.com/docs/en/agent-sdk/sessions",
+        "https://code.claude.com/docs/en/checkpointing",
+        "https://platform.claude.com/docs/en/agents-and-tools/tool-use/overview",
+        "https://platform.claude.com/docs/en/build-with-claude/prompt-caching"
+      ],
+      "sha256": "55a1c82479a6de0a462bc2cb8da8a52cdd2388d5c0e20ba37c0a13388cc11ff8",
+      "sha8": "55a1c82479a6",
+      "snapshot": "versions/claude/08-replay-and-time-travel/55a1c82479a6.md",
+      "html": "claude/08-replay-and-time-travel.html"
+    },
+    {
+      "name": "claude/09-hosts-and-portability",
+      "title": "Hosts and Portability",
+      "source": "claude/09-hosts-and-portability.md",
+      "source_urls": [
+        "https://kody-w.github.io/agent-books/claude/09-hosts-and-portability.md",
+        "https://code.claude.com/docs/en/agent-sdk/custom-tools",
+        "https://code.claude.com/docs/en/agent-sdk/python",
+        "https://code.claude.com/docs/en/chrome",
+        "https://code.claude.com/docs/en/skills",
+        "https://platform.claude.com/docs/en/agents-and-tools/tool-use/overview",
+        "https://platform.claude.com/docs/en/managed-agents/self-hosted-sandboxes-custom-tools.md",
+        "https://platform.claude.com/docs/en/managed-agents/tools.md",
+        "https://support.claude.com/en/articles/12512180-using-skills-in-claude",
+        "https://support.claude.com/en/articles/13345190-getting-started-with-cowork"
+      ],
+      "sha256": "e68710c59abbd8b7e6bfd8abd6c69f24e72ab7bebc7e19b2d6f68c97c21c9250",
+      "sha8": "e68710c59abb",
+      "snapshot": "versions/claude/09-hosts-and-portability/e68710c59abb.md",
+      "html": "claude/09-hosts-and-portability.html"
+    },
+    {
+      "name": "claude/10-building-a-real-system",
+      "title": "Building a Real System End to End",
+      "source": "claude/10-building-a-real-system.md",
+      "source_urls": [
+        "https://kody-w.github.io/agent-books/claude/10-building-a-real-system.md",
+        "https://code.claude.com/docs/en/agent-sdk/sessions",
+        "https://platform.claude.com/docs/en/agents-and-tools/tool-use/overview"
+      ],
+      "sha256": "d6358fe00be5f016f73950fcbe0c447119a3f1e67f883721721f01dcda8f8015",
+      "sha8": "d6358fe00be5",
+      "snapshot": "versions/claude/10-building-a-real-system/d6358fe00be5.md",
+      "html": "claude/10-building-a-real-system.html"
+    },
+    {
+      "name": "claude/A-reference-manual",
+      "title": "Claude Reference Manual",
+      "source": "claude/A-reference-manual.md",
+      "source_urls": [
+        "https://kody-w.github.io/agent-books/claude/A-reference-manual.md",
+        "https://code.claude.com/docs/en/agent-sdk/custom-tools",
+        "https://code.claude.com/docs/en/agent-sdk/python",
+        "https://code.claude.com/docs/en/agent-sdk/sessions",
+        "https://code.claude.com/docs/en/checkpointing",
+        "https://code.claude.com/docs/en/chrome",
+        "https://code.claude.com/docs/en/hooks",
+        "https://code.claude.com/docs/en/memory",
+        "https://code.claude.com/docs/en/plugins/overview",
+        "https://code.claude.com/docs/en/skills",
+        "https://code.claude.com/docs/en/sub-agents",
+        "https://platform.claude.com/docs/en/agents-and-tools/tool-use/code-execution-tool",
+        "https://platform.claude.com/docs/en/agents-and-tools/tool-use/memory-tool",
+        "https://platform.claude.com/docs/en/agents-and-tools/tool-use/overview",
+        "https://platform.claude.com/docs/en/agents-and-tools/tool-use/programmatic-tool-calling",
+        "https://platform.claude.com/docs/en/agents-and-tools/tool-use/tool-search-tool",
+        "https://platform.claude.com/docs/en/build-with-claude/context-editing",
+        "https://platform.claude.com/docs/en/build-with-claude/prompt-caching",
+        "https://platform.claude.com/docs/en/managed-agents/self-hosted-sandboxes-custom-tools.md",
+        "https://platform.claude.com/docs/en/managed-agents/tools.md",
+        "https://support.claude.com/en/articles/12512180-using-skills-in-claude",
+        "https://support.claude.com/en/articles/13345190-getting-started-with-cowork",
+        "https://support.claude.com/en/articles/9517075-what-are-projects"
+      ],
+      "sha256": "c5da5e182039c96372e48c484bb794f5bf9721e78347d2d9458dc4c598baa9dd",
+      "sha8": "c5da5e182039",
+      "snapshot": "versions/claude/A-reference-manual/c5da5e182039.md",
+      "html": "claude/A-reference-manual.html"
+    },
+    {
+      "name": "claude/B-glossary",
+      "title": "Glossary",
+      "source": "claude/B-glossary.md",
+      "source_urls": [
+        "https://kody-w.github.io/agent-books/claude/B-glossary.md",
+        "https://code.claude.com/docs/en/agent-sdk/custom-tools",
+        "https://code.claude.com/docs/en/agent-sdk/sessions",
+        "https://code.claude.com/docs/en/checkpointing",
+        "https://code.claude.com/docs/en/hooks",
+        "https://code.claude.com/docs/en/memory",
+        "https://code.claude.com/docs/en/plugins/overview",
+        "https://code.claude.com/docs/en/skills",
+        "https://code.claude.com/docs/en/sub-agents",
+        "https://platform.claude.com/docs/en/agents-and-tools/tool-use/memory-tool",
+        "https://platform.claude.com/docs/en/agents-and-tools/tool-use/overview",
+        "https://platform.claude.com/docs/en/agents-and-tools/tool-use/programmatic-tool-calling",
+        "https://platform.claude.com/docs/en/agents-and-tools/tool-use/tool-search-tool",
+        "https://platform.claude.com/docs/en/build-with-claude/context-editing",
+        "https://platform.claude.com/docs/en/build-with-claude/prompt-caching",
+        "https://support.claude.com/en/articles/9517075-what-are-projects"
+      ],
+      "sha256": "210eb9ec5ff9107079c3bddb7e61aa63ee3c9cc05ce769f050f42ffff649fde9",
+      "sha8": "210eb9ec5ff9",
+      "snapshot": "versions/claude/B-glossary/210eb9ec5ff9.md",
+      "html": "claude/B-glossary.html"
+    },
+    {
+      "name": "claude/C-mapping-table",
+      "title": "Mapping Table",
+      "source": "claude/C-mapping-table.md",
+      "source_urls": [
+        "https://kody-w.github.io/agent-books/claude/C-mapping-table.md",
+        "https://code.claude.com/docs/en/agent-sdk/custom-tools",
+        "https://code.claude.com/docs/en/agent-sdk/sessions",
+        "https://code.claude.com/docs/en/checkpointing",
+        "https://code.claude.com/docs/en/chrome",
+        "https://code.claude.com/docs/en/hooks",
+        "https://code.claude.com/docs/en/mcp",
+        "https://code.claude.com/docs/en/memory",
+        "https://code.claude.com/docs/en/plugins/overview",
+        "https://code.claude.com/docs/en/skills",
+        "https://code.claude.com/docs/en/sub-agents",
+        "https://platform.claude.com/docs/en/agents-and-tools/tool-use/memory-tool",
+        "https://platform.claude.com/docs/en/agents-and-tools/tool-use/overview",
+        "https://platform.claude.com/docs/en/agents-and-tools/tool-use/programmatic-tool-calling",
+        "https://platform.claude.com/docs/en/agents-and-tools/tool-use/tool-search-tool",
+        "https://platform.claude.com/docs/en/build-with-claude/context-editing",
+        "https://platform.claude.com/docs/en/managed-agents/tools.md",
+        "https://support.claude.com/en/articles/12512180-using-skills-in-claude",
+        "https://support.claude.com/en/articles/13345190-getting-started-with-cowork",
+        "https://support.claude.com/en/articles/9517075-what-are-projects"
+      ],
+      "sha256": "6ab7fcc8d22de593e41f09f7f82e037512016474325a67199b1cc67a8081443d",
+      "sha8": "6ab7fcc8d22d",
+      "snapshot": "versions/claude/C-mapping-table/6ab7fcc8d22d.md",
+      "html": "claude/C-mapping-table.html"
+    }
+  ]
+}

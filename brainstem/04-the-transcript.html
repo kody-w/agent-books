@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>The Brainstem Agent Programming Language — The Transcript</title><link rel="stylesheet" href="../site.css"></head><body><div class="progress" style="width:31%"></div><main><nav><a href="../index.html">Companion shelf</a></nav><p class="edition">Docs as of 2026-11-05 · Tutorial and reference edition</p><p><a href="03-execution.html">← Chapter 3: Execution</a> · <a href="README.html">Book contents</a> · <a href="05-output-that-steers.html">Chapter 5: Output That Steers the Next Step →</a></p>
+<h1 id="chapter-4--the-transcript">Chapter 4 — The Transcript</h1>
+<blockquote><p><strong>In this chapter:</strong> examine a call record, preserve what downstream steps need, and separate the conversation view from the durable audit record.</p></blockquote>
+<h2 id="41-look-at-the-record">4.1 Look at the record</h2>
+<p>Run <code>python3 brainstem/examples/04_transcript.py</code>.</p>
+<pre><code class="language-python">import json
+import sys
+sys.path.insert(0, &quot;brainstem/examples&quot;)
+from mini_loop import MiniLoop
+
+loop = MiniLoop()
+loop.call(&quot;DraftFollowUp&quot;, {&quot;transcript&quot;: &quot;Please request a library review.&quot;})
+event = loop.transcript[0]
+assert set(event) == {&quot;name&quot;, &quot;arguments&quot;, &quot;output&quot;}
+print(json.dumps(event, indent=2))</code></pre>
+<p>You will see the call name, supplied arguments, and returned output. You will not see the method body, local variables, or private scratch work.</p>
+<p>This is the fourth rule in practice. &quot;Outputs only&quot; refers to execution internals: return the relevant product, not the machinery. A replayable conversation necessarily also records what was asked. Removing the arguments would make exact replay impossible.</p>
+<h2 id="42-the-conversation-is-a-composition-surface">4.2 The conversation is a composition surface</h2>
+<p>Suppose the first result contains an approved working preference, the second contains a draft, and the third contains a review. The next caller can use those outputs without opening each tool&#x27;s storage or knowing which internal helpers it called. That is composition through a shared stream.</p>
+<p>The teaching caller stores results but does not feed them to a model. Chapter 5 passes one field explicitly to make the transfer observable. A real host would serialize results into the model&#x27;s conversation format and let the model decide what is useful next. Do not attribute that selection behavior to this name-dispatch fixture.</p>
+<h2 id="43-copies-matter">4.3 Copies matter</h2>
+<p><code>MiniLoop.call()</code> deep-copies both arguments and results before recording them. Without that copy, downstream code could mutate a dictionary after the call and silently rewrite the apparent past. The original object returned to the caller remains convenient to use, while the record preserves what actually crossed the boundary.</p>
+<p>This is in-memory protection, not an append-only storage system or a signature. Someone with access to the transcript list can still edit it. If an audit needs tamper evidence, add an appropriate storage and integrity design; do not imply that a list of dictionaries already provides it.</p>
+<h2 id="44-context-is-not-the-archive">4.4 Context is not the archive</h2>
+<p>A model&#x27;s active context is limited. Keep a complete, access-controlled archive outside it, and present only the material relevant to the next decision. Summarization, filtering, and retrieval are views over evidence, not permission to erase the evidence itself.</p>
+<p>For large tool results, put the bulk artifact in a controlled store, return a stable identifier and a useful digest, and include the small part needed immediately. If later reasoning requires omitted details, make a retrieval capability available. Never replace a failed retrieval with a confident summary from stale memory.</p>
+<p>The supplied ContextMemory agent demonstrates bounded presentation: individual memory content is limited, and <code>system_context()</code> limits the injected text. Those are context limits, not proof that all memories were recalled. Chapter 6 examines that distinction.</p>
+<h2 id="45-exercises">4.5 Exercises</h2>
+<p><strong>Exercise 4-1.</strong> Mutate the returned result after a call. Assert that the stored event does not change.</p>
+<p><strong>Exercise 4-2.</strong> Build a short presentation view and a full archive from the same events. State which one is suitable for replay and why.</p>
+<p><strong>Exercise 4-3.</strong> Add a large synthetic artifact. Return a digest and a retrieval identifier without placing the entire artifact in every event&#x27;s summary.</p>
+<hr>
+<p><a href="03-execution.html">← Chapter 3: Execution</a> · <a href="README.html">Book contents</a> · <a href="05-output-that-steers.html">Chapter 5: Output That Steers the Next Step →</a></p></main></body></html>

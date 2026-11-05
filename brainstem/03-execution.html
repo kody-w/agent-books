@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>The Brainstem Agent Programming Language — Execution</title><link rel="stylesheet" href="../site.css"></head><body><div class="progress" style="width:24%"></div><main><nav><a href="../index.html">Companion shelf</a></nav><p class="edition">Docs as of 2026-11-05 · Tutorial and reference edition</p><p><a href="02-the-interface.html">← Chapter 2: The Interface</a> · <a href="README.html">Book contents</a> · <a href="04-the-transcript.html">Chapter 4: The Transcript →</a></p>
+<h1 id="chapter-3--execution">Chapter 3 — Execution</h1>
+<blockquote><p><strong>In this chapter:</strong> implement the hidden work, preserve explicit errors, and identify where network access and side effects change the contract.</p></blockquote>
+<h2 id="31-start-with-a-refusal">3.1 Start with a refusal</h2>
+<p>Run <code>python3 brainstem/examples/03_execution.py</code>.</p>
+<pre><code class="language-python">import sys
+sys.path.insert(0, &quot;brainstem/examples&quot;)
+from agent import DraftFollowUp
+
+result = DraftFollowUp().perform(transcript=&quot;&quot;)
+assert result == {&quot;status&quot;: &quot;error&quot;, &quot;message&quot;: &quot;transcript must be nonempty text&quot;}
+print(result[&quot;message&quot;])</code></pre>
+<p>This is a complete execution test without a model or caller. It establishes that the tool refuses semantically empty input even when invoked directly.</p>
+<p><code>perform()</code> is where the public promise becomes work. In our example it validates text, hashes the exact input, assembles a draft, and returns a structured result. Neither hashing nor template details belong in the selection description.</p>
+<h2 id="32-follow-a-real-implementation">3.2 Follow a real implementation</h2>
+<p>The <a href="../ref-hacker_news_agent.py">Hacker News source</a> converts and bounds <code>count</code>, fetches the top identifiers, fetches each item, formats Markdown links, and returns a JSON string. That is more than &quot;a prompt in a file.&quot; Python performs the network and formatting operations.</p>
+<p>Its count conversion handles <code>TypeError</code> and <code>ValueError</code> explicitly. A top-list fetch failure returns <code>status: error</code>. Individual item failures are skipped. The latter policy means a nominally successful result can contain fewer stories than requested. A production consumer should compare the returned count with its requirements; a caller must not infer that ten were retrieved merely because ten were requested.</p>
+<p>The source first attempts Pyodide&#x27;s <code>open_url</code>, then falls back to <code>urllib</code>. That code is observable. A successful browser run was not observed here; it remains <strong>(unverified)</strong>. Reading an adapter is not equivalent to executing it under browser network rules.</p>
+<h2 id="33-errors-are-outputs">3.3 Errors are outputs</h2>
+<p>Use an error result for an expected domain refusal that a caller can repair. Use an exception for an infrastructure or programming failure that the host must surface. Our miniature caller does not broadly catch exceptions and pretend that work succeeded. A corrupt memory file, for example, raises a decoding error.</p>
+<p>Avoid empty-list fallbacks for failed operations. &quot;No records matched&quot; and &quot;the backend was unavailable&quot; imply different next steps. Give the next caller enough information to distinguish them without revealing secrets or stack traces to an untrusted audience.</p>
+<h2 id="34-execution-locations">3.4 Execution locations</h2>
+<p>A Python method can run locally, behind an HTTP service, or inside another process. The caller&#x27;s contract need not change, but filesystem paths, credentials, timeouts, dependency availability, and persistence do.</p>
+<p>A helper script is not a separate agent simply because it has a file extension. A delegated model is not deterministic simply because its invocation is wrapped in Python. Hooks are host callbacks, not a substitute for tool validation. Name these boundaries accurately when documenting a deployed system.</p>
+<p>The book&#x27;s loop runs synchronously and sequentially. There is no concurrency, cancellation, network retry, or sandbox. Adding those facilities belongs in the host, with explicit timeout and failure rules, rather than in a description that only hopes execution will be safe.</p>
+<h2 id="35-exercises">3.5 Exercises</h2>
+<p><strong>Exercise 3-1.</strong> Add a maximum input size and test the exact accepted boundary. Return a refusal that tells the caller how to retry.</p>
+<p><strong>Exercise 3-2.</strong> Read the story-fetch loop and specify when partial success is acceptable. Design a result field that makes missing stories visible.</p>
+<p><strong>Exercise 3-3.</strong> Wrap a pure tool in an HTTP adapter. Keep request decoding, domain validation, and transport failures distinguishable.</p>
+<hr>
+<p><a href="02-the-interface.html">← Chapter 2: The Interface</a> · <a href="README.html">Book contents</a> · <a href="04-the-transcript.html">Chapter 4: The Transcript →</a></p></main></body></html>

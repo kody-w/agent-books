@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>The Claude Agent Programming Language — Output That Steers the Next Step</title><link rel="stylesheet" href="../site.css"></head><body><div class="progress" style="width:38%"></div><main><nav><a href="../index.html">Companion shelf</a></nav><p class="edition">Docs as of 2026-11-05 · Tutorial and reference edition</p><p><a href="04-the-transcript.html">← Chapter 4: The Transcript</a> · <a href="README.html">Book contents</a> · <a href="06-memory.html">Chapter 6: Memory →</a></p>
+<h1 id="chapter-5--output-that-steers-the-next-step">Chapter 5 — Output That Steers the Next Step</h1>
+<blockquote><p><strong>In this chapter:</strong> give a downstream step an exact artifact, return useful guidance, and separate a book result convention from an API requirement.</p></blockquote>
+<h2 id="51-hand-off-a-value">5.1 Hand off a value</h2>
+<p>Run <code>python3 claude/examples/05_handoff.py</code>.</p>
+<pre><code class="language-python">import sys
+sys.path.insert(0, &quot;claude/examples&quot;)
+from common import REVIEW, draft_once, run
+
+draft = draft_once(&quot;Please request a library review.&quot;)[&quot;output&quot;][&quot;data_slush&quot;][&quot;draft&quot;]
+result = run(&quot;Call review_draft with this exact draft:\n&quot; + draft,
+             tools=[REVIEW], required=&quot;review_draft&quot;)
+reviews = [e for e in result[&quot;events&quot;] if e[&quot;name&quot;] == &quot;review_draft&quot;]
+assert reviews and reviews[0][&quot;arguments&quot;][&quot;draft&quot;] == draft
+assert reviews[0][&quot;output&quot;][&quot;data_slush&quot;][&quot;sent&quot;] is False
+print(reviews[0][&quot;output&quot;][&quot;summary&quot;])</code></pre>
+<p>The two calls use real SDK requests. The local operations are deliberately pure. If the model changes the handed-off draft, the assertion fails rather than treating a paraphrase as exact transfer. Client tools and their paired results are the documented transport; these exact-value checks are application policy. <a href="https://platform.claude.com/docs/en/agents-and-tools/tool-use/overview">Tool results</a>.</p>
+<h2 id="52-a-convention-you-can-adopt">5.2 A convention you can adopt</h2>
+<p>Our result contains a readable <code>summary</code>, an <code>instruction</code> for the next reader, and machine-useful <code>data_slush</code>. These are <strong>book conventions</strong>, not reserved Anthropic fields. JSON text can travel in a normal <code>tool_result</code>; an SDK MCP tool can also return <code>structuredContent</code> alongside readable <code>content</code>. <a href="https://platform.claude.com/docs/en/agents-and-tools/tool-use/overview">Client results</a>, <a href="https://code.claude.com/docs/en/agent-sdk/custom-tools">SDK structured results</a>.</p>
+<p>Nothing prevents a Claude tool from returning all three jobs together. Managed Agents likewise exposes custom tools whose results let the agent continue the task. The choice to make those outputs pleasant to read and easy to pass onward belongs to the tool author. <a href="https://platform.claude.com/docs/en/managed-agents/tools.md">Managed Agents tools</a>.</p>
+<p>Application guidance: put exact identifiers, draft text, provenance, and partial- success flags in structured fields. Use prose for meaning and next-step guidance. Do not make another model recover an identifier from a formatted paragraph when the next operation needs the exact value.</p>
+<h2 id="53-guidance-remains-subordinate">5.3 Guidance remains subordinate</h2>
+<p>A tool result can suggest review, another lookup, or user approval. It should not be treated as a new system instruction. Retrieved transcripts and web pages may contain hostile directives. Claude Code&#x27;s MCP documentation explicitly warns about prompt-injection risk from connected servers. <a href="https://code.claude.com/docs/en/mcp">MCP trust boundary</a>.</p>
+<p>The book therefore makes no send tool available, checks the exact evidence, and treats the result instruction as advice. These application constraints are more concrete than relying only on a sentence saying &quot;do not send.&quot;</p>
+<h2 id="54-failures-steer-too">5.4 Failures steer too</h2>
+<p>An API <code>tool_result</code> can mark an error with <code>is_error</code>; an SDK MCP handler can use <code>isError</code>. Our client loop translates domain exceptions into explicit error results so the model can repair the call. It does not swallow authentication or network failures and invent a successful draft. <a href="https://platform.claude.com/docs/en/agents-and-tools/tool-use/overview">Tool result errors</a>, <a href="https://code.claude.com/docs/en/agent-sdk/custom-tools">custom-tool errors</a>.</p>
+<p>Application guidance: stop the downstream flow when the required artifact is missing. A polished final model answer is not proof that the intended tool ran. Inspect the tool event and its success state.</p>
+<h2 id="55-exercises">5.5 Exercises</h2>
+<p><strong>Exercise 5-1.</strong> Add a provenance field and verify that the reviewer receives it without changing its value.</p>
+<p><strong>Exercise 5-2.</strong> Return an explicit partial result and evaluate whether the next step asks for the missing evidence rather than inventing it.</p>
+<p><strong>Exercise 5-3.</strong> Place a hostile instruction in the source transcript. Verify that no sending capability becomes available.</p>
+<hr>
+<p><a href="04-the-transcript.html">← Chapter 4: The Transcript</a> · <a href="README.html">Book contents</a> · <a href="06-memory.html">Chapter 6: Memory →</a></p></main></body></html>

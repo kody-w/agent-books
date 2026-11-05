@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>The Claude Agent Programming Language — Building a Real System End to End</title><link rel="stylesheet" href="../site.css"></head><body><div class="progress" style="width:73%"></div><main><nav><a href="../index.html">Companion shelf</a></nav><p class="edition">Docs as of 2026-11-05 · Tutorial and reference edition</p><p><a href="09-hosts-and-portability.html">← Chapter 9: Hosts and Portability</a> · <a href="README.html">Book contents</a> · <a href="A-reference-manual.html">Appendix A: Reference Manual →</a></p>
+<h1 id="chapter-10--building-a-real-system-end-to-end">Chapter 10 — Building a Real System End to End</h1>
+<blockquote><p><strong>In this chapter:</strong> call real tools over real files, verify the handoff, replay one pure step with later evidence, and preserve the original result.</p></blockquote>
+<h2 id="101-run-the-system">10.1 Run the system</h2>
+<p>With the dependencies installed and a key available, run <code>python3 claude/examples/10_system.py</code>. It prints the result and saves <code>example-output/claude-system.json</code>. This book-level entry point also runs the flow:</p>
+<pre><code class="language-python">import importlib.util
+import sys
+sys.path.insert(0, &quot;claude/examples&quot;)
+from common import FIXTURES
+
+spec = importlib.util.spec_from_file_location(&quot;book_claude_system&quot;, &quot;claude/examples/10_system.py&quot;)
+module = importlib.util.module_from_spec(spec)
+spec.loader.exec_module(module)
+result = module.system(FIXTURES / &quot;chat.txt&quot;, FIXTURES / &quot;later.txt&quot;)
+assert &quot;Monday&quot; in result[&quot;replayed&quot;][&quot;summary&quot;]
+assert result[&quot;archive&quot;][&quot;step2&quot;][&quot;output&quot;][&quot;data_slush&quot;][&quot;sent&quot;] is False
+print(result[&quot;replayed&quot;][&quot;summary&quot;])</code></pre>
+<p>The live part uses client tools through the official Messages API. The application runs the handlers and returns their results, as in the documented tool lifecycle. <a href="https://platform.claude.com/docs/en/agents-and-tools/tool-use/overview">Client tool execution</a>.</p>
+<h2 id="102-trace-the-four-boundaries">10.2 Trace the four boundaries</h2>
+<p>Application design: first, read the synthetic chat file into text. Second, require a draft tool call and verify that its transcript argument matches the file exactly. Third, require the reviewer tool and verify that its draft argument matches the returned artifact exactly. Fourth, copy the recorded draft arguments, append the later file, and invoke only the pure draft handler locally.</p>
+<p>The last step is application-owned replay, not an SDK session fork. It runs the same local operation on more evidence without asking Claude to choose the operation again. The SDK&#x27;s distinct session-fork behavior is demonstrated in chapter 8. <a href="https://platform.claude.com/docs/en/agents-and-tools/tool-use/overview">Tool execution</a>, <a href="https://code.claude.com/docs/en/agent-sdk/sessions">session forks</a>.</p>
+<p>The tool draft remains an evidence-preserving template in both books. It contains the original Friday date and the later Monday correction so the conflict is visible. No claim of semantic resolution is hidden behind a mechanical equality test.</p>
+<h2 id="103-what-the-archive-establishes">10.3 What the archive establishes</h2>
+<p>The saved record contains first-step and second-step calls and outputs, a replay schema identifier, and the SHA-256 of <code>common.py</code>. It also stores the revised result. This is a book format, not a Claude session serialization format.</p>
+<p>For persisted replay, the example&#x27;s <code>replay()</code> function checks the schema and source digest before executing the saved step. A mismatch fails explicitly. Keep the corresponding repository revision if the archive must remain replayable after code changes. A hash identifies implementation bytes but does not restore them.</p>
+<p>SDK sessions separately preserve conversation and tool history on disk. That facility is useful for model continuation but does not replace the exact application input and implementation record. <a href="https://code.claude.com/docs/en/agent-sdk/sessions">SDK persistence</a>.</p>
+<h2 id="104-evaluate-the-right-property">10.4 Evaluate the right property</h2>
+<p>The offline suite compiles and imports examples and tests the pure handler and archive behavior. The opt-in live test calls the complete system with the key and checks actual tool events, the exact draft transfer, and later evidence. A skipped authenticated test is printed as skipped, never substituted with a fake response.</p>
+<p>For a future model-generated drafting implementation, add semantic evaluations: preserved commitments, explicit uncertainty, accurate deadline handling, and no invented sending claim. Keep those separate from transport, provenance, and replay checks.</p>
+<p>Application guidance: never publish real chat archives through this repository&#x27;s static book API. The site indexes manuscripts and synthetic examples, not private conversation data.</p>
+<h2 id="105-exercises">10.5 Exercises</h2>
+<p><strong>Exercise 10-1.</strong> Run the live system with your own synthetic temporary files. Check the source digest and both exact-value handoffs.</p>
+<p><strong>Exercise 10-2.</strong> Modify the archive&#x27;s implementation digest and verify that persisted replay refuses before invoking a handler.</p>
+<p><strong>Exercise 10-3.</strong> Replace the template with a semantic drafting tool. Keep the original mechanical tests and add an independent quality evaluation.</p>
+<hr>
+<p><a href="09-hosts-and-portability.html">← Chapter 9: Hosts and Portability</a> · <a href="README.html">Book contents</a> · <a href="A-reference-manual.html">Appendix A: Reference Manual →</a></p></main></body></html>

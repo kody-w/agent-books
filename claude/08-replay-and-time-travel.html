@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>The Claude Agent Programming Language — Replay and Time Travel</title><link rel="stylesheet" href="../site.css"></head><body><div class="progress" style="width:59%"></div><main><nav><a href="../index.html">Companion shelf</a></nav><p class="edition">Docs as of 2026-11-05 · Tutorial and reference edition</p><p><a href="07-growing-mid-session.html">← Chapter 7: Growing Mid-Session</a> · <a href="README.html">Book contents</a> · <a href="09-hosts-and-portability.html">Chapter 9: Hosts and Portability →</a></p>
+<h1 id="chapter-8--replay-and-time-travel">Chapter 8 — Replay and Time Travel</h1>
+<blockquote><p><strong>In this chapter:</strong> branch a real SDK session, understand rewind&#x27;s boundaries, and implement exact local step replay without claiming deterministic model output.</p></blockquote>
+<h2 id="81-fork-a-conversation">8.1 Fork a conversation</h2>
+<p>Run <code>python3 claude/examples/08_replay.py</code>. It creates a draft session and forks it with the deadline correction. The core option construction can be inspected offline:</p>
+<pre><code class="language-python">from claude_agent_sdk import ClaudeAgentOptions
+
+options = ClaudeAgentOptions(
+    model=&quot;claude-opus-5-5&quot;,
+    tools=[],
+    resume=&quot;replace-with-a-real-session-id&quot;,
+    fork_session=True,
+    max_turns=3,
+)
+print(options.fork_session)</code></pre>
+<p>The placeholder above is only an offline options demonstration; the numbered program captures a real <code>ResultMessage.session_id</code> and uses it. Resume extends a selected session; fork copies its history into a new session and leaves the original intact. <a href="https://code.claude.com/docs/en/agent-sdk/sessions">SDK sessions</a>.</p>
+<h2 id="82-checkpoints-and-rewind">8.2 Checkpoints and rewind</h2>
+<p>Claude Code creates checkpoints for prompts that start turns and tracks file edits. <code>/rewind</code> can restore conversation, code, or both, and can summarize selected portions. It is a session-level recovery mechanism, not a replacement for version control. <a href="https://code.claude.com/docs/en/checkpointing">Checkpointing</a>.</p>
+<p>The current documentation is nuanced about shell changes: once a file has been tracked by Claude&#x27;s editing tools, later Bash changes to that file can be undone; a file changed only by Bash is not tracked. Most subagent edits to previously untracked files are not restored. External changes and linked files have further limits. Do not promise universal filesystem rollback. <a href="https://code.claude.com/docs/en/checkpointing">Checkpoint limitations</a>.</p>
+<h2 id="83-conversation-state-is-not-filesystem-state">8.3 Conversation state is not filesystem state</h2>
+<p>SDK sessions preserve prompts, calls, results, and responses. They do not snapshot the filesystem; the SDK documentation treats file checkpointing separately. A resumed model can therefore see old conversation context while reading newer files from disk. <a href="https://code.claude.com/docs/en/agent-sdk/sessions">Session persistence boundary</a>.</p>
+<p>Application guidance: record input hashes and the exact file revision used for a decision. A session identifier alone is not enough to prove which current bytes will be read after resumption.</p>
+<p>The SDK also provides direct session inspection and a <code>fork_session()</code> function that can branch up to a selected message identifier. This is useful when an application needs explicit branch control rather than only continuing the latest history. <a href="https://code.claude.com/docs/en/agent-sdk/python">Python session APIs</a>.</p>
+<h2 id="84-replay-a-tool-operation">8.4 Replay a tool operation</h2>
+<p>There is no need to wait for a special product primitive to replay a pure tool handler. An application can save the tool name, arguments, implementation identity, and result, then invoke that same handler with additional evidence. That is an application convention built on ordinary client tools, not a promise that an SDK session fork will rerun one fixed operation. <a href="https://platform.claude.com/docs/en/agents-and-tools/tool-use/overview">Client execution boundary</a>.</p>
+<p>Chapter 10 implements precisely this distinction: the initial calls go through Claude, then Python replays the recorded pure draft operation locally. The archive keeps both results. A separate SDK fork asks the model again and can produce a different answer; neither session persistence nor prompt caching guarantees byte-identical model output. <a href="https://code.claude.com/docs/en/agent-sdk/sessions">Sessions</a>, <a href="https://platform.claude.com/docs/en/build-with-claude/prompt-caching">caching semantics</a>.</p>
+<p>Application guidance: never repeat an external side effect under a &quot;replay&quot; label without an explicit idempotency and approval policy.</p>
+<h2 id="85-exercises">8.5 Exercises</h2>
+<p><strong>Exercise 8-1.</strong> Verify that a fork returns a distinct session identifier and leaves the original conversation available.</p>
+<p><strong>Exercise 8-2.</strong> Change a source file after a session is saved. Demonstrate why session history and filesystem history require separate tracking.</p>
+<p><strong>Exercise 8-3.</strong> Replay a pure handler locally, then ask the model again with the same evidence. State exactly what each experiment proves.</p>
+<hr>
+<p><a href="07-growing-mid-session.html">← Chapter 7: Growing Mid-Session</a> · <a href="README.html">Book contents</a> · <a href="09-hosts-and-portability.html">Chapter 9: Hosts and Portability →</a></p></main></body></html>

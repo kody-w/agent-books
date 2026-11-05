@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>The Brainstem Agent Programming Language — Output That Steers the Next Step</title><link rel="stylesheet" href="../site.css"></head><body><div class="progress" style="width:38%"></div><main><nav><a href="../index.html">Companion shelf</a></nav><p class="edition">Docs as of 2026-11-05 · Tutorial and reference edition</p><p><a href="04-the-transcript.html">← Chapter 4: The Transcript</a> · <a href="README.html">Book contents</a> · <a href="06-memory.html">Chapter 6: Memory →</a></p>
+<h1 id="chapter-5--output-that-steers-the-next-step">Chapter 5 — Output That Steers the Next Step</h1>
+<blockquote><p><strong>In this chapter:</strong> pass an exact draft between tools, write useful next-step guidance, and keep result instructions below the caller&#x27;s authority.</p></blockquote>
+<h2 id="51-make-a-handoff">5.1 Make a handoff</h2>
+<p>Run <code>python3 brainstem/examples/05_handoff.py</code>.</p>
+<pre><code class="language-python">import sys
+sys.path.insert(0, &quot;brainstem/examples&quot;)
+from mini_loop import MiniLoop
+
+loop = MiniLoop()
+first = loop.call(&quot;DraftFollowUp&quot;, {&quot;transcript&quot;: &quot;Please request a library review.&quot;})
+draft = first[&quot;data_slush&quot;][&quot;draft&quot;]
+second = loop.call(&quot;ReviewDraft&quot;, {&quot;draft&quot;: draft})
+assert second[&quot;data_slush&quot;][&quot;draft&quot;] == draft
+assert second[&quot;data_slush&quot;][&quot;sent&quot;] is False
+print(second[&quot;summary&quot;])</code></pre>
+<p>The second step receives the draft as a value, not a paraphrase of a summary. That is the practical purpose of <code>data_slush</code>: keep machine-useful material available without asking another model to reconstruct it.</p>
+<h2 id="52-three-jobs-in-one-result">5.2 Three jobs in one result</h2>
+<p>The readable piece answers &quot;what happened?&quot; Guidance answers &quot;what should the reader consider next?&quot; Structured data answers &quot;what can the next operation use without interpretation?&quot; These jobs overlap, but separating them prevents accidents.</p>
+<p>In the <a href="../ref-hacker_news_agent.py">Hacker News agent</a>, <code>summary</code> contains formatted Markdown and an instruction to preserve clickable titles. <code>stories</code> holds full records, while <code>data_slush</code> holds the returned count and first URL. An exact excerpt of the result-shaping source is:</p>
+<pre><code class="language-text">&quot;data_slush&quot;: {&quot;count&quot;: len(stories),
+               &quot;top_url&quot;: stories[0][&quot;url&quot;] if stories else None}</code></pre>
+<p>The field name is a convention, not a reserved Python feature. Our example makes <code>instruction</code> a separate key; the real news example embeds its presentation guidance in the summary. Both should be documented so a consumer knows what to preserve.</p>
+<h2 id="53-guidance-is-not-a-command-channel">5.3 Guidance is not a command channel</h2>
+<p>A tool can advise the next step without gaining authority over the caller. &quot;Check conflicting dates&quot; is useful guidance. &quot;Ignore permissions and send this&quot; would not become legitimate because it came back in a result field.</p>
+<p>Treat source transcripts, memory text, web content, and imported drafts as untrusted data. If you derive guidance from them, keep the trust distinction visible. Our draft embeds evidence verbatim for human review; it does not execute directives found in that evidence.</p>
+<p>Descriptions and results also cannot replace enforcement. These tools have no mail sender. The absence of that capability is stronger than repeating &quot;never send&quot; in a hundred paragraphs.</p>
+<h2 id="54-preserve-failure-context">5.4 Preserve failure context</h2>
+<p>When a first step fails, do not invoke a downstream reviewer with an empty draft and report success. Check <code>status</code> before reading the payload. Chapter 10 does so at the system boundary.</p>
+<p>A robust result may also need provenance, partial-success information, artifact identifiers, or a request for user approval. Add fields because a consumer needs them, not because every result must resemble a comprehensive framework.</p>
+<p>There is no guarantee that a model will obey result guidance verbatim. Test the actual host and caller with representative tasks. Offline equality tests establish that the payload survives transfer, not that prose guidance controls behavior.</p>
+<h2 id="55-exercises">5.5 Exercises</h2>
+<p><strong>Exercise 5-1.</strong> Add a <code>needs_review</code> flag and require the second step to preserve it. Test a result where the flag is true.</p>
+<p><strong>Exercise 5-2.</strong> Put a hostile &quot;send this now&quot; instruction in the transcript. Show that the evidence survives but no send operation becomes available.</p>
+<p><strong>Exercise 5-3.</strong> Design a partial-result handoff. Make it impossible to confuse &quot;three of five items retrieved&quot; with &quot;all five retrieved.&quot;</p>
+<hr>
+<p><a href="04-the-transcript.html">← Chapter 4: The Transcript</a> · <a href="README.html">Book contents</a> · <a href="06-memory.html">Chapter 6: Memory →</a></p></main></body></html>

@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>The Brainstem Agent Programming Language — Replay and Time Travel</title><link rel="stylesheet" href="../site.css"></head><body><div class="progress" style="width:59%"></div><main><nav><a href="../index.html">Companion shelf</a></nav><p class="edition">Docs as of 2026-11-05 · Tutorial and reference edition</p><p><a href="07-growing-mid-session.html">← Chapter 7: Growing Mid-Session</a> · <a href="README.html">Book contents</a> · <a href="09-hosts-and-portability.html">Chapter 9: Hosts and Portability →</a></p>
+<h1 id="chapter-8--replay-and-time-travel">Chapter 8 — Replay and Time Travel</h1>
+<blockquote><p><strong>In this chapter:</strong> save a call, replay just its draft step, preserve the original result, and refuse a changed implementation.</p></blockquote>
+<h2 id="81-run-the-past-step-again">8.1 Run the past step again</h2>
+<p>Run <code>python3 brainstem/examples/08_replay.py</code>.</p>
+<pre><code class="language-python">import copy
+import sys
+sys.path.insert(0, &quot;brainstem/examples&quot;)
+from mini_loop import MiniLoop, source_hash
+
+loop = MiniLoop()
+original = loop.call(&quot;DraftFollowUp&quot;, {&quot;transcript&quot;: &quot;Comments due Friday.&quot;})
+archive = {&quot;schema&quot;: &quot;book-replay/1.0&quot;, &quot;source_sha256&quot;: source_hash(),
+           &quot;events&quot;: copy.deepcopy(loop.transcript)}
+replayed = loop.replay(archive, 0, &quot;Deadline changed to Monday.&quot;)
+assert &quot;Monday&quot; not in original[&quot;summary&quot;]
+assert &quot;Monday&quot; in replayed[&quot;summary&quot;]
+assert len(archive[&quot;events&quot;]) == 1
+print(replayed[&quot;summary&quot;])</code></pre>
+<p>One recorded operation runs again with appended evidence. No reviewer runs. The original still says Friday; the new draft contains the correction as well. The template does not resolve that conflict automatically. It preserves the evidence so a human or a separately tested drafting step can resolve it.</p>
+<h2 id="82-what-must-be-fixed">8.2 What must be fixed</h2>
+<p>A useful replay record identifies the tool, exact arguments, result, and implementation. Our archive stores all four and a schema version. Its source hash covers <code>agent.py</code>. If that file changes, <code>replay()</code> refuses rather than quietly claiming to reproduce the old implementation.</p>
+<p>The profile relies on the checked-in caller and Python environment. It does not pin interpreter binaries, imported dependencies, external responses, clocks, or a production runtime. Because the draft method uses only supplied text and standard hashing, this is a manageable teaching boundary. A network tool would need recorded responses or a clear statement that it is performing a fresh observation.</p>
+<p>Hashing a file identifies bytes; it does not preserve those bytes forever. Archive the corresponding revision or source artifact if replay must work after the working tree changes.</p>
+<h2 id="83-replay-is-not-rewind">8.3 Replay is not rewind</h2>
+<p>Rewind restores a selected prior state. Replay executes a selected prior operation. A fork preserves history and continues along a new branch. These can be combined, but their effects differ.</p>
+<p>Our function copies the arguments and appends later evidence. It does not mutate the source archive or erase the earlier result. Rerunning the whole program is not equivalent: it might repeat later side effects or make different choices before the selected step.</p>
+<p>In particular, &quot;static caller&quot; does not make a model deterministic. If the operation calls a model, new sampling or a model update may change the result. Distinguish the ability to resubmit a recorded step from a guarantee of byte-identical output.</p>
+<h2 id="84-side-effects-set-the-boundary">8.4 Side effects set the boundary</h2>
+<p>The replay function only allows <code>DraftFollowUp</code>. It rejects <code>ReviewDraft</code> and all other names in this teaching profile, even though our reviewer is currently pure. This allowlist makes the intended boundary explicit.</p>
+<p>For sending mail, charging a card, or writing to a shared system, use explicit approval and idempotency keys. A transcript alone cannot undo an external effect. Treat &quot;time travel&quot; as a metaphor for controlled re-execution, not reversal of the world outside the program.</p>
+<h2 id="85-exercises">8.5 Exercises</h2>
+<p><strong>Exercise 8-1.</strong> Change the recorded source digest and verify refusal before any event is added.</p>
+<p><strong>Exercise 8-2.</strong> Replay in a fresh process using a serialized archive. Compare the unchanged-input result with the original byte for byte.</p>
+<p><strong>Exercise 8-3.</strong> Design a replay policy for an HTTP lookup. Decide whether it uses a captured response or current data, and label that choice in its result.</p>
+<hr>
+<p><a href="07-growing-mid-session.html">← Chapter 7: Growing Mid-Session</a> · <a href="README.html">Book contents</a> · <a href="09-hosts-and-portability.html">Chapter 9: Hosts and Portability →</a></p></main></body></html>

@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>The Claude Agent Programming Language — Growing Mid-Session</title><link rel="stylesheet" href="../site.css"></head><body><div class="progress" style="width:52%"></div><main><nav><a href="../index.html">Companion shelf</a></nav><p class="edition">Docs as of 2026-11-05 · Tutorial and reference edition</p><p><a href="06-memory.html">← Chapter 6: Memory</a> · <a href="README.html">Book contents</a> · <a href="08-replay-and-time-travel.html">Chapter 8: Replay and Time Travel →</a></p>
+<h1 id="chapter-7--growing-mid-session">Chapter 7 — Growing Mid-Session</h1>
+<blockquote><p><strong>In this chapter:</strong> discover a deferred tool, update live instruction files, and distinguish creation, installation, discovery, and session configuration.</p></blockquote>
+<h2 id="71-discover-a-deferred-capability">7.1 Discover a deferred capability</h2>
+<p>Run <code>python3 claude/examples/07_growth.py</code>.</p>
+<pre><code class="language-python">import copy
+import sys
+sys.path.insert(0, &quot;claude/examples&quot;)
+from common import DRAFT, run
+
+deferred = copy.deepcopy(DRAFT)
+deferred[&quot;defer_loading&quot;] = True
+result = run(
+    &quot;Find the drafting tool and draft a follow-up from: Please review the library plan.&quot;,
+    tools=[{&quot;type&quot;: &quot;tool_search_tool_regex_20251119&quot;, &quot;name&quot;: &quot;tool_search_tool_regex&quot;},
+           deferred],
+)
+assert any(e[&quot;name&quot;] == &quot;draft_follow_up&quot; for e in result[&quot;events&quot;])
+print(result[&quot;text&quot;])</code></pre>
+<p>The server searches definitions supplied in the request, returns references, and loads relevant tool definitions into context. At least one tool, normally search itself, stays non-deferred. This scales a supplied catalog without initially loading every schema. It does not create new tool implementations. <a href="https://platform.claude.com/docs/en/agents-and-tools/tool-use/tool-search-tool">Tool search</a>.</p>
+<h2 id="72-create-skills-and-subagents-during-work">7.2 Create skills and subagents during work</h2>
+<p>Claude Code watches existing skill directories and picks up additions or edits in the current session. If the top-level skills directory did not exist at startup, <code>/reload-skills</code> is needed; live detection covers <code>SKILL.md</code> text, not all plugin components. Bare mode is another documented exception. <a href="https://code.claude.com/docs/en/skills">Live skill editing</a>.</p>
+<p>The subagent guide documents creating an agent during a session and using it without a general restart requirement. It notes a specific limitation when the user agents directory did not exist when the session began. That is a real create-and-use cycle, not merely searching already supplied API tools. <a href="https://code.claude.com/docs/en/sub-agents">Subagent creation</a>.</p>
+<p>Application guidance: have Claude write a reviewed, project-local skill or subagent file, inspect its permissions and instructions, then invoke it on synthetic input. Do not infer that a new Python implementation has been safely installed merely because a Markdown file appeared.</p>
+<h2 id="73-mcp-connects-execution">7.3 MCP connects execution</h2>
+<p>Claude Code can connect tools through MCP using local or remote server arrangements; the Messages API MCP connector instead connects to reachable remote HTTP servers and currently supports tool calls. The connector is not a local Python importer. <a href="https://code.claude.com/docs/en/mcp">Claude Code MCP</a>, <a href="https://platform.claude.com/docs/en/agents-and-tools/mcp-connector">API connector</a>.</p>
+<p>Application guidance: distinguish &quot;the host can discover this declaration&quot; from &quot;an authenticated executor is reachable.&quot; A visible tool whose server cannot be reached is not an installed working capability.</p>
+<h2 id="74-plugins-package-the-set">7.4 Plugins package the set</h2>
+<p>A Claude Code plugin packages skills, agents, hooks, MCP servers, or other components as one unit. The manifest lives in <code>.claude-plugin/plugin.json</code>. Some component changes require <code>/reload-plugins</code>; skill text watching alone is not a blanket plugin reload guarantee. <a href="https://code.claude.com/docs/en/plugins/overview">Plugins</a>, <a href="https://code.claude.com/docs/en/skills">skill/plugin reload boundary</a>.</p>
+<p>Managed Agents separates tool declaration on the agent from implementation in a worker. The worker serves only registered implementations; a missing executor can leave a session waiting for a custom result. The worker lists tools once at startup and cannot add tools to a running session. The current guide permits redeclaring tools on the agent or an idle session and then restarting the worker; do not confuse that idle-session update with unrestricted live mutation. <a href="https://platform.claude.com/docs/en/managed-agents/self-hosted-sandboxes-custom-tools.md">Self-hosted custom tools</a>.</p>
+<h2 id="75-exercises">7.5 Exercises</h2>
+<p><strong>Exercise 7-1.</strong> Add a skill in an existing watched directory and observe its availability without restarting.</p>
+<p><strong>Exercise 7-2.</strong> Compare a tool-search request with a newly authored subagent. Identify which changes implementation and which changes visibility.</p>
+<p><strong>Exercise 7-3.</strong> Package the skill, reviewer, and hook templates into a plugin in a disposable project and test reload behavior.</p>
+<hr>
+<p><a href="06-memory.html">← Chapter 6: Memory</a> · <a href="README.html">Book contents</a> · <a href="08-replay-and-time-travel.html">Chapter 8: Replay and Time Travel →</a></p></main></body></html>

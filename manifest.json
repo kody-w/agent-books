@@ -1,0 +1,34 @@
+{
+  "schema": "agent-books-manifest/1.0",
+  "docs_as_of": "2026-11-05",
+  "last_checked": "2026-11-05T19:38:34Z",
+  "pages_base_url": "https://kody-w.github.io/agent-books/",
+  "raw_base_url": "https://raw.githubusercontent.com/kody-w/agent-books/main/",
+  "policy": "observe",
+  "books": [
+    {"name": "brainstem", "title": "The Brainstem Agent Programming Language"},
+    {"name": "claude", "title": "The Claude Agent Programming Language"}
+  ],
+  "chapters": [
+    "00-preface.md",
+    "01-a-tutorial-introduction.md",
+    "02-the-interface.md",
+    "03-execution.md",
+    "04-the-transcript.md",
+    "05-output-that-steers.md",
+    "06-memory.md",
+    "07-growing-mid-session.md",
+    "08-replay-and-time-travel.md",
+    "09-hosts-and-portability.md",
+    "10-building-a-real-system.md",
+    "A-reference-manual.md",
+    "B-glossary.md",
+    "C-mapping-table.md"
+  ],
+  "source_notes": {
+    "anthropic": "Official URLs cited inline were fetched and read on docs_as_of; last_checked is the editorial verification date, not every build time.",
+    "reference_book": "The five requested local reference files were inaccessible; their public kody-w/rapp-1/main/book counterparts were fetched and read.",
+    "brainstem": "Local runtime source access was denied. Supplied ref-*.py files and ref-blog-post.html are the observed source evidence.",
+    "hosting": "Pages URL is the intended destination, not a claim of a live deployment. No remote or push is performed by the build."
+  }
+}

@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>The Brainstem Agent Programming Language — Hosts and Portability</title><link rel="stylesheet" href="../site.css"></head><body><div class="progress" style="width:66%"></div><main><nav><a href="../index.html">Companion shelf</a></nav><p class="edition">Docs as of 2026-11-05 · Tutorial and reference edition</p><p><a href="08-replay-and-time-travel.html">← Chapter 8: Replay and Time Travel</a> · <a href="README.html">Book contents</a> · <a href="10-building-a-real-system.html">Chapter 10: Building a Real System End to End →</a></p>
+<h1 id="chapter-9--hosts-and-portability">Chapter 9 — Hosts and Portability</h1>
+<blockquote><p><strong>In this chapter:</strong> cross a JSON boundary, identify host responsibilities, and distinguish a portable pattern from a verified deployment.</p></blockquote>
+<h2 id="91-cross-the-wire">9.1 Cross the wire</h2>
+<p>Run <code>python3 brainstem/examples/09_hosts.py</code>.</p>
+<pre><code class="language-python">import json
+import sys
+sys.path.insert(0, &quot;brainstem/examples&quot;)
+from mini_loop import MiniLoop
+
+wire = &#x27;{&quot;name&quot;:&quot;ReviewDraft&quot;,&quot;arguments&quot;:{&quot;draft&quot;:&quot;Library follow-up&quot;}}&#x27;
+request = json.loads(wire)
+result = MiniLoop().call(request[&quot;name&quot;], request[&quot;arguments&quot;])
+encoded = json.dumps(result)
+assert json.loads(encoded)[&quot;data_slush&quot;][&quot;sent&quot;] is False
+print(encoded)</code></pre>
+<p>This is serialization, not a running HTTP endpoint. It establishes that the request and result can cross a text boundary without depending on Python object identity. An actual server must also define transport errors, authentication, request limits, and concurrent execution.</p>
+<h2 id="92-local-brainstem">9.2 Local Brainstem</h2>
+<p>The supplied agents import <code>BasicAgent</code> from <code>agents.basic_agent</code>. The news agent calls its base constructor with a name and metadata; the memory agents also depend on <code>memory_store</code>. A local host must provide those modules and decide how agents are discovered and invoked.</p>
+<p>Our examples use no <code>BasicAgent</code> import because they must run with Python alone. They preserve the metadata/method/result pattern but are not drop-in demonstrations of a particular installed package. The installed package&#x27;s loader, invocation transport, and lifecycle remain <strong>(unverified)</strong> because its source was inaccessible.</p>
+<p>That is a material portability distinction. Carrying one Python file does not carry the modules it imports or the credentials and permissions it expects.</p>
+<h2 id="93-pyodide-and-a-browser">9.3 Pyodide and a browser</h2>
+<p>The news source documents a Pyodide path and imports <code>pyodide.http.open_url</code> inside its fetch helper. That is evidence of an intended networking adapter. The browser still controls CORS, network availability, and storage lifetime. Ordinary CPython file paths and SQLite assumptions do not automatically survive inside WebAssembly.</p>
+<p>A working browser deployment is <strong>(unverified)</strong> here. To verify one, use the actual browser host, call a real read-only capability, inspect the returned structure, and reload the page to test persistence separately. Do not claim portability from Python syntax compilation alone.</p>
+<h2 id="94-copilot-studio-boundary">9.4 Copilot Studio boundary</h2>
+<p>A studio host would need an adapter from its action schema to the agent declaration, an execution location for Python, and a result mapping back into conversation. Those are architectural requirements, not a claim that a particular connector is already installed.</p>
+<p>No Copilot Studio deployment was performed; execution, memory, hot loading, and replay through that host are <strong>(unverified)</strong>. This chapter includes the host because the requested portability map includes it, not to advertise an unobserved integration.</p>
+<h2 id="95-carry-a-host-contract">9.5 Carry a host contract</h2>
+<p>For each destination, record Python version, imports, filesystem availability, network policy, authenticated scope, timeout, result encoding, and how context is assembled. Add a smoke test for every facility actually used.</p>
+<p>The portable part is the described capability with hidden work and useful output. The nonportable part is often a host convenience that no one wrote down. Keep that convenience out of the agent&#x27;s semantic contract when possible, and make it explicit when it is unavoidable.</p>
+<h2 id="96-exercises">9.6 Exercises</h2>
+<p><strong>Exercise 9-1.</strong> Round-trip a result containing non-ASCII text through UTF-8 JSON. Assert that its evidence and digest remain consistent.</p>
+<p><strong>Exercise 9-2.</strong> Write a host capability checklist for a read-only tool and for a persistent memory tool. Identify the additional requirements of the latter.</p>
+<p><strong>Exercise 9-3.</strong> Propose a studio adapter with a real failure response. State what must be observed before you would remove its unverified label.</p>
+<hr>
+<p><a href="08-replay-and-time-travel.html">← Chapter 8: Replay and Time Travel</a> · <a href="README.html">Book contents</a> · <a href="10-building-a-real-system.html">Chapter 10: Building a Real System End to End →</a></p></main></body></html>

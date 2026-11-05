@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>The Brainstem Agent Programming Language — A Tutorial Introduction</title><link rel="stylesheet" href="../site.css"></head><body><div class="progress" style="width:10%"></div><main><nav><a href="../index.html">Companion shelf</a></nav><p class="edition">Docs as of 2026-11-05 · Tutorial and reference edition</p><p><a href="00-preface.html">← Preface</a> · <a href="README.html">Book contents</a> · <a href="02-the-interface.html">Chapter 2: The Interface →</a></p>
+<h1 id="chapter-1--a-tutorial-introduction">Chapter 1 — A Tutorial Introduction</h1>
+<blockquote><p><strong>In this chapter:</strong> read a chat file, call one agent, inspect its draft, and distinguish a deterministic test from model-driven selection.</p></blockquote>
+<h2 id="11-getting-started">1.1 Getting started</h2>
+<p>From the repository root, run <code>python3 brainstem/examples/01_hello.py</code>. Here is the complete operation, also runnable from that root:</p>
+<pre><code class="language-python">import sys
+sys.path.insert(0, &quot;brainstem/examples&quot;)
+from mini_loop import FIXTURES, MiniLoop
+
+text = (FIXTURES / &quot;chat.txt&quot;).read_text(encoding=&quot;utf-8&quot;)
+result = MiniLoop().call(&quot;DraftFollowUp&quot;, {&quot;transcript&quot;: text})
+assert result[&quot;status&quot;] == &quot;success&quot;
+print(result[&quot;summary&quot;])</code></pre>
+<p>The first line of output is <code>Draft follow-up for review</code>. A short message asks for comments and confirmation of next steps; its evidence section contains the library discussion verbatim. It is a useful starting artifact: someone can check the source before turning it into a message. Nothing is sent.</p>
+<p>Start with this small behavior rather than a model that can write plausible prose. If you cannot prove which text the tool received, a polished draft makes the defect harder to see. The fixture is synthetic; it carries no private chat history.</p>
+<h2 id="12-what-the-caller-sees">1.2 What the caller sees</h2>
+<p>Open <a href="examples/agent.py">agent.py</a>. <code>DraftFollowUp.metadata</code> contains three public pieces: a name, a description, and an object schema with one required string, <code>transcript</code>. The description says both what to do and what not to do.</p>
+<p>The caller does not need to know about hashing or the template. An actual model-facing host would translate the metadata into that model&#x27;s tool declaration. Here <code>MiniLoop.call()</code> is deliberately less ambitious: it checks the requested name and a small subset of schema rules, invokes <code>perform()</code>, and records the result.</p>
+<p>Read <a href="examples/mini_loop.py">mini_loop.py</a> now. There is no model inside it. Tests choose names explicitly. Consequently this example proves dispatch, validation, and data movement; it says nothing about whether a particular model will select the right tool from a vague request.</p>
+<h2 id="13-what-execution-returns">1.3 What execution returns</h2>
+<p>The result has <code>status</code>, <code>summary</code>, <code>instruction</code>, and <code>data_slush</code>. <code>summary</code> is readable text. <code>instruction</code> says to review, not send. <code>data_slush</code> contains the exact draft and the SHA-256 of the supplied text. The digest gives the review artifact a source identity; it is not proof that the source is true or that the draft is good.</p>
+<p>The teaching profile uses Python dictionaries. The supplied production-style Hacker News agent returns a JSON string. Those are different transport representations of a similar boundary. Do not silently assume every host accepts both; put serialization at its adapter.</p>
+<h2 id="14-make-it-fail">1.4 Make it fail</h2>
+<p>Try a missing <code>transcript</code> key. The caller refuses before execution. Try an empty string: the schema accepts a string, but <code>perform()</code> returns an error because there is no useful text. Try an unknown name: no implementation runs.</p>
+<p>These are three different failures. A schema checks shape, a tool checks domain meaning, and a registry checks availability. Treating every refusal as &quot;the model did not understand&quot; prevents you from repairing the right layer.</p>
+<p>The example has no side effects beyond reading the fixture and printing output. That is why rerunning it is safe. Adding a mail sender later would change this property even if its interface looked almost identical.</p>
+<h2 id="15-exercises">1.5 Exercises</h2>
+<p><strong>Exercise 1-1.</strong> Copy the fixture into a temporary directory, add one sentence, and verify that both the draft and source digest change.</p>
+<p><strong>Exercise 1-2.</strong> Call the tool with an integer, an empty string, and an unknown parameter. Identify which layer refuses each input.</p>
+<p><strong>Exercise 1-3.</strong> Rewrite the description for a new reader without changing its schema or implementation. Explain what an offline test can and cannot tell you.</p>
+<hr>
+<p><a href="00-preface.html">← Preface</a> · <a href="README.html">Book contents</a> · <a href="02-the-interface.html">Chapter 2: The Interface →</a></p></main></body></html>

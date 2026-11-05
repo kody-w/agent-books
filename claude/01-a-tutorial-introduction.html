@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>The Claude Agent Programming Language — A Tutorial Introduction</title><link rel="stylesheet" href="../site.css"></head><body><div class="progress" style="width:10%"></div><main><nav><a href="../index.html">Companion shelf</a></nav><p class="edition">Docs as of 2026-11-05 · Tutorial and reference edition</p><p><a href="00-preface.html">← Preface</a> · <a href="README.html">Book contents</a> · <a href="02-the-interface.html">Chapter 2: The Interface →</a></p>
+<h1 id="chapter-1--a-tutorial-introduction">Chapter 1 — A Tutorial Introduction</h1>
+<blockquote><p><strong>In this chapter:</strong> ask Claude to call a draft tool, execute it in Python, return its result, and check that the source text did not change.</p></blockquote>
+<h2 id="11-getting-started">1.1 Getting started</h2>
+<p>From the repository root, create a virtual environment and install <code>claude/examples/requirements.txt</code>. Set <code>ANTHROPIC_API_KEY</code> through your ordinary secret-management mechanism; do not put it in a source file. Run <code>python3 claude/examples/01_hello.py</code> with the environment&#x27;s Python. The Python SDK constructs a client from environment credentials. <a href="https://platform.claude.com/docs/en/agents-and-tools/tool-use/overview">Official Python usage</a>.</p>
+<p>Here is the complete book-level operation:</p>
+<pre><code class="language-python">import sys
+sys.path.insert(0, &quot;claude/examples&quot;)
+from common import FIXTURES, draft_once
+
+event = draft_once((FIXTURES / &quot;chat.txt&quot;).read_text(encoding=&quot;utf-8&quot;))
+assert event[&quot;output&quot;][&quot;status&quot;] == &quot;success&quot;
+print(event[&quot;output&quot;][&quot;summary&quot;])</code></pre>
+<p>The helper is not a fake client. Read <a href="examples/common.py">common.py</a>: it calls <code>anthropic.Anthropic().messages.create()</code>, receives actual tool calls, executes the declared local operation, and sends results back. This is the round trip in the official tool-use guide. <a href="https://platform.claude.com/docs/en/agents-and-tools/tool-use/overview">Client tool lifecycle</a>.</p>
+<h2 id="12-follow-the-round-trip">1.2 Follow the round trip</h2>
+<p>A request contains the tool declaration and a user message. A tool call comes back as an assistant <code>tool_use</code> block with an identifier, name, and input. The application runs that call and returns a user <code>tool_result</code> block referencing the identifier. The next request includes both the assistant response and the result. <a href="https://platform.claude.com/docs/en/agents-and-tools/tool-use/overview">Tool-use messages</a>.</p>
+<p>Our helper preserves the full assistant content, not only the tool-call fragment. It handles every client call in the response, returns explicit <code>is_error</code> results for domain refusals, and limits the loop to eight model turns. These are application choices built around the documented message protocol. <a href="https://platform.claude.com/docs/en/agents-and-tools/tool-use/overview">Tool result protocol</a>.</p>
+<h2 id="13-make-one-real-thing-happen">1.3 Make one real thing happen</h2>
+<p>The local tool creates a draft from the file&#x27;s actual contents and hashes that exact input. It has no mail sender. The helper also checks that the model supplied the source text verbatim. If Claude paraphrases the transcript before calling, the example raises instead of claiming exact provenance.</p>
+<p>The first request requires the named draft tool. Later requests permit automatic selection so the model can finish. Named tool choice is an API facility, not evidence that a model would always choose this tool from an ambiguous prompt. <a href="https://platform.claude.com/docs/en/agents-and-tools/tool-use/overview">Tool choice</a>.</p>
+<h2 id="14-know-what-a-successful-run-proves">1.4 Know what a successful run proves</h2>
+<p>The expected first line is <code>Draft follow-up for review</code>, followed by a short request for comments and deadline confirmation, then the synthetic discussion as evidence. It proves an authenticated request, a real model-emitted call, local execution, a tool-result round trip, and exact-source checking. It does not prove semantic drafting quality: the tool intentionally uses a template.</p>
+<p>With no key, the program prints a clear <code>SKIP</code> message and makes no live request. The test suite separately reports live checks as skipped. An import or compilation success is never relabeled as an authenticated API success.</p>
+<h2 id="15-exercises">1.5 Exercises</h2>
+<p><strong>Exercise 1-1.</strong> Run with a separate synthetic chat file. Check the returned digest against a local SHA-256 calculation.</p>
+<p><strong>Exercise 1-2.</strong> Remove required tool choice and evaluate whether descriptions alone select the tool for five different requests.</p>
+<p><strong>Exercise 1-3.</strong> Trigger a domain refusal and inspect the paired <code>tool_use_id</code> and <code>is_error</code> fields without printing your API key.</p>
+<hr>
+<p><a href="00-preface.html">← Preface</a> · <a href="README.html">Book contents</a> · <a href="02-the-interface.html">Chapter 2: The Interface →</a></p></main></body></html>

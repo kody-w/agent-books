@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Two Agent Programming Books</title><link rel="stylesheet" href="site.css">
+</head><body><main class="shelf"><h1>Two Agent Programming Books</h1>
+<p>One chapter skeleton. Two host-aware tutorials. Read chapter N beside chapter N.</p>
+<p id="asof" class="edition">Loading book index…</p>
+<div id="books" class="columns"></div>
+<noscript><p>JavaScript is off. Open <a href="brainstem/README.html">Brainstem</a>
+or <a href="claude/README.html">Claude</a>, or read <a href="api/v1/books.json">the JSON index</a>.</p></noscript>
+<p><a href="registry.json">Registry</a> · <a href="llms.txt">LLM index</a> · <a href="README.md">Setup and evidence limits</a></p>
+</main><script>
+"use strict";
+fetch("api/v1/books.json").then(response => {
+  if (!response.ok) throw new Error("Book index HTTP " + response.status);
+  return response.json();
+}).then(index => {
+  document.getElementById("asof").textContent = "Docs as of " + index.docs_as_of +
+    " · editorial checks " + index.last_checked + " · not a live-service claim";
+  for (const book of index.books) {
+    const section = document.createElement("section");
+    const title = document.createElement("h2"); title.textContent = book.title;
+    section.append(title);
+    const list = document.createElement("ol");
+    for (const chapter of book.chapters) {
+      const item = document.createElement("li"), link = document.createElement("a");
+      link.href = chapter.html; link.textContent = chapter.label + ": " + chapter.title;
+      item.append(link); list.append(item);
+    }
+    section.append(list); document.getElementById("books").append(section);
+  }
+}).catch(error => {
+  const status = document.getElementById("asof");
+  status.className = "error"; status.textContent = "Could not load books: " + error.message;
+});
+</script></body></html>

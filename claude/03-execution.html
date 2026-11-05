@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>The Claude Agent Programming Language — Execution</title><link rel="stylesheet" href="../site.css"></head><body><div class="progress" style="width:24%"></div><main><nav><a href="../index.html">Companion shelf</a></nav><p class="edition">Docs as of 2026-11-05 · Tutorial and reference edition</p><p><a href="02-the-interface.html">← Chapter 2: The Interface</a> · <a href="README.html">Book contents</a> · <a href="04-the-transcript.html">Chapter 4: The Transcript →</a></p>
+<h1 id="chapter-3--execution">Chapter 3 — Execution</h1>
+<blockquote><p><strong>In this chapter:</strong> execute code on Anthropic&#x27;s server, identify the client&#x27;s responsibilities, and use hooks for lifecycle behavior rather than prompting alone.</p></blockquote>
+<h2 id="31-run-server-side-code">3.1 Run server-side code</h2>
+<p>Run <code>python3 claude/examples/03_execution.py</code>. The complete program handles <code>pause_turn</code>; this first-request form shows the execution boundary:</p>
+<pre><code class="language-python">import anthropic
+
+with anthropic.Anthropic() as client:
+    response = client.messages.create(
+        model=&quot;claude-opus-5-5&quot;,
+        max_tokens=2048,
+        tools=[{&quot;type&quot;: &quot;code_execution_20260521&quot;, &quot;name&quot;: &quot;code_execution&quot;}],
+        messages=[{&quot;role&quot;: &quot;user&quot;, &quot;content&quot;: &quot;Use code execution to compute sum([2, 3, 5]).&quot;}],
+    )
+    print(response.model_dump_json(indent=2))</code></pre>
+<p>Code execution is a server tool: Anthropic runs code in a sandboxed container. The documented current version above adds explicit wall-clock-limit guidance to the runtime that supports persistent Python state and programmatic calls. No code-execution beta header is required for this tool version. <a href="https://platform.claude.com/docs/en/agents-and-tools/tool-use/code-execution-tool">Code execution</a>.</p>
+<h2 id="32-client-work-and-server-work">3.2 Client work and server work</h2>
+<p>In chapter 1, our application executes the handler and returns a result. For server tools such as web search and code execution, the API executes the work. Server responses may require continuation with <code>pause_turn</code>; that is not the same as a client <code>tool_use</code> request. Our numbered program bounds continuation and raises on incomplete stop reasons rather than reporting a partial answer as complete. <a href="https://platform.claude.com/docs/en/agents-and-tools/tool-use/overview">Tool execution and stop behavior</a>.</p>
+<p>This division is a useful strength: an application can keep domain-specific credentials and validation local while delegating supported search or computation to the server. It still needs to assess the feature&#x27;s retention and availability contract. The code-execution page documents container retention separately from tool syntax. <a href="https://platform.claude.com/docs/en/agents-and-tools/tool-use/code-execution-tool">Code execution contract</a>.</p>
+<h2 id="33-scripts-and-subagents">3.3 Scripts and subagents</h2>
+<p>A skill can invoke a script without placing the script&#x27;s source in context. A subagent can inspect many files in a separate context and return a small summary. Both are legitimate ways to keep implementation or working material out of the parent conversation. <a href="https://code.claude.com/docs/en/skills">Skills</a>, <a href="https://code.claude.com/docs/en/sub-agents">subagents</a>.</p>
+<p>Application guidance: use a script for stable transformations and a subagent for work that requires judgment or exploration. A wrapper around a model call does not make the operation deterministic. Measure both latency and result quality when choosing an execution location.</p>
+<h2 id="34-hooks-run-at-boundaries">3.4 Hooks run at boundaries</h2>
+<p>Claude Code fires hooks at events including <code>PreToolUse</code>, <code>PostToolUse</code>, <code>UserPromptSubmit</code>, and <code>Stop</code>. Command hooks receive JSON on stdin and may return structured decisions. They can enforce a deterministic precondition before a tool runs instead of hoping the model remembers a paragraph. <a href="https://code.claude.com/docs/en/hooks">Hook lifecycle and output</a>.</p>
+<p>The <a href="config/hooks.json">hook template</a> demonstrates an event handler returning a deny decision for Bash calls. It is intentionally conservative and belongs in a disposable test project, not your working configuration. Read it before installing. A hook can run code with the host&#x27;s permissions; a &quot;hook&quot; label is not a sandbox. <a href="https://code.claude.com/docs/en/hooks">Hook configuration</a>.</p>
+<h2 id="35-exercises">3.5 Exercises</h2>
+<p><strong>Exercise 3-1.</strong> Inspect the server result blocks and distinguish execution output from the final natural-language answer.</p>
+<p><strong>Exercise 3-2.</strong> Install the deny hook in a disposable project and verify both a denied Bash call and an unaffected read operation.</p>
+<p><strong>Exercise 3-3.</strong> Move one deterministic transformation from a skill&#x27;s prose into a script. Compare what enters the conversation before and after.</p>
+<hr>
+<p><a href="02-the-interface.html">← Chapter 2: The Interface</a> · <a href="README.html">Book contents</a> · <a href="04-the-transcript.html">Chapter 4: The Transcript →</a></p></main></body></html>
