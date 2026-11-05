@@ -5,3 +5,5 @@ __pycache__/
 sol-books.log
 sol-books-2.log
 example-output/
+ORDER-*.md
+sol-*.log
