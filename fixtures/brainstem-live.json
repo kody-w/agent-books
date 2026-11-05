@@ -9,7 +9,7 @@
     "agents/basic_agent.py": "701488bc00d536a7b23295e7da99c62f24e9b00f233daa325886430c736b78eb",
     "agents/rar_rapp_learn_new_agent.py": "0edcecec861b4dce7ad6c06ef77a320d4c8affe51f8a9944b8c77aca0803c21c"
   },
-  "isolation": "temporary runtime, credentials, soul, and book-only agents; no port 7071",
+  "isolation": "temporary runtime, credentials, soul, and book-only agents; never the main install",
   "turns": [
     {
       "chapter": 1,

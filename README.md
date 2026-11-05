@@ -42,7 +42,7 @@ python3 brainstem/examples/10_system.py
 model and not an installed Brainstem runtime. A separate
 [live runner](scripts/run_brainstem_live.py) copies the inspected runtime and only
 book agents into a temporary directory, chooses a free loopback port, and reuses
-existing Copilot access without touching the work instance on port 7071.
+existing Copilot access without touching the reader's main Brainstem.
 Install `flask flask-cors python-dotenv requests` in a chosen test environment,
 then run `python3 scripts/run_brainstem_live.py` for real model requests.
 The [synthetic fixture](fixtures/brainstem-live.json) records chapters 1, 5, 7,
